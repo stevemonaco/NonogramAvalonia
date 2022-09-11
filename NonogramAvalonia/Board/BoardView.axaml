@@ -1,0 +1,102 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:vm="using:NonogramAvalonia.ViewModels"
+             xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+             xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
+             x:Class="NonogramAvalonia.Views.BoardView"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:CompileBindings="True"
+			 x:DataType="vm:BoardViewModel">
+	<UserControl.Styles>
+		<Style Selector="Rectangle.cell">
+			<Setter Property="Opacity" Value="0.8" />
+		</Style>
+		<Style Selector="Rectangle.cell:pointerover">
+			<Setter Property="Opacity" Value="1" />
+		</Style>
+
+		<Style Selector="Border.cell">
+			<Setter Property="BorderThickness" Value="2" />
+			<Setter Property="BorderBrush" Value="Black" />
+		</Style>
+		<Style Selector="Border.cell:pointerover">
+			<Setter Property="BorderThickness" Value="4" />
+			<Setter Property="BorderBrush" Value="Purple" />
+		</Style>
+	</UserControl.Styles>
+	
+	<Grid RowDefinitions="Auto, *" ColumnDefinitions="Auto, *">
+		<!--<Rectangle Grid.Row="0" Grid.Column="0" />-->
+		<TextBlock x:Name="description" TextWrapping="Wrap" />
+
+		<!-- Solution Row Constraints -->
+		<ItemsControl Grid.Row="1" Items="{Binding SolutionRowConstraints}">
+			<ItemsControl.ItemsPanel>
+				<ItemsPanelTemplate>
+					<UniformGrid Columns="1" Rows="{Binding GridRows}" />
+				</ItemsPanelTemplate>
+			</ItemsControl.ItemsPanel>
+			<ItemsControl.ItemTemplate>
+				<DataTemplate>
+					<Grid>
+						<TextBlock Text="{Binding}" VerticalAlignment="Center" HorizontalAlignment="Right" />
+					</Grid>
+				</DataTemplate>
+			</ItemsControl.ItemTemplate>
+		</ItemsControl>
+
+		<!-- Solution Column Constraints -->
+		<ItemsControl Grid.Row="0" Grid.Column="1" Items="{Binding SolutionColumnConstraints}">
+			<ItemsControl.ItemsPanel>
+				<ItemsPanelTemplate>
+					<UniformGrid Rows="1" Columns="{Binding GridColumns}" />
+				</ItemsPanelTemplate>
+			</ItemsControl.ItemsPanel>
+			<ItemsControl.ItemTemplate>
+				<DataTemplate>
+					<Grid>
+						<TextBlock Text="{Binding}" VerticalAlignment="Bottom" HorizontalAlignment="Center" />
+					</Grid>
+				</DataTemplate>
+			</ItemsControl.ItemTemplate>
+		</ItemsControl>
+
+		<!--  Main Nonogram Grid  -->
+		<Border Grid.Row="1" Grid.Column="1">
+			<ItemsControl Items="{Binding BoardCells}">
+				<ItemsControl.ItemsPanel>
+					<ItemsPanelTemplate>
+						<UniformGrid Margin="1" Columns="{Binding GridColumns}" Rows="{Binding GridRows}" />
+					</ItemsPanelTemplate>
+				</ItemsControl.ItemsPanel>
+
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<Border Classes="cell" Margin="1">
+							<Rectangle Classes="cell" PointerPressed="OnPointerPressed" PointerReleased="OnPointerReleased"  PointerEnter="OnPointerEnter">
+								<i:Interaction.Behaviors>
+									<ia:DataTriggerBehavior Binding="{Binding CellState}" ComparisonCondition="Equal" Value="Undetermined">
+										<ia:ChangePropertyAction PropertyName="Fill" Value="#df6626" />
+									</ia:DataTriggerBehavior>
+								</i:Interaction.Behaviors>
+								<i:Interaction.Behaviors>
+									<ia:DataTriggerBehavior Binding="{Binding CellState}" ComparisonCondition="Equal" Value="Empty">
+										<ia:ChangePropertyAction PropertyName="Fill" Value="#ac3232" />
+									</ia:DataTriggerBehavior>
+								</i:Interaction.Behaviors>
+								<i:Interaction.Behaviors>
+									<ia:DataTriggerBehavior Binding="{Binding CellState}" ComparisonCondition="Equal" Value="Filled">
+										<ia:ChangePropertyAction PropertyName="Fill" Value="#37946e" />
+									</ia:DataTriggerBehavior>
+								</i:Interaction.Behaviors>
+							</Rectangle>
+						</Border>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
+		</Border>
+		
+	</Grid>
+</UserControl>
