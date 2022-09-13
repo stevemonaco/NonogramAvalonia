@@ -5,7 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
 using System.Linq;
 using CommunityToolkit.Mvvm.Input;
-using NonogramAvalonia.EventModels;
+using NonogramAvalonia.Messages;
 using CommunityToolkit.Mvvm.Messaging;
 
 namespace NonogramAvalonia.ViewModels;
@@ -21,7 +21,6 @@ internal partial class BoardViewModel : ObservableRecipient
 
     [ObservableProperty] private ObservableCollection<NonogramCell> _boardCells;
     [ObservableProperty] private string _puzzleName = "";
-    [ObservableProperty] private TimeSpan? _timeElapsed;
     [ObservableProperty] private bool _isSolved;
 
     public IEnumerable<string> SolutionRowConstraints
@@ -135,6 +134,6 @@ internal partial class BoardViewModel : ObservableRecipient
         foreach (var cell in BoardCells.Where(x => x.CellState != CellState.Filled))
             cell.CellState = CellState.Undetermined;
 
-        Messenger.Send(new GameWinModel());
+        Messenger.Send(new GameWinMessage());
     }
 }

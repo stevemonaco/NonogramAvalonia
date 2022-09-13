@@ -1,6 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace NonogramAvalonia.ViewModels;
-public class ViewModelBase : ObservableObject
+public class ViewModelBase : ObservableRecipient
 {
 }

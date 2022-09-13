@@ -5,6 +5,7 @@
 			 xmlns:vm="using:NonogramAvalonia.ViewModels"
              xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
              xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
+			 xmlns:ngd="using:Nonogram.Domain"
              x:Class="NonogramAvalonia.Views.BoardView"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 			 x:CompileBindings="True"
@@ -18,7 +19,7 @@
 		</Style>
 
 		<Style Selector="Border.cell">
-			<Setter Property="BorderThickness" Value="2" />
+			<Setter Property="BorderThickness" Value="1" />
 			<Setter Property="BorderBrush" Value="Black" />
 		</Style>
 		<Style Selector="Border.cell:pointerover">
@@ -68,30 +69,28 @@
 			<ItemsControl Items="{Binding BoardCells}">
 				<ItemsControl.ItemsPanel>
 					<ItemsPanelTemplate>
-						<UniformGrid Margin="1" Columns="{Binding GridColumns}" Rows="{Binding GridRows}" />
+						<UniformGrid Columns="{Binding GridColumns}" Rows="{Binding GridRows}" />
 					</ItemsPanelTemplate>
 				</ItemsControl.ItemsPanel>
 
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>
-						<Border Classes="cell" Margin="1">
-							<Rectangle Classes="cell" PointerPressed="OnPointerPressed" PointerReleased="OnPointerReleased"  PointerEnter="OnPointerEnter">
-								<i:Interaction.Behaviors>
-									<ia:DataTriggerBehavior Binding="{Binding CellState}" ComparisonCondition="Equal" Value="Undetermined">
-										<ia:ChangePropertyAction PropertyName="Fill" Value="#df6626" />
-									</ia:DataTriggerBehavior>
-								</i:Interaction.Behaviors>
-								<i:Interaction.Behaviors>
-									<ia:DataTriggerBehavior Binding="{Binding CellState}" ComparisonCondition="Equal" Value="Empty">
-										<ia:ChangePropertyAction PropertyName="Fill" Value="#ac3232" />
-									</ia:DataTriggerBehavior>
-								</i:Interaction.Behaviors>
-								<i:Interaction.Behaviors>
-									<ia:DataTriggerBehavior Binding="{Binding CellState}" ComparisonCondition="Equal" Value="Filled">
-										<ia:ChangePropertyAction PropertyName="Fill" Value="#37946e" />
-									</ia:DataTriggerBehavior>
-								</i:Interaction.Behaviors>
-							</Rectangle>
+						<Border Classes="cell" Margin="2">
+							<Border BorderThickness="2" BorderBrush="Transparent">
+								<Rectangle Classes="cell" PointerPressed="OnPointerPressed" PointerReleased="OnPointerReleased"  PointerEnter="OnPointerEnter">
+									<i:Interaction.Behaviors>
+										<ia:DataTriggerBehavior Binding="{Binding CellState}" Value="{x:Static ngd:CellState.Undetermined}">
+											<ia:ChangePropertyAction PropertyName="Fill" Value="#df6626" />
+										</ia:DataTriggerBehavior>
+										<ia:DataTriggerBehavior Binding="{Binding CellState}" Value="{x:Static ngd:CellState.Empty}">
+											<ia:ChangePropertyAction PropertyName="Fill" Value="#ac3232" />
+										</ia:DataTriggerBehavior>
+										<ia:DataTriggerBehavior Binding="{Binding CellState}" Value="{x:Static ngd:CellState.Filled}">
+											<ia:ChangePropertyAction PropertyName="Fill" Value="#37946e" />
+										</ia:DataTriggerBehavior>
+									</i:Interaction.Behaviors>
+								</Rectangle>
+							</Border>
 						</Border>
 					</DataTemplate>
 				</ItemsControl.ItemTemplate>

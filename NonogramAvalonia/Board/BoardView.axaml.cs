@@ -2,20 +2,19 @@ using System;
 using Avalonia.Controls;
 using Avalonia.Controls.Shapes;
 using Avalonia.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using Nonogram.Domain;
+using NonogramAvalonia.Messages;
 using NonogramAvalonia.ViewModels;
 
 namespace NonogramAvalonia.Views;
 public partial class BoardView : UserControl
 {
     private BoardViewModel _viewModel = null!;
-    private TextBlock _description;
 
     public BoardView()
     {
         InitializeComponent();
-
-        _description = this.FindControl<TextBlock>("description");
     }
 
     protected override void OnDataContextChanged(EventArgs e)

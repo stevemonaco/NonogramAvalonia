@@ -12,7 +12,7 @@
 		<Menu Grid.Row="0">
 			<MenuItem Header="_File">
 				<MenuItem Header="Open" Command="{Binding OpenBoardCommand}" />
-				<MenuItem Header="Exit" Command="{Binding ExitApplicationCommand}" />
+				<MenuItem Header="Exit" Click="ExitApplication" />
 			</MenuItem>
 		</Menu>
 		
@@ -20,8 +20,7 @@
 
 		<DockPanel Grid.Row="2">
 			<TextBlock Text="{Binding TimeElapsed}" DockPanel.Dock="Right" />
-			
-			<TextBlock Text="{Binding PuzzleName, StringFormat=Now Playing: {0}}" />
+			<TextBlock Text="{Binding ActiveBoard.PuzzleName, StringFormat=Now Playing: {0}}" />
 		</DockPanel>
 	</Grid>
 </Window>

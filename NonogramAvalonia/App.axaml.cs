@@ -33,8 +33,8 @@ public partial class App : Application
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            var shellViewModel = provider.GetService<ShellViewModel>();
             var shellView = provider.GetService<ShellView>();
+            var shellViewModel = provider.GetService<ShellViewModel>();
             shellView!.DataContext = shellViewModel;
             desktop.MainWindow = shellView;
         }

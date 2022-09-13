@@ -1,17 +1,17 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using NonogramAvalonia.Services;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using NonogramAvalonia.Messages;
+using NonogramAvalonia.Services;
 
 namespace NonogramAvalonia.ViewModels;
 internal partial class ShellViewModel : ViewModelBase
 {
 	[ObservableProperty] private BoardViewModel _activeBoard;
+	[ObservableProperty] private TimeSpan? _timeElapsed;
 
 	private readonly BoardService _boardService;
 	private readonly IFileSelectService _fileSelectService;
@@ -27,12 +27,31 @@ internal partial class ShellViewModel : ViewModelBase
 		if (result.IsSuccess)
 		{
 			_activeBoard = result.Entity;
+			Messenger.Send(new GameStartedMessage());
 		}
 	}
 
 	[RelayCommand]
 	public async Task OpenBoard()
 	{
-		
+		var dialogResult = await _fileSelectService.GetBoardFileNameByUserAsync();
+
+		if (dialogResult is string filePath)
+		{
+			string json = await File.ReadAllTextAsync(filePath);
+			var boardResult = _boardService.LoadBoardFromJson(json);
+
+			if (boardResult.IsSuccess)
+			{
+				ActiveBoard = boardResult.Entity;
+				_timeElapsed = TimeSpan.Zero;
+				Messenger.Send(new GameStartedMessage());
+			}
+		}
+	}
+
+	public bool RequestApplicationExit()
+	{
+		return true;
 	}
 }

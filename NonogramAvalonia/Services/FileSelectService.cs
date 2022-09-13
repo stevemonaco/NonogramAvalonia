@@ -8,12 +8,12 @@ namespace NonogramAvalonia.Services;
 
 internal interface IFileSelectService
 {
-    Task<string?> GetBoardFileNameByUser();
+    Task<string?> GetBoardFileNameByUserAsync();
 }
 
 internal class FileSelectService : IFileSelectService
 {
-    public async Task<string?> GetBoardFileNameByUser()
+    public async Task<string?> GetBoardFileNameByUserAsync()
     {
         var filters = new List<FileDialogFilter>
         {
