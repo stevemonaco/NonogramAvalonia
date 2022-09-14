@@ -62,8 +62,8 @@ internal partial class BoardViewModel : ObservableRecipient
     public BoardViewModel(NonogramBoard board)
     {
         _board = board;
+        _boardCells = new(_board.Board);
 
-        BoardCells = new(_board.Board);
         GridRows = _board.Rows;
         GridColumns = _board.Columns;
 
@@ -71,28 +71,11 @@ internal partial class BoardViewModel : ObservableRecipient
         OnPropertyChanged(nameof(SolutionColumnConstraints));
     }
 
-    [RelayCommand]
-    public void ToggleCellFilled(NonogramCell cell)
-    {
-        if (IsSolved)
-            return;
-
-        _transition = cell.CellState == CellState.Filled ? CellTransition.ToUndetermined : CellTransition.ToFilled;
-        ApplyCellTransition(cell);
-    }
-
-    [RelayCommand]
-    public void ToggleCellEmpty(NonogramCell cell)
-    {
-        if (IsSolved)
-            return;
-
-        _transition = cell.CellState == CellState.Empty ? CellTransition.ToUndetermined : CellTransition.ToEmpty;
-        ApplyCellTransition(cell);
-    }
-
     public void ApplyCellTransition(NonogramCell cell)
     {
+        if (cell.Locked)
+            return;
+
         if (_transition == CellTransition.None)
             return;
 
@@ -110,6 +93,9 @@ internal partial class BoardViewModel : ObservableRecipient
 
     public void StartCellTransition(NonogramCell cell, bool secondary)
     {
+        if (cell.Locked)
+            return;
+
         _transition = (cell.CellState, secondary) switch
         {
             (CellState.Undetermined, false) => CellTransition.ToFilled,

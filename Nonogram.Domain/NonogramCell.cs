@@ -25,4 +25,5 @@ public partial class NonogramCell : ObservableObject
     [ObservableProperty] private CellState _cellState;
     [ObservableProperty] private int _row;
     [ObservableProperty] private int _column;
+    [ObservableProperty] private bool _locked;
 }

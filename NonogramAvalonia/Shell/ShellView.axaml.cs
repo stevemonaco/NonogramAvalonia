@@ -8,7 +8,7 @@ using NonogramAvalonia.Messages;
 using NonogramAvalonia.ViewModels;
 
 namespace NonogramAvalonia.Views;
-public partial class ShellView : Window, IRecipient<GameStartedMessage>
+public partial class ShellView : Window, IRecipient<GameStartedMessage>, IRecipient<GameWinMessage>
 {
     private ShellViewModel _viewModel = null!;
     private DispatcherTimer _timer;
@@ -53,5 +53,11 @@ public partial class ShellView : Window, IRecipient<GameStartedMessage>
     {
         _timeStarted = DateTime.Now;
         _timer.Start();
+    }
+
+    public void Receive(GameWinMessage message)
+    {
+        _viewModel.TimeElapsed = DateTime.Now - _timeStarted;
+        _timer.Stop();
     }
 }

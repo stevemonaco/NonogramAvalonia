@@ -1,6 +1,7 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="using:NonogramAvalonia"
+			 xmlns:con="using:NonogramAvalonia.Converters"
              x:Class="NonogramAvalonia.App">
     <Application.DataTemplates>
         <local:ViewLocator/>
@@ -9,4 +10,9 @@
     <Application.Styles>
         <FluentTheme Mode="Light"/>
     </Application.Styles>
+
+	<Application.Resources>
+		<con:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
+		<con:TimeSpanToTimerStringConverter x:Key="TimeSpanToTimerStringConverter" />
+	</Application.Resources>
 </Application>

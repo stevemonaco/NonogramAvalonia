@@ -11,8 +11,20 @@
 			 x:CompileBindings="True"
 			 x:DataType="vm:BoardViewModel">
 	<UserControl.Styles>
-		<Style Selector="Rectangle.cell">
+		<Style Selector="Rectangle">
+			<Setter Property="Fill" Value="Green" />
+		</Style>
+		<Style Selector="Rectangle.undetermined">
 			<Setter Property="Opacity" Value="0.8" />
+			<Setter Property="Fill" Value="#df6626" />
+		</Style>
+		<Style Selector="Rectangle.empty">
+			<Setter Property="Opacity" Value="0.8" />
+			<Setter Property="Fill" Value="#ac3232" />
+		</Style>
+		<Style Selector="Rectangle.filled">
+			<Setter Property="Opacity" Value="0.8" />
+			<Setter Property="Fill" Value="#37946e" />
 		</Style>
 		<Style Selector="Rectangle.cell:pointerover">
 			<Setter Property="Opacity" Value="1" />
@@ -77,8 +89,11 @@
 					<DataTemplate>
 						<Border Classes="cell" Margin="2">
 							<Border BorderThickness="2" BorderBrush="Transparent">
-								<Rectangle Classes="cell" PointerPressed="OnPointerPressed" PointerReleased="OnPointerReleased"  PointerEnter="OnPointerEnter">
-									<i:Interaction.Behaviors>
+								<Rectangle Classes.undetermined="{Binding CellState, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Undetermined}" 
+										   Classes.empty="{Binding CellState, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Empty}" 
+										   Classes.filled="{Binding CellState, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Filled}" 
+										   PointerPressed="OnPointerPressed" PointerReleased="OnPointerReleased"  PointerEnter="OnPointerEnter">
+									<!--<i:Interaction.Behaviors>
 										<ia:DataTriggerBehavior Binding="{Binding CellState}" Value="{x:Static ngd:CellState.Undetermined}">
 											<ia:ChangePropertyAction PropertyName="Fill" Value="#df6626" />
 										</ia:DataTriggerBehavior>
@@ -88,7 +103,7 @@
 										<ia:DataTriggerBehavior Binding="{Binding CellState}" Value="{x:Static ngd:CellState.Filled}">
 											<ia:ChangePropertyAction PropertyName="Fill" Value="#37946e" />
 										</ia:DataTriggerBehavior>
-									</i:Interaction.Behaviors>
+									</i:Interaction.Behaviors>-->
 								</Rectangle>
 							</Border>
 						</Border>
@@ -96,6 +111,5 @@
 				</ItemsControl.ItemTemplate>
 			</ItemsControl>
 		</Border>
-		
 	</Grid>
 </UserControl>
