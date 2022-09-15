@@ -1,13 +1,16 @@
+using System;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using CommunityToolkit.Mvvm.ComponentModel;
-using System;
 
 namespace NonogramAvalonia;
 public class ViewLocator : IDataTemplate
 {
-    public IControl Build(object data)
+    public IControl Build(object? data)
     {
+        if (data is null)
+            return new TextBlock { Text = "Null view" };
+
         var name = data.GetType().FullName!.Replace("ViewModel", "View");
         var type = Type.GetType(name);
 
@@ -21,7 +24,7 @@ public class ViewLocator : IDataTemplate
         }
     }
 
-    public bool Match(object data)
+    public bool Match(object? data)
     {
         return data is ObservableObject;
     }

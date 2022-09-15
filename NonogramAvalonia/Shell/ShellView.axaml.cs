@@ -11,7 +11,7 @@ namespace NonogramAvalonia.Views;
 public partial class ShellView : Window, IRecipient<GameStartedMessage>, IRecipient<GameWinMessage>
 {
     private ShellViewModel _viewModel = null!;
-    private DispatcherTimer _timer;
+    private readonly DispatcherTimer _timer;
     private DateTime _timeStarted;
 
     public ShellView()
@@ -35,7 +35,7 @@ public partial class ShellView : Window, IRecipient<GameStartedMessage>, IRecipi
             _viewModel = (ShellViewModel)DataContext;
     }
 
-    public void ExitApplication(object sender, RoutedEventArgs e)
+    public void ExitApplication(object? sender, RoutedEventArgs e)
     {
         var canExit = _viewModel.RequestApplicationExit();
         var lifetime = Avalonia.Application.Current!.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime;

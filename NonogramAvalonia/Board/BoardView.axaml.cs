@@ -1,10 +1,7 @@
 using System;
 using Avalonia.Controls;
-using Avalonia.Controls.Shapes;
 using Avalonia.Input;
-using CommunityToolkit.Mvvm.Messaging;
 using Nonogram.Domain;
-using NonogramAvalonia.Messages;
 using NonogramAvalonia.ViewModels;
 
 namespace NonogramAvalonia.Views;
@@ -27,22 +24,22 @@ public partial class BoardView : UserControl
         base.OnDataContextChanged(e);
     }
 
-    private void OnPointerPressed(object sender, PointerPressedEventArgs e)
+    private void OnPointerPressed(object? sender, PointerPressedEventArgs e)
     {
-        if (e.Pointer.Type == PointerType.Mouse && _viewModel is not null && sender is Rectangle { DataContext: NonogramCell cell } rect)
+        if (e.Pointer.Type == PointerType.Mouse && _viewModel is not null && sender is Control { DataContext: NonogramCell cell })
         {
             var props = e.GetCurrentPoint(null).Properties;
             var secondary = props.IsRightButtonPressed;
 
-            _viewModel.StartCellTransition(cell, secondary);
-            _viewModel.ApplyCellTransition(cell);
+            _viewModel.TryStartCellTransition(cell, secondary);
+            _viewModel.TryApplyCellTransition(cell);
 
             e.Pointer.Capture(null); // Release capture so that the mouse can color multiple cells while pressed
-            //e.Handled = true;
+            e.Handled = true;
         }
     }
 
-    private void OnPointerReleased(object sender, PointerReleasedEventArgs e)
+    private void OnPointerReleased(object? sender, PointerReleasedEventArgs e)
     {
         if (e.Pointer.Type == PointerType.Mouse && _viewModel is not null)
         {
@@ -51,13 +48,13 @@ public partial class BoardView : UserControl
 
             if (!anyPressed)
                 _viewModel.EndCellTransition();
-            //e.Handled = true;
+            e.Handled = true;
         }
     }
 
-    private void OnPointerEnter(object sender, PointerEventArgs e)
+    private void OnPointerMoved(object? sender, PointerEventArgs e)
     {
-        if (e.Pointer.Type == PointerType.Mouse && _viewModel is not null && sender is Rectangle { DataContext: NonogramCell cell } rect)
+        if (e.Pointer.Type == PointerType.Mouse && _viewModel is not null && sender is Control { DataContext: NonogramCell cell })
         {
             var props = e.GetCurrentPoint(null).Properties;
             var anyPressed = props.IsLeftButtonPressed || props.IsMiddleButtonPressed || props.IsRightButtonPressed;
@@ -68,7 +65,7 @@ public partial class BoardView : UserControl
                 return;
             }
 
-            _viewModel.ApplyCellTransition(cell);
+            _viewModel.TryApplyCellTransition(cell);
             e.Handled = true;
         }
     }

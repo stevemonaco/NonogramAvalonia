@@ -1,38 +1,54 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Platform.Storage;
+using JetBrains.Annotations;
 
 namespace NonogramAvalonia.Services;
 
 internal interface IFileSelectService
 {
-    Task<string?> GetBoardFileNameByUserAsync();
+    Task<Uri?> GetBoardFileNameByUserAsync();
 }
 
 internal class FileSelectService : IFileSelectService
 {
-    public async Task<string?> GetBoardFileNameByUserAsync()
+    public async Task<Uri?> GetBoardFileNameByUserAsync()
     {
-        var filters = new List<FileDialogFilter>
+        var options = new FilePickerOpenOptions()
         {
-            new FileDialogFilter { Extensions = { "json" }, Name = "Nonogram Board Files" }
-        };
-
-        var dialog = new OpenFileDialog
-        {
-            Title = "Select Board File",
-            AllowMultiple = false,
-            Filters = filters
+            FileTypeFilter = new List<FilePickerFileType>()
+            {
+                new FilePickerFileType("Board File")
+                {
+                    Patterns = new[] { "*.json" },
+                    AppleUniformTypeIdentifiers = new[] { "public.json" },
+                    MimeTypes = new[] { "application/json" }
+                }
+            },
+            Title = "Select Board File"
         };
 
         var window = GetWindow();
 
-        if (window is not null)
+        if (window is null)
+            return null;
+
+        var pickerResult = await window.StorageProvider.OpenFilePickerAsync(options);
+        //if (pickerResult?[0] is IStorageFile storageFile)
+        //{
+        //    var uriResult = storageFile.TryGetUri(out var uri);
+
+        //    if (uriResult is true)
+        //        return uri;
+        //}
+
+        if (pickerResult?[0].TryGetUri(out var uri) is true)
         {
-            var result = await dialog.ShowAsync(window);
-            return result?.FirstOrDefault();
+            return uri;
         }
 
         return null;

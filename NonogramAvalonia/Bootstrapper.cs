@@ -20,11 +20,8 @@ public interface IAppBootstrapper<TViewModel> where TViewModel : class
 
 public class Bootstrapper : IAppBootstrapper<ShellViewModel>
 {
-    private ILoggerFactory _loggerFactory;
-
+    private ILoggerFactory? _loggerFactory;
     private const string _logFileName = @"log.txt";
-    private const string _monsterDataFileName = @"_data/mob.csv";
-    private const string _connectionString = @"Filename=./_objectives/Completions.sqlite";
 
     public void ConfigureIoc(IServiceCollection services)
     {
@@ -72,9 +69,9 @@ public class Bootstrapper : IAppBootstrapper<ShellViewModel>
         return factory;
     }
 
-    public async ValueTask<bool> LoadConfigurations(IServiceProvider provider)
+    public ValueTask<bool> LoadConfigurations(IServiceProvider provider)
     {
-        return true;
+        return ValueTask.FromResult(true);
     }
 
     //protected override void OnUnhandledException(DispatcherUnhandledExceptionEventArgs e)

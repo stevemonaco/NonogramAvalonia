@@ -12,37 +12,50 @@
 			 x:DataType="vm:BoardViewModel">
 	<UserControl.Styles>
 		<Style Selector="Rectangle">
-			<Setter Property="Fill" Value="Green" />
+			<Setter Property="Fill" Value="#888888" />
+			<Setter Property="IsHitTestVisible" Value="True" />
+			<Setter Property="Transitions">
+				<Transitions>
+					<DoubleTransition Property="Opacity" Duration="0:0:0.2" />
+					<BrushTransition Property="Fill" Duration="0:0:0:0.5" Easing="BounceEaseOut" />
+				</Transitions>
+			</Setter>
 		</Style>
 		<Style Selector="Rectangle.undetermined">
-			<Setter Property="Opacity" Value="0.8" />
+			<Setter Property="Opacity" Value="0.6" />
 			<Setter Property="Fill" Value="#df6626" />
 		</Style>
 		<Style Selector="Rectangle.empty">
-			<Setter Property="Opacity" Value="0.8" />
+			<Setter Property="Opacity" Value="0.6" />
 			<Setter Property="Fill" Value="#ac3232" />
 		</Style>
 		<Style Selector="Rectangle.filled">
-			<Setter Property="Opacity" Value="0.8" />
+			<Setter Property="Opacity" Value="0.6" />
 			<Setter Property="Fill" Value="#37946e" />
 		</Style>
-		<Style Selector="Rectangle.cell:pointerover">
-			<Setter Property="Opacity" Value="1" />
+		<Style Selector="Rectangle:pointerover">
+			<Setter Property="Opacity" Value="1.0" />
 		</Style>
 
-		<Style Selector="Border.cell">
-			<Setter Property="BorderThickness" Value="1" />
+		<Style Selector="Border.outerCell">
+			<Setter Property="BorderThickness" Value="2" />
 			<Setter Property="BorderBrush" Value="Black" />
 		</Style>
-		<Style Selector="Border.cell:pointerover">
+		<Style Selector="Border.outerCell:pointerover">
 			<Setter Property="BorderThickness" Value="4" />
 			<Setter Property="BorderBrush" Value="Purple" />
+		</Style>
+		<Style Selector="Border.innerCell">
+			<Setter Property="BorderThickness" Value="2" />
+			<Setter Property="BorderBrush" Value="Transparent" />
+		</Style>
+		<Style Selector="Border.innerCell:pointerover">
+			<Setter Property="BorderThickness" Value="0" />
 		</Style>
 	</UserControl.Styles>
 	
 	<Grid RowDefinitions="Auto, *" ColumnDefinitions="Auto, *">
 		<!--<Rectangle Grid.Row="0" Grid.Column="0" />-->
-		<TextBlock x:Name="description" TextWrapping="Wrap" />
 
 		<!-- Solution Row Constraints -->
 		<ItemsControl Grid.Row="1" Items="{Binding SolutionRowConstraints}">
@@ -77,7 +90,7 @@
 		</ItemsControl>
 
 		<!--  Main Nonogram Grid  -->
-		<Border Grid.Row="1" Grid.Column="1">
+		<Border Grid.Row="1" Grid.Column="1" BorderThickness="1" BorderBrush="Black">
 			<ItemsControl Items="{Binding BoardCells}">
 				<ItemsControl.ItemsPanel>
 					<ItemsPanelTemplate>
@@ -87,12 +100,11 @@
 
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>
-						<Border Classes="cell" Margin="2">
-							<Border BorderThickness="2" BorderBrush="Transparent">
+						<Border Classes="outerCell" PointerPressed="OnPointerPressed" PointerReleased="OnPointerReleased" PointerMoved="OnPointerMoved">
+							<Border Classes="innerCell">
 								<Rectangle Classes.undetermined="{Binding CellState, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Undetermined}" 
 										   Classes.empty="{Binding CellState, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Empty}" 
-										   Classes.filled="{Binding CellState, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Filled}" 
-										   PointerPressed="OnPointerPressed" PointerReleased="OnPointerReleased"  PointerEnter="OnPointerEnter">
+										   Classes.filled="{Binding CellState, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Filled}" >
 									<!--<i:Interaction.Behaviors>
 										<ia:DataTriggerBehavior Binding="{Binding CellState}" Value="{x:Static ngd:CellState.Undetermined}">
 											<ia:ChangePropertyAction PropertyName="Fill" Value="#df6626" />

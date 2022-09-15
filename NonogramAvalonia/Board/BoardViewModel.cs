@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
-using System;
-using Nonogram.Domain;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using CommunityToolkit.Mvvm.Input;
-using NonogramAvalonia.Messages;
+using System.Collections.Generic;
 using CommunityToolkit.Mvvm.Messaging;
+using CommunityToolkit.Mvvm.ComponentModel;
+using Nonogram.Domain;
+using NonogramAvalonia.Messages;
 
 namespace NonogramAvalonia.ViewModels;
 
@@ -71,30 +70,32 @@ internal partial class BoardViewModel : ObservableRecipient
         OnPropertyChanged(nameof(SolutionColumnConstraints));
     }
 
-    public void ApplyCellTransition(NonogramCell cell)
+    public bool TryApplyCellTransition(NonogramCell cell)
     {
-        if (cell.Locked)
-            return;
+        if (cell.Locked || IsSolved)
+            return false;
 
         if (_transition == CellTransition.None)
-            return;
+            return false;
 
         cell.CellState = _transition switch
         {
             CellTransition.ToUndetermined => CellState.Undetermined,
             CellTransition.ToEmpty => CellState.Empty,
             CellTransition.ToFilled => CellState.Filled,
-            _ => throw new InvalidOperationException($"{nameof(ApplyCellTransition)} attempted to apply invalid transition {_transition}")
+            _ => throw new InvalidOperationException($"{nameof(TryApplyCellTransition)} attempted to apply invalid transition {_transition}")
         };
 
         if (_board.CheckWinState())
             PuzzleSolved();
+
+        return true;
     }
 
-    public void StartCellTransition(NonogramCell cell, bool secondary)
+    public bool TryStartCellTransition(NonogramCell cell, bool secondary)
     {
-        if (cell.Locked)
-            return;
+        if (cell.Locked || IsSolved)
+            return false;
 
         _transition = (cell.CellState, secondary) switch
         {
@@ -106,6 +107,8 @@ internal partial class BoardViewModel : ObservableRecipient
             (CellState.Filled, true) => CellTransition.ToEmpty,
             _ => CellTransition.None
         };
+
+        return true;
     }
 
     public void EndCellTransition()
