@@ -1,11 +1,6 @@
-﻿using NonogramAvalonia.ViewModels;
+﻿using System.Text.Json;
+using NonogramAvalonia.ViewModels;
 using NonogramAvalonia.SerializationModels.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
 using Remora.Results;
 using Nonogram.Domain;
 

@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using NonogramAvalonia.ViewModels;
 using NonogramAvalonia.Views;
 using RagnaRoute;
+using System.Linq;
 
 namespace NonogramAvalonia;
 public partial class App : Application
@@ -19,7 +20,11 @@ public partial class App : Application
     public override async void OnFrameworkInitializationCompleted()
     {
         // Remove Avalonia data validation so that Mvvm Toolkit's data validation works
-        ExpressionObserver.DataValidators.RemoveAll(x => x is DataAnnotationsValidationPlugin);
+        var annotationPlugin = BindingPlugins.DataValidators.OfType<DataAnnotationsValidationPlugin>().FirstOrDefault();
+        if (annotationPlugin is not null)
+        {
+            BindingPlugins.DataValidators.Remove(annotationPlugin);
+        }
 
         var services = new ServiceCollection();
         var bootstrapper = new Bootstrapper();

@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
-using JetBrains.Annotations;
 
 namespace NonogramAvalonia.Services;
 
@@ -38,20 +37,7 @@ internal class FileSelectService : IFileSelectService
             return null;
 
         var pickerResult = await window.StorageProvider.OpenFilePickerAsync(options);
-        //if (pickerResult?[0] is IStorageFile storageFile)
-        //{
-        //    var uriResult = storageFile.TryGetUri(out var uri);
-
-        //    if (uriResult is true)
-        //        return uri;
-        //}
-
-        if (pickerResult?[0].TryGetUri(out var uri) is true)
-        {
-            return uri;
-        }
-
-        return null;
+        return pickerResult?.FirstOrDefault()?.Path;
     }
 
     private static Window? GetWindow()

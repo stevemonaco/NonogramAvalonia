@@ -36,9 +36,9 @@ internal partial class ShellViewModel : ViewModelBase
 	{
 		var dialogResult = await _fileSelectService.GetBoardFileNameByUserAsync();
 
-		if (dialogResult is Uri filePath)
+		if (dialogResult is Uri uri)
 		{
-			string json = await File.ReadAllTextAsync(filePath.LocalPath);
+			string json = await File.ReadAllTextAsync(uri.LocalPath);
 			var boardResult = _boardService.LoadBoardFromJson(json);
 
 			if (boardResult.IsSuccess)

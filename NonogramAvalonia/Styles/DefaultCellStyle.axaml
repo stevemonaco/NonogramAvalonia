@@ -1,0 +1,37 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:c="using:NonogramAvalonia.Controls">
+	<Design.PreviewWith>
+		<StackPanel>
+			<c:Cell Width="200" Height="200" Background="Red" BorderBrush="Red" BorderThickness="5" />
+		</StackPanel>
+	</Design.PreviewWith>
+	
+	<ControlTheme x:Key="{x:Type c:Cell}" TargetType="c:Cell">
+		<Setter Property="Background" Value="{DynamicResource Background}" />
+
+		<Setter Property="Template">
+			<ControlTemplate>
+				<Border x:Name="outerBorder">
+					<Border x:Name="innerBorder">
+						<Rectangle Classes.undetermined="{Binding CellState, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Undetermined}"
+								   Classes.empty="{Binding CellState, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Empty}"
+								   Classes.filled="{Binding CellState, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Filled}" >
+							<!--<i:Interaction.Behaviors>
+										<ia:DataTriggerBehavior Binding="{Binding CellState}" Value="{x:Static ngd:CellState.Undetermined}">
+											<ia:ChangePropertyAction PropertyName="Fill" Value="#df6626" />
+										</ia:DataTriggerBehavior>
+										<ia:DataTriggerBehavior Binding="{Binding CellState}" Value="{x:Static ngd:CellState.Empty}">
+											<ia:ChangePropertyAction PropertyName="Fill" Value="#ac3232" />
+										</ia:DataTriggerBehavior>
+										<ia:DataTriggerBehavior Binding="{Binding CellState}" Value="{x:Static ngd:CellState.Filled}">
+											<ia:ChangePropertyAction PropertyName="Fill" Value="#37946e" />
+										</ia:DataTriggerBehavior>
+									</i:Interaction.Behaviors>-->
+						</Rectangle>
+					</Border>
+				</Border>
+			</ControlTemplate>
+		</Setter>
+	</ControlTheme>
+</ResourceDictionary>
