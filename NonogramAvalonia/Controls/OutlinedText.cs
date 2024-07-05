@@ -44,8 +44,6 @@ public partial class OutlinedText : TextBlock
         }
 
         context.DrawGeometry(Foreground, pen, _geometry!);
-
-        //base.RenderTextLayout(context, origin);
     }
 
     protected virtual Geometry? CreateTextGeometry(string? text)
@@ -68,10 +66,10 @@ public partial class OutlinedText : TextBlock
             case nameof(StrokeDashOffset):
             case nameof(StrokeThickness):
             case nameof(StrokeLineCap):
-                {
-                    InvalidateTextLayout();
-                    break;
-                }
+            {
+                InvalidateTextLayout();
+                break;
+            }
         }
     }
 }

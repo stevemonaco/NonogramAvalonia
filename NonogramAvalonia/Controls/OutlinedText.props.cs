@@ -1,14 +1,7 @@
 ﻿using Avalonia.Collections;
-using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Avalonia.Controls.Shapes;
-using SkiaSharp;
 
 namespace NonogramAvalonia.Controls;
 public partial class OutlinedText

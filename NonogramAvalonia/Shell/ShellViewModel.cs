@@ -4,13 +4,12 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using NonogramAvalonia.Messages;
 using NonogramAvalonia.Services;
 
 namespace NonogramAvalonia.ViewModels;
-internal partial class ShellViewModel : ViewModelBase
+public partial class ShellViewModel : ViewModelBase
 {
-	[ObservableProperty] private BoardViewModel _activeBoard;
+	[ObservableProperty] private BoardViewModel? _activeBoard;
 	[ObservableProperty] private TimeSpan? _timeElapsed;
 
 	private readonly BoardService _boardService;
@@ -20,35 +19,31 @@ internal partial class ShellViewModel : ViewModelBase
 	{
 		_boardService = boardService;
 		_fileSelectService = fileSelectService;
-
-		string json = File.ReadAllText(@"_boards\PicrossDS 1-B.json");
-		var result = _boardService.LoadBoardFromJson(json);
-
-		if (result.IsSuccess)
-		{
-			_activeBoard = result.Entity;
-			Messenger.Send(new GameStartedMessage());
-		}
 	}
 
 	[RelayCommand]
-	public async Task OpenBoard()
+	public async Task RequestBoard()
 	{
-		var dialogResult = await _fileSelectService.GetBoardFileNameByUserAsync();
+		var dialogResult = await _fileSelectService.RequestBoardFileNameAsync();
 
-		if (dialogResult is Uri uri)
-		{
-			string json = await File.ReadAllTextAsync(uri.LocalPath);
-			var boardResult = _boardService.LoadBoardFromJson(json);
+		if (dialogResult is not string path)
+			return;
 
-			if (boardResult.IsSuccess)
-			{
-				ActiveBoard = boardResult.Entity;
-				_timeElapsed = TimeSpan.Zero;
-				Messenger.Send(new GameStartedMessage());
-			}
-		}
+		await LoadBoardAsync(path);
 	}
+
+	public async Task LoadBoardAsync(string path)
+	{
+        string json = await File.ReadAllTextAsync(path);
+        var boardResult = _boardService.LoadBoardFromJson(json);
+
+        if (boardResult.IsSuccess)
+        {
+            ActiveBoard = boardResult.Entity;
+            TimeElapsed = TimeSpan.Zero;
+            Messenger.Send(new GameStartedMessage());
+        }
+    }
 
 	public bool RequestApplicationExit()
 	{

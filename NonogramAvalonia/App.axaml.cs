@@ -1,12 +1,10 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
 using NonogramAvalonia.ViewModels;
 using NonogramAvalonia.Views;
-using RagnaRoute;
 using System.Linq;
 
 namespace NonogramAvalonia;
@@ -39,8 +37,7 @@ public partial class App : Application
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             var shellView = provider.GetService<ShellView>();
-            var shellViewModel = provider.GetService<ShellViewModel>();
-            shellView!.DataContext = shellViewModel;
+            shellView!.DataContext = provider.GetService<ShellViewModel>();
             desktop.MainWindow = shellView;
         }
 

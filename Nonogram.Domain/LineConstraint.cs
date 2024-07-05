@@ -17,8 +17,11 @@ public class LineConstraint : IEquatable<LineConstraint>
         Items.Add(constraint);
     }
 
-    public bool Equals(LineConstraint other)
+    public bool Equals(LineConstraint? other)
     {
+        if (other is null)
+            return false;
+
         if (Items.Count != other.Items.Count)
             return false;
 

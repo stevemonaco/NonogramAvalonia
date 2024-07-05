@@ -1,4 +1,4 @@
-﻿namespace NonogramAvalonia.Messages;
+﻿namespace NonogramAvalonia;
 
 public record GameWinMessage();
 public record GameOpenedMessage();

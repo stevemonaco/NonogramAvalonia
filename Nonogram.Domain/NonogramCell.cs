@@ -6,6 +6,11 @@ public enum CellState { Undetermined, Empty, Filled };
 
 public partial class NonogramCell : ObservableObject
 {
+    [ObservableProperty] private CellState _cellState;
+    [ObservableProperty] private int _row;
+    [ObservableProperty] private int _column;
+    [ObservableProperty] private bool _locked;
+
     public NonogramCell() : this(CellState.Undetermined)
     {
     }
@@ -21,9 +26,4 @@ public partial class NonogramCell : ObservableObject
         Row = row;
         Column = column;
     }
-
-    [ObservableProperty] private CellState _cellState;
-    [ObservableProperty] private int _row;
-    [ObservableProperty] private int _column;
-    [ObservableProperty] private bool _locked;
 }

@@ -1,6 +1,4 @@
-﻿using System.Xml.Linq;
-
-namespace Nonogram.Domain;
+﻿namespace Nonogram.Domain;
 
 public class NonogramBoard
 {
@@ -28,62 +26,35 @@ public class NonogramBoard
         IsGameActive = true;
     }
 
-    //public bool LoadFromXml(string fileName)
-    //{
-    //    var root = XElement.Load(fileName);
-
-    //    var rowConstraints = root.Element("RowConstraints");
-    //    foreach (var el in rowConstraints.Descendants())
-    //    {
-    //        var vals = el.Value.Split(new char[] { ' ', ',' }, StringSplitOptions.RemoveEmptyEntries).Where(x => int.TryParse(x, out _));
-    //        var constraints = new LineConstraint(vals.Select(x => int.Parse(x)));
-    //        SolutionRowConstraints.Add(constraints);
-    //    }
-
-    //    var columnConstraints = root.Element("ColumnConstraints");
-    //    foreach (var el in columnConstraints.Descendants())
-    //    {
-    //        var vals = el.Value.Split(new char[] { ' ', ',' }, StringSplitOptions.RemoveEmptyEntries).Where(x => int.TryParse(x, out _));
-    //        var constraints = new LineConstraint(vals.Select(x => int.Parse(x)));
-    //        SolutionColumnConstraints.Add(constraints);
-    //    }
-
-    //    int.TryParse(rowConstraints.Attribute("count").Value, out var rowConstraintsCount);
-    //    int.TryParse(columnConstraints.Attribute("count").Value, out var columnConstraintsCount);
-
-    //    InitializeBoard(columnConstraintsCount, rowConstraintsCount);
-    //    IsGameActive = true;
-
-    //    return true;
-    //}
-
-    //public void InitializeBoard(int x, int y)
-    //{
-    //    Cells = new NonogramCell[x, y];
-    //    ResetMatrixStates();
-    //}
-
     public bool CheckWinState()
     {
         BuildConstraints();
 
-        for (int i = 0; i < PlayerRowConstraints.Count; i++)
-        {
-            if (!SolutionRowConstraints[i].Equals(PlayerRowConstraints[i]))
-                return false;
-        }
+        if (!AreConstraintsEqual(PlayerRowConstraints, SolutionRowConstraints))
+            return false;
 
-        for (int i = 0; i < PlayerColumnConstraints.Count; i++)
-        {
-            if (!SolutionColumnConstraints[i].Equals(PlayerColumnConstraints[i]))
-                return false;
-        }
+        if (!AreConstraintsEqual(PlayerColumnConstraints, SolutionColumnConstraints))
+            return false;
 
         IsGameActive = false;
         return true;
+
+        bool AreConstraintsEqual(List<LineConstraint> a, List<LineConstraint> b)
+        {
+            if (a.Count != b.Count)
+                return false;
+
+            for (int i = 0; i < a.Count; i++)
+            {
+                if (!a[i].Equals(b[i]))
+                    return false;
+            }
+
+            return true;
+        }
     }
 
-    public void BuildConstraints()
+    private void BuildConstraints()
     {
         PlayerRowConstraints.Clear();
         PlayerColumnConstraints.Clear();

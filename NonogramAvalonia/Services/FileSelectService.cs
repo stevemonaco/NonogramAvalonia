@@ -8,14 +8,14 @@ using Avalonia.Platform.Storage;
 
 namespace NonogramAvalonia.Services;
 
-internal interface IFileSelectService
+public interface IFileSelectService
 {
-    Task<Uri?> GetBoardFileNameByUserAsync();
+    Task<string?> RequestBoardFileNameAsync();
 }
 
-internal class FileSelectService : IFileSelectService
+public class FileSelectService : IFileSelectService
 {
-    public async Task<Uri?> GetBoardFileNameByUserAsync()
+    public async Task<string?> RequestBoardFileNameAsync()
     {
         var options = new FilePickerOpenOptions()
         {
@@ -23,9 +23,9 @@ internal class FileSelectService : IFileSelectService
             {
                 new FilePickerFileType("Board File")
                 {
-                    Patterns = new[] { "*.json" },
-                    AppleUniformTypeIdentifiers = new[] { "public.json" },
-                    MimeTypes = new[] { "application/json" }
+                    Patterns = ["*.json"],
+                    AppleUniformTypeIdentifiers = ["public.json"],
+                    MimeTypes = ["application/json"]
                 }
             },
             Title = "Select Board File"
@@ -37,7 +37,7 @@ internal class FileSelectService : IFileSelectService
             return null;
 
         var pickerResult = await window.StorageProvider.OpenFilePickerAsync(options);
-        return pickerResult?.FirstOrDefault()?.Path;
+        return pickerResult?.FirstOrDefault()?.TryGetLocalPath();
     }
 
     private static Window? GetWindow()

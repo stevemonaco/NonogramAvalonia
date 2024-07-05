@@ -4,13 +4,12 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Messaging;
-using NonogramAvalonia.Messages;
 using NonogramAvalonia.ViewModels;
 
 namespace NonogramAvalonia.Views;
 public partial class ShellView : Window, IRecipient<GameStartedMessage>, IRecipient<GameWinMessage>
 {
-    private ShellViewModel _viewModel = null!;
+    internal ShellViewModel ViewModel => (ShellViewModel)DataContext!;
     private readonly DispatcherTimer _timer;
     private DateTime _timeStarted;
 
@@ -22,22 +21,21 @@ public partial class ShellView : Window, IRecipient<GameStartedMessage>, IRecipi
         WeakReferenceMessenger.Default.RegisterAll(this);
     }
 
-    private void Timer_Tick(object? sender, EventArgs e)
+    protected override async void OnLoaded(RoutedEventArgs e)
     {
-        _viewModel.TimeElapsed = DateTime.Now - _timeStarted;
+        base.OnLoaded(e);
+
+        await ViewModel.LoadBoardAsync(@"_boards\PicrossDS 1-B.json");
     }
 
-    protected override void OnDataContextChanged(EventArgs e)
+    private void Timer_Tick(object? sender, EventArgs e)
     {
-        base.OnDataContextChanged(e);
-
-        if (DataContext is not null)
-            _viewModel = (ShellViewModel)DataContext;
+        ViewModel.TimeElapsed = DateTime.Now - _timeStarted;
     }
 
     public void ExitApplication(object? sender, RoutedEventArgs e)
     {
-        var canExit = _viewModel.RequestApplicationExit();
+        var canExit = ViewModel.RequestApplicationExit();
         var lifetime = Avalonia.Application.Current!.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime;
 
         if (canExit)
@@ -57,7 +55,7 @@ public partial class ShellView : Window, IRecipient<GameStartedMessage>, IRecipi
 
     public void Receive(GameWinMessage message)
     {
-        _viewModel.TimeElapsed = DateTime.Now - _timeStarted;
+        ViewModel.TimeElapsed = DateTime.Now - _timeStarted;
         _timer.Stop();
     }
 }

@@ -5,7 +5,7 @@ using Remora.Results;
 using Nonogram.Domain;
 
 namespace NonogramAvalonia.Services;
-internal class BoardService
+public class BoardService
 {
     public Result<BoardViewModel> LoadBoardFromJson(string json)
     {

@@ -8,7 +8,7 @@ using Serilog;
 using NonogramAvalonia.Services;
 using NonogramAvalonia.ViewModels;
 
-namespace RagnaRoute;
+namespace NonogramAvalonia;
 public interface IAppBootstrapper<TViewModel> where TViewModel : class
 {
     void ConfigureServices(IServiceCollection services);
@@ -73,17 +73,4 @@ public class Bootstrapper : IAppBootstrapper<ShellViewModel>
     {
         return ValueTask.FromResult(true);
     }
-
-    //protected override void OnUnhandledException(DispatcherUnhandledExceptionEventArgs e)
-    //{
-    //    base.OnUnhandledException(e);
-
-    //    Log.Error(e.Exception, "Unhandled exception");
-
-    //    if (!_isStarting)
-    //    {
-    //        _container?.Resolve<IWindowManager>()?.ShowMessageBox($"{e.Exception.Message}", "Unhandled Exception", MessageBoxButton.OK, MessageBoxImage.Error);
-    //        e.Handled = true;
-    //    }
-    //}
 }

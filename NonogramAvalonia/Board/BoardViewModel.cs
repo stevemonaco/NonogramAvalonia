@@ -5,12 +5,11 @@ using System.Collections.Generic;
 using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Nonogram.Domain;
-using NonogramAvalonia.Messages;
 
 namespace NonogramAvalonia.ViewModels;
 
 public enum CellTransition { None, ToUndetermined, ToEmpty, ToFilled }
-internal partial class BoardViewModel : ObservableRecipient
+public partial class BoardViewModel : ObservableRecipient
 {
     private readonly NonogramBoard _board;
     private CellTransition _transition;
