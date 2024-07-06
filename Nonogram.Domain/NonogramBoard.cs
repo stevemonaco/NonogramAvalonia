@@ -5,15 +5,21 @@ public class NonogramBoard
     public int Columns { get => Cells.GetLength(0); }
     public int Rows { get => Cells.GetLength(1); }
 
-    public List<LineConstraint> SolutionRowConstraints { get; private set; }
-    public List<LineConstraint> SolutionColumnConstraints { get; private set; }
+    public List<LineConstraint> SolutionRowConstraints { get; private set; } = [];
+    public List<LineConstraint> SolutionColumnConstraints { get; private set; } = [];
 
-    public List<LineConstraint> PlayerRowConstraints { get; private set; } = new();
-    public List<LineConstraint> PlayerColumnConstraints { get; private set; } = new();
+    public List<LineConstraint> PlayerRowConstraints { get; private set; } = [];
+    public List<LineConstraint> PlayerColumnConstraints { get; private set; } = [];
 
     public NonogramCell[,] Cells { get; private set; }
 
     public string? Name { get; set; }
+
+    public NonogramBoard(int rows, int columns)
+    {
+        Cells = new NonogramCell[rows, columns];
+        ResetCellStates();
+    }
 
     public NonogramBoard(List<List<int>> rowConstraints, List<List<int>> columnConstraints)
     {
@@ -51,7 +57,7 @@ public class NonogramBoard
         }
     }
 
-    private void BuildConstraints()
+    public void BuildConstraints()
     {
         PlayerRowConstraints.Clear();
         PlayerColumnConstraints.Clear();

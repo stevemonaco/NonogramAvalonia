@@ -27,10 +27,7 @@
     <ProjectReference Include="..\Nonogram.Domain\Nonogram.Domain.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <None Update="_boards\PicrossDS 0-C.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="_boards\PicrossDS 1-B.json">
+    <None Update="_boards\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

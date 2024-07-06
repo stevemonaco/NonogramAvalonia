@@ -7,7 +7,8 @@ using Nonogram.Domain;
 using NonogramAvalonia.Services;
 
 namespace NonogramAvalonia.ViewModels;
-public partial class ShellViewModel : ViewModelBase, IRecipient<NavigateToPlayMessage>, IRecipient<NavigateToMenuMessage>
+public partial class ShellViewModel : ViewModelBase,
+	IRecipient<NavigateToPlayMessage>, IRecipient<NavigateToMenuMessage>, IRecipient<NavigateToCreateMessage>
 {
 	[ObservableProperty] private ObservableObject? _activeScreen;
 
@@ -36,7 +37,7 @@ public partial class ShellViewModel : ViewModelBase, IRecipient<NavigateToPlayMe
     [RelayCommand]
 	public async Task RequestBoard()
 	{
-		var dialogResult = await _fileSelectService.RequestBoardFileNameAsync();
+		var dialogResult = await _fileSelectService.RequestOpenBoardFileNameAsync();
 
 		if (dialogResult is not string path)
 			return;
@@ -47,13 +48,11 @@ public partial class ShellViewModel : ViewModelBase, IRecipient<NavigateToPlayMe
 	public async Task LoadBoardAsync(string path)
 	{
         string json = await File.ReadAllTextAsync(path);
-        var boardResult = _boardService.LoadBoardFromJson(json);
+        var boardResult = _boardService.DeserializeBoard(json);
 
         if (boardResult.IsSuccess)
         {
 			PlayBoard(boardResult.Entity);
-            ActiveScreen = new PlayBoardViewModel(boardResult.Entity);
-            Messenger.Send(new GameStartedMessage());
         }
     }
 
@@ -77,5 +76,11 @@ public partial class ShellViewModel : ViewModelBase, IRecipient<NavigateToPlayMe
     public void Receive(NavigateToMenuMessage message)
     {
         ActiveScreen = _selectBoardViewModel;
+    }
+
+    public void Receive(NavigateToCreateMessage message)
+    {
+        var board = new NonogramBoard(10, 10);
+        ActiveScreen = new CreateBoardViewModel(board, _boardService, _fileSelectService);
     }
 }

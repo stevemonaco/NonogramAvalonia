@@ -2,11 +2,12 @@
 using NonogramAvalonia.SerializationModels.Json;
 using Remora.Results;
 using Nonogram.Domain;
+using System.Linq;
 
 namespace NonogramAvalonia.Services;
 public class BoardService
 {
-    public Result<NonogramBoard> LoadBoardFromJson(string json)
+    public Result<NonogramBoard> DeserializeBoard(string json)
     {
         var jsonOptions = new JsonSerializerOptions()
         {
@@ -36,5 +37,22 @@ public class BoardService
         };
 
         return Result<NonogramBoard>.FromSuccess(board);
+    }
+
+    public string SerializeBoard(NonogramBoard board)
+    {
+        var jsonOptions = new JsonSerializerOptions()
+        {
+            PropertyNameCaseInsensitive = true
+        };
+
+        var rowConstraints = board.PlayerRowConstraints.Select(x => x.Items).ToList();
+        var columnConstraints = board.PlayerColumnConstraints.Select(x => x.Items).ToList();
+
+        var model = new NonogramModel(board.Name ?? "", board.Rows, board.Columns, rowConstraints, columnConstraints);
+
+        var json = JsonSerializer.Serialize(model, jsonOptions);
+
+        return json;
     }
 }

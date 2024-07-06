@@ -1,0 +1,109 @@
+<UserControl
+    x:Class="NonogramAvalonia.Views.CreateBoardView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="using:NonogramAvalonia.Controls"
+    xmlns:con="using:NonogramAvalonia.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ngd="using:Nonogram.Domain"
+    xmlns:res="using:NonogramAvalonia"
+    xmlns:vm="using:NonogramAvalonia.ViewModels"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    x:DataType="vm:CreateBoardViewModel">
+    <UserControl.Styles>
+        <Style Selector="c|OutlinedText">
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="36" />
+            <Setter Property="StrokeThickness" Value="1" />
+            <Setter Property="Stroke" Value="Red" />
+            <Setter Property="FontFamily" Value="{x:Static res:AppResources.Polaris}" />
+        </Style>
+
+        <Style Selector="Rectangle">
+            <Setter Property="Fill" Value="#888888" />
+            <Setter Property="Transitions">
+                <Transitions>
+                    <DoubleTransition
+                        Easing="CubicEaseOut"
+                        Property="Opacity"
+                        Duration="0:0:0.5" />
+                    <BrushTransition
+                        Easing="CubicEaseOut"
+                        Property="Fill"
+                        Duration="0:0:0:0.5" />
+                </Transitions>
+            </Setter>
+        </Style>
+        <Style Selector="Rectangle.undetermined">
+            <Setter Property="Opacity" Value="0.8" />
+            <Setter Property="Fill" Value="#df6626" />
+        </Style>
+        <Style Selector="Rectangle.empty">
+            <Setter Property="Opacity" Value="0.8" />
+            <Setter Property="Fill" Value="#ac3232" />
+        </Style>
+        <Style Selector="Rectangle.filled">
+            <Setter Property="Opacity" Value="0.8" />
+            <Setter Property="Fill" Value="#37946e" />
+        </Style>
+        <Style Selector="Rectangle:pointerover">
+            <Setter Property="Opacity" Value="1.0" />
+        </Style>
+
+        <Style Selector="Border.outerCell">
+            <Setter Property="BorderThickness" Value="2" />
+            <Setter Property="BorderBrush" Value="Black" />
+        </Style>
+        <Style Selector="Border.outerCell:pointerover">
+            <Setter Property="BorderThickness" Value="4" />
+            <Setter Property="BorderBrush" Value="Purple" />
+        </Style>
+        <Style Selector="Border.innerCell">
+            <Setter Property="BorderThickness" Value="2" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+        </Style>
+        <Style Selector="Border.innerCell:pointerover">
+            <Setter Property="BorderThickness" Value="0" />
+        </Style>
+    </UserControl.Styles>
+
+    <Grid RowDefinitions="auto, *">
+        <StackPanel Orientation="Horizontal">
+            <Button Command="{Binding SaveBoardCommand}" Content="Save" />
+        </StackPanel>
+
+        <!--  Main Nonogram Grid  -->
+        <Border
+            Grid.Row="1"
+            BorderBrush="Black"
+            BorderThickness="1"
+            Cursor="Hand">
+            <ItemsControl ItemsSource="{Binding BoardCells}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="{Binding GridColumns}" Rows="{Binding GridRows}" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border
+                            Classes="outerCell"
+                            PointerMoved="OnPointerMoved"
+                            PointerPressed="OnPointerPressed"
+                            PointerReleased="OnPointerReleased">
+                            <Border Classes="innerCell">
+                                <Rectangle
+                                    Classes.empty="{Binding CellState, Converter={x:Static con:AppConverters.EnumToBoolean}, ConverterParameter=Empty}"
+                                    Classes.filled="{Binding CellState, Converter={x:Static con:AppConverters.EnumToBoolean}, ConverterParameter=Filled}"
+                                    Classes.undetermined="{Binding CellState, Converter={x:Static con:AppConverters.EnumToBoolean}, ConverterParameter=Undetermined}" />
+                            </Border>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Border>
+    </Grid>
+</UserControl>

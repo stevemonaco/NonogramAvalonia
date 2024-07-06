@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using Avalonia.Controls.Documents;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using NonogramAvalonia.Services;
@@ -25,7 +26,7 @@ public partial class MenuViewModel : ObservableRecipient
         foreach (var file in Directory.GetFiles(_boardLocation).Where(x => x.EndsWith(".json")))
         {
             var content = await File.ReadAllTextAsync(file);
-            var board = _boardService.LoadBoardFromJson(content);
+            var board = _boardService.DeserializeBoard(content);
 
             if (board.IsSuccess)
             {
@@ -39,5 +40,11 @@ public partial class MenuViewModel : ObservableRecipient
     public void Play(BoardViewModel board)
     {
         WeakReferenceMessenger.Default.Send(new NavigateToPlayMessage(board.Board));
+    }
+
+    [RelayCommand]
+    public void CreateBoard()
+    {
+        WeakReferenceMessenger.Default.Send(new NavigateToCreateMessage());
     }
 }

@@ -25,8 +25,6 @@ public partial class PlayBoardViewModel : BoardViewModel
 
     public PlayBoardViewModel(NonogramBoard board) : base(board)
     {
-        //OnPropertyChanged(nameof(SolutionRowConstraints));
-        //OnPropertyChanged(nameof(SolutionColumnConstraints));
     }
 
     public override bool TryApplyCellTransition(NonogramCell cell)

@@ -9,13 +9,17 @@ namespace NonogramAvalonia.Services;
 
 public interface IFileSelectService
 {
-    Task<string?> RequestBoardFileNameAsync();
+    Task<string?> RequestOpenBoardFileNameAsync();
+    Task<string?> RequestSaveBoardFileNameAsync();
 }
 
 public class FileSelectService : IFileSelectService
 {
-    public async Task<string?> RequestBoardFileNameAsync()
+    public async Task<string?> RequestOpenBoardFileNameAsync()
     {
+        if (GetWindow() is not Window window)
+            return null;
+
         var options = new FilePickerOpenOptions()
         {
             FileTypeFilter = new List<FilePickerFileType>()
@@ -30,13 +34,31 @@ public class FileSelectService : IFileSelectService
             Title = "Select Board File"
         };
 
-        var window = GetWindow();
-
-        if (window is null)
-            return null;
-
         var pickerResult = await window.StorageProvider.OpenFilePickerAsync(options);
         return pickerResult?.FirstOrDefault()?.TryGetLocalPath();
+    }
+
+    public async Task<string?> RequestSaveBoardFileNameAsync()
+    {
+        if (GetWindow() is not Window window)
+            return null;
+
+        var folder = await window.StorageProvider.TryGetFolderFromPathAsync("_boards");
+
+        if (folder is null)
+        {
+            return null;
+        }
+
+        var options = new FilePickerSaveOptions()
+        {
+            DefaultExtension = "json",
+            SuggestedStartLocation = folder,
+            Title = "Select Board File"
+        };
+
+        var pickerResult = await window.StorageProvider.SaveFilePickerAsync(options);
+        return pickerResult?.TryGetLocalPath();
     }
 
     private static Window? GetWindow()

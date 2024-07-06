@@ -15,31 +15,37 @@
         </Style>
     </UserControl.Styles>
 
-    <ItemsControl x:Name="boards" ItemsSource="{Binding AvailableBoards}">
-        <ItemsControl.ItemsPanel>
-            <ItemsPanelTemplate>
-                <UniformGrid VerticalAlignment="Top" />
-            </ItemsPanelTemplate>
-        </ItemsControl.ItemsPanel>
-        <ItemsControl.ItemTemplate>
-            <DataTemplate>
-                <Button
-                    HorizontalAlignment="Stretch"
-                    BorderBrush="Orange"
-                    BorderThickness="1"
-                    Command="{Binding #boards.((vm:MenuViewModel)DataContext).PlayCommand}"
-                    CommandParameter="{Binding}"
-                    CornerRadius="4">
-                    <StackPanel>
-                        <TextBlock Text="{Binding PuzzleName}" />
-                        <TextBlock>
-                            <Run Text="{Binding GridRows}" />
-                            <Run Text="x" />
-                            <Run Text="{Binding GridColumns}" />
-                        </TextBlock>
-                    </StackPanel>
-                </Button>
-            </DataTemplate>
-        </ItemsControl.ItemTemplate>
-    </ItemsControl>
+    <Grid RowDefinitions="*,auto">
+        <ItemsControl x:Name="boards" ItemsSource="{Binding AvailableBoards}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid VerticalAlignment="Top" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Button
+                        HorizontalAlignment="Stretch"
+                        BorderBrush="Orange"
+                        BorderThickness="1"
+                        Command="{Binding #boards.((vm:MenuViewModel)DataContext).PlayCommand}"
+                        CommandParameter="{Binding}"
+                        CornerRadius="4">
+                        <StackPanel>
+                            <TextBlock Text="{Binding PuzzleName}" />
+                            <TextBlock>
+                                <Run Text="{Binding GridRows}" />
+                                <Run Text="x" />
+                                <Run Text="{Binding GridColumns}" />
+                            </TextBlock>
+                        </StackPanel>
+                    </Button>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Bottom" Orientation="Horizontal">
+            <Button Command="{Binding CreateBoardCommand}" Content="Create" />
+        </StackPanel>
+    </Grid>
 </UserControl>
