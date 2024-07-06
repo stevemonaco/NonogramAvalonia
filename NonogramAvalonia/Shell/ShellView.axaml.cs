@@ -1,41 +1,42 @@
 using System;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Messaging;
 using NonogramAvalonia.ViewModels;
 
 namespace NonogramAvalonia.Views;
-public partial class ShellView : Window, IRecipient<GameStartedMessage>, IRecipient<GameWinMessage>
+public partial class ShellView : Window
 {
     internal ShellViewModel ViewModel => (ShellViewModel)DataContext!;
-    private readonly DispatcherTimer _timer;
-    private DateTime _timeStarted;
 
     public ShellView()
     {
         InitializeComponent();
-
-        _timer = new(TimeSpan.FromSeconds(1), DispatcherPriority.Normal, Timer_Tick);
-        WeakReferenceMessenger.Default.RegisterAll(this);
     }
 
     protected override async void OnLoaded(RoutedEventArgs e)
     {
         base.OnLoaded(e);
-
-        await ViewModel.LoadBoardAsync(@"_boards\PicrossDS 1-B.json");
+        await ViewModel.InitializeAsync();
     }
 
-    private void Timer_Tick(object? sender, EventArgs e)
+    protected override void OnKeyDown(KeyEventArgs e)
     {
-        ViewModel.TimeElapsed = DateTime.Now - _timeStarted;
+        base.OnKeyDown(e);
+
+        if (e.Key == Key.Escape && ViewModel.ActiveScreen is PlayBoardViewModel)
+        {
+            WeakReferenceMessenger.Default.Send(new GameQuitMessage());
+            WeakReferenceMessenger.Default.Send(new NavigateToMenuMessage());
+        }
     }
 
     public void ExitApplication(object? sender, RoutedEventArgs e)
     {
         var canExit = ViewModel.RequestApplicationExit();
+
         var lifetime = Avalonia.Application.Current!.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime;
 
         if (canExit)
@@ -45,17 +46,5 @@ public partial class ShellView : Window, IRecipient<GameStartedMessage>, IRecipi
             else
                 Environment.Exit(0);
         }
-    }
-
-    public void Receive(GameStartedMessage message)
-    {
-        _timeStarted = DateTime.Now;
-        _timer.Start();
-    }
-
-    public void Receive(GameWinMessage message)
-    {
-        ViewModel.TimeElapsed = DateTime.Now - _timeStarted;
-        _timer.Stop();
     }
 }

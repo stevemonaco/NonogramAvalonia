@@ -1,0 +1,45 @@
+<UserControl
+    x:Class="NonogramAvalonia.Views.MenuView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:NonogramAvalonia.ViewModels"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    x:DataType="vm:MenuViewModel"
+    mc:Ignorable="d">
+    <UserControl.Styles>
+        <Style Selector="Button:pressed">
+            <Setter Property="RenderTransform" Value="{x:Null}" />
+        </Style>
+    </UserControl.Styles>
+
+    <ItemsControl x:Name="boards" ItemsSource="{Binding AvailableBoards}">
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <UniformGrid VerticalAlignment="Top" />
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.ItemTemplate>
+            <DataTemplate>
+                <Button
+                    HorizontalAlignment="Stretch"
+                    BorderBrush="Orange"
+                    BorderThickness="1"
+                    Command="{Binding #boards.((vm:MenuViewModel)DataContext).PlayCommand}"
+                    CommandParameter="{Binding}"
+                    CornerRadius="4">
+                    <StackPanel>
+                        <TextBlock Text="{Binding PuzzleName}" />
+                        <TextBlock>
+                            <Run Text="{Binding GridRows}" />
+                            <Run Text="x" />
+                            <Run Text="{Binding GridColumns}" />
+                        </TextBlock>
+                    </StackPanel>
+                </Button>
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+    </ItemsControl>
+</UserControl>

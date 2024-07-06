@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using NonogramAvalonia.ViewModels;
 using NonogramAvalonia.SerializationModels.Json;
 using Remora.Results;
 using Nonogram.Domain;
@@ -7,7 +6,7 @@ using Nonogram.Domain;
 namespace NonogramAvalonia.Services;
 public class BoardService
 {
-    public Result<BoardViewModel> LoadBoardFromJson(string json)
+    public Result<NonogramBoard> LoadBoardFromJson(string json)
     {
         var jsonOptions = new JsonSerializerOptions()
         {
@@ -18,25 +17,24 @@ public class BoardService
 
         if (model is null)
         {
-            return Result<BoardViewModel>.FromError(new ArgumentInvalidError("JSON parsing error", "Could not parse the JSON content for an undetermined reason"));
+            return Result<NonogramBoard>.FromError(new ArgumentInvalidError("JSON parsing error", "Could not parse the JSON content for an undetermined reason"));
         }
 
         if (model.Rows != model.RowConstraints.Count)
         {
-            return Result<BoardViewModel>.FromError(new ArgumentInvalidError("Mismatched row dimensions", $"The 'rows' ({model.Rows}) did not match the number of constraints ({model.RowConstraints.Count})"));
+            return Result<NonogramBoard>.FromError(new ArgumentInvalidError("Mismatched row dimensions", $"The 'rows' ({model.Rows}) did not match the number of constraints ({model.RowConstraints.Count})"));
         }
 
         if (model.Columns != model.ColumnConstraints.Count)
         {
-            return Result<BoardViewModel>.FromError(new ArgumentInvalidError("Mismatched column dimensions", $"The 'columns' ({model.Columns}) did not match the number of constraints ({model.ColumnConstraints.Count})"));
+            return Result<NonogramBoard>.FromError(new ArgumentInvalidError("Mismatched column dimensions", $"The 'columns' ({model.Columns}) did not match the number of constraints ({model.ColumnConstraints.Count})"));
         }
 
-        var board = new NonogramBoard(model.RowConstraints, model.ColumnConstraints);
-        var vm = new BoardViewModel(board)
+        var board = new NonogramBoard(model.RowConstraints, model.ColumnConstraints)
         {
-            PuzzleName = model.Name
+            Name = model.Name
         };
 
-        return Result<BoardViewModel>.FromSuccess(vm);
+        return Result<NonogramBoard>.FromSuccess(board);
     }
 }

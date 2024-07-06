@@ -13,7 +13,7 @@ public class NonogramBoard
 
     public NonogramCell[,] Cells { get; private set; }
 
-    public bool IsGameActive { get; private set; } = false;
+    public string? Name { get; set; }
 
     public NonogramBoard(List<List<int>> rowConstraints, List<List<int>> columnConstraints)
     {
@@ -21,9 +21,7 @@ public class NonogramBoard
         SolutionRowConstraints = rowConstraints.Select(x => new LineConstraint(x)).ToList();
         SolutionColumnConstraints = columnConstraints.Select(x => new LineConstraint(x)).ToList();
 
-        ResetMatrixStates();
-
-        IsGameActive = true;
+        ResetCellStates();
     }
 
     public bool CheckWinState()
@@ -36,7 +34,6 @@ public class NonogramBoard
         if (!AreConstraintsEqual(PlayerColumnConstraints, SolutionColumnConstraints))
             return false;
 
-        IsGameActive = false;
         return true;
 
         bool AreConstraintsEqual(List<LineConstraint> a, List<LineConstraint> b)
@@ -108,7 +105,7 @@ public class NonogramBoard
         }
     }
 
-    public void ResetMatrixStates()
+    public void ResetCellStates()
     {
         for (int row = 0; row < Rows; row++)
         {
@@ -129,15 +126,10 @@ public class NonogramBoard
 
     public void SetState(int row, int column, CellState cs)
     {
-        if (IsGameActive)
-        {
-            if (row < Columns && column < Rows && row >= 0 && column >= 0)
-                Cells[row, column].CellState = cs;
-            else
-                throw new IndexOutOfRangeException();
-        }
+        if (row < Columns && column < Rows && row >= 0 && column >= 0)
+            Cells[row, column].CellState = cs;
         else
-            throw new InvalidOperationException();
+            throw new IndexOutOfRangeException();
     }
 
     public IEnumerable<NonogramCell> GetRowCells(int row)

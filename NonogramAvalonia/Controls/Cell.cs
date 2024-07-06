@@ -1,7 +1,5 @@
 ﻿using Avalonia;
 using Avalonia.Controls.Primitives;
-using Avalonia.Controls.Shapes;
-using Avalonia.Media;
 using Nonogram.Domain;
 using System;
 

@@ -20,11 +20,6 @@
             </MenuItem>
         </Menu>
 
-        <ContentControl Grid.Row="1" Content="{Binding ActiveBoard}" />
-
-        <DockPanel Grid.Row="2">
-            <TextBlock DockPanel.Dock="Right" Text="{Binding TimeElapsed, Converter={x:Static con:AppConverters.TimeSpanToTimerString}}" />
-            <TextBlock Text="{Binding ActiveBoard.PuzzleName, StringFormat=Now Playing: {0}}" />
-        </DockPanel>
+        <ContentControl Grid.Row="1" Content="{Binding ActiveScreen}" />
     </Grid>
 </Window>
