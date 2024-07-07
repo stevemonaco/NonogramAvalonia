@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Nonogram.Domain;
+using NonogramAvalonia.Factory;
 using NonogramAvalonia.Services;
 
 namespace NonogramAvalonia.ViewModels;
@@ -12,25 +13,25 @@ public partial class ShellViewModel : ViewModelBase,
 {
 	[ObservableProperty] private ObservableObject? _activeScreen;
 
-	private readonly MenuViewModel _selectBoardViewModel;
+	private readonly MenuViewModel _menuViewModel;
+    private readonly BoardService _boardService;
+    private readonly IFileSelectService _fileSelectService;
+    private readonly BoardViewModelFactory _boardViewModelFactory;
 
-	private readonly BoardService _boardService;
-	private readonly IFileSelectService _fileSelectService;
-
-	public ShellViewModel(BoardService boardService, IFileSelectService fileSelectService)
+    public ShellViewModel(MenuViewModel menuViewModel, BoardService boardService, IFileSelectService fileSelectService, BoardViewModelFactory boardViewModelFactory)
 	{
-		_boardService = boardService;
-		_fileSelectService = fileSelectService;
-
-		_selectBoardViewModel = new(boardService);
+		_menuViewModel = menuViewModel;
+        _boardService = boardService;
+        _fileSelectService = fileSelectService;
+        _boardViewModelFactory = boardViewModelFactory;
 
         WeakReferenceMessenger.Default.RegisterAll(this);
     }
 
     public async Task InitializeAsync()
 	{
-		await _selectBoardViewModel.InitializeAsync();
-		ActiveScreen = _selectBoardViewModel;
+		await _menuViewModel.InitializeAsync();
+		ActiveScreen = _menuViewModel;
 	}
 
 
@@ -58,7 +59,7 @@ public partial class ShellViewModel : ViewModelBase,
 
     public void PlayBoard(NonogramBoard board)
     {
-        ActiveScreen = new PlayBoardViewModel(board);
+        ActiveScreen = _boardViewModelFactory.CreatePlay(board);
         Messenger.Send(new GameStartedMessage());
     }
 
@@ -75,12 +76,12 @@ public partial class ShellViewModel : ViewModelBase,
 
     public void Receive(NavigateToMenuMessage message)
     {
-        ActiveScreen = _selectBoardViewModel;
+        ActiveScreen = _menuViewModel;
     }
 
     public void Receive(NavigateToCreateMessage message)
     {
-        var board = new NonogramBoard(10, 10);
-        ActiveScreen = new CreateBoardViewModel(board, _boardService, _fileSelectService);
+        var board = new NonogramBoard(message.Rows, message.Columns);
+        ActiveScreen = _boardViewModelFactory.CreateEditor(board);
     }
 }

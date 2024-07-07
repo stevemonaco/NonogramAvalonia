@@ -1,5 +1,5 @@
 <UserControl
-    x:Class="NonogramAvalonia.Views.CreateBoardView"
+    x:Class="NonogramAvalonia.Views.BoardPlayView"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:c="using:NonogramAvalonia.Controls"
@@ -11,7 +11,8 @@
     xmlns:vm="using:NonogramAvalonia.ViewModels"
     d:DesignHeight="450"
     d:DesignWidth="800"
-    x:DataType="vm:CreateBoardViewModel">
+    x:DataType="vm:BoardViewModel"
+    mc:Ignorable="d">
     <UserControl.Styles>
         <Style Selector="c|OutlinedText">
             <Setter Property="FontWeight" Value="Bold" />
@@ -69,14 +70,50 @@
         </Style>
     </UserControl.Styles>
 
-    <Grid RowDefinitions="auto, *">
-        <StackPanel Orientation="Horizontal">
-            <Button Command="{Binding SaveBoardCommand}" Content="Save" />
-        </StackPanel>
+    <Grid ColumnDefinitions="Auto, *" RowDefinitions="Auto, *, Auto">
+        <!--<Rectangle Grid.Row="0" Grid.Column="0" />-->
+
+        <!--  Solution Row Constraints  -->
+        <ItemsControl Grid.Row="1" ItemsSource="{Binding SolutionRowConstraints}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Columns="1" Rows="{Binding GridRows}" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <c:OutlinedText
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Text="{Binding}" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <!--  Solution Column Constraints  -->
+        <ItemsControl
+            Grid.Row="0"
+            Grid.Column="1"
+            ItemsSource="{Binding SolutionColumnConstraints}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Columns="{Binding GridColumns}" Rows="1" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <c:OutlinedText
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Bottom"
+                        Text="{Binding}" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
 
         <!--  Main Nonogram Grid  -->
         <Border
             Grid.Row="1"
+            Grid.Column="1"
             BorderBrush="Black"
             BorderThickness="1"
             Cursor="Hand">
@@ -105,5 +142,10 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </Border>
+
+        <DockPanel Grid.Row="2" Grid.ColumnSpan="2">
+            <TextBlock DockPanel.Dock="Right" Text="{Binding TimeElapsed, Converter={x:Static con:AppConverters.TimeSpanToTimerString}}" />
+            <TextBlock Text="{Binding PuzzleName, StringFormat=Now Playing: {0}}" />
+        </DockPanel>
     </Grid>
 </UserControl>

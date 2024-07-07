@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using NonogramAvalonia.Services;
 using NonogramAvalonia.ViewModels;
+using NonogramAvalonia.Factory;
 
 namespace NonogramAvalonia;
 public interface IAppBootstrapper<TViewModel> where TViewModel : class
@@ -32,6 +33,7 @@ public class Bootstrapper : IAppBootstrapper<ShellViewModel>
     {
         services.AddTransient<BoardService>();
         services.AddTransient<IFileSelectService, FileSelectService>();
+        services.AddTransient<BoardViewModelFactory>();
     }
 
     public void ConfigureViews(IServiceCollection services)

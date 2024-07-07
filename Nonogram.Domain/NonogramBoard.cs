@@ -32,8 +32,6 @@ public class NonogramBoard
 
     public bool CheckWinState()
     {
-        BuildConstraints();
-
         if (!AreConstraintsEqual(PlayerRowConstraints, SolutionRowConstraints))
             return false;
 

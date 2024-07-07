@@ -3,7 +3,7 @@
 namespace NonogramAvalonia;
 
 public record NavigateToPlayMessage(NonogramBoard Board);
-public record NavigateToCreateMessage();
+public record NavigateToCreateMessage(int Rows, int Columns);
 public record NavigateToMenuMessage();
 
 public record GameOpenedMessage();

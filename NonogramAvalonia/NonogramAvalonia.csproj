@@ -31,4 +31,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Compile Update="GameScreens\BoardEditorView.axaml.cs">
+      <DependentUpon>BoardEditorView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="GameScreens\BoardPlayView.axaml.cs">
+      <DependentUpon>BoardPlayView.axaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
 </Project>

@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using NonogramAvalonia.Factory;
 using NonogramAvalonia.Services;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -14,11 +15,13 @@ public partial class MenuViewModel : ObservableRecipient
     [ObservableProperty] ObservableCollection<BoardViewModel> _availableBoards = [];
 
     private readonly BoardService _boardService;
+    private readonly BoardViewModelFactory _boardViewModelFactory;
     private string _boardLocation = @"_boards";
 
-    public MenuViewModel(BoardService boardService)
+    public MenuViewModel(BoardService boardService, BoardViewModelFactory boardViewModelFactory)
     {
         _boardService = boardService;
+        _boardViewModelFactory = boardViewModelFactory;
     }
 
     public async Task InitializeAsync()
@@ -30,7 +33,7 @@ public partial class MenuViewModel : ObservableRecipient
 
             if (board.IsSuccess)
             {
-                var vm = new BoardViewModel(board.Entity);
+                var vm = _boardViewModelFactory.CreateEditor(board.Entity);
                 AvailableBoards.Add(vm);
             }
         }
@@ -45,6 +48,6 @@ public partial class MenuViewModel : ObservableRecipient
     [RelayCommand]
     public void CreateBoard()
     {
-        WeakReferenceMessenger.Default.Send(new NavigateToCreateMessage());
+        WeakReferenceMessenger.Default.Send(new NavigateToCreateMessage(10, 10));
     }
 }

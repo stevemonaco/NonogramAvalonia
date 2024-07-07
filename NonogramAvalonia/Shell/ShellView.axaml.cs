@@ -26,7 +26,7 @@ public partial class ShellView : Window
     {
         base.OnKeyDown(e);
 
-        if (e.Key == Key.Escape && ViewModel.ActiveScreen is PlayBoardViewModel or CreateBoardViewModel)
+        if (e.Key == Key.Escape && ViewModel.ActiveScreen is BoardViewModel)
         {
             WeakReferenceMessenger.Default.Send(new GameQuitMessage());
             WeakReferenceMessenger.Default.Send(new NavigateToMenuMessage());
