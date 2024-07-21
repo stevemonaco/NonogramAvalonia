@@ -5,11 +5,9 @@ public partial class PuzzleSolverTests
 {
     [Theory]
     [MemberData(nameof(SolvePuzzleFullyCases))]
-    public void SolvePuzzles_FullySolved(Puzzle puzzle, List<string> solution)
+    public void SolvePuzzles_FullySolved(Puzzle puzzle, List<string> expected)
     {
         var isSolved = puzzle.SolvePuzzle();
-
-        var expected = solution;
         var actual = NonogramUtility.ToCellStrings(puzzle);
 
         Assert.True(isSolved);
