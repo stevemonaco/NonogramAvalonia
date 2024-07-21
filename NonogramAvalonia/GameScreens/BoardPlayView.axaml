@@ -57,18 +57,54 @@
 
         <Style Selector="Border.outerCell">
             <Setter Property="BorderThickness" Value="2" />
-            <Setter Property="BorderBrush" Value="Black" />
         </Style>
-        <Style Selector="Border.outerCell:pointerover">
+        <!--<Style Selector="Border.outerCell:pointerover">
             <Setter Property="BorderThickness" Value="4" />
             <Setter Property="BorderBrush" Value="Purple" />
-        </Style>
+        </Style>-->
         <Style Selector="Border.innerCell">
             <Setter Property="BorderThickness" Value="2" />
             <Setter Property="BorderBrush" Value="Transparent" />
         </Style>
-        <Style Selector="Border.innerCell:pointerover">
+        <!--<Style Selector="Border.innerCell:pointerover">
             <Setter Property="BorderThickness" Value="0" />
+        </Style>-->
+
+        <Style Selector="Border.outerCell.left-edge">
+            <Setter Property="BorderBrush">
+                <LinearGradientBrush>
+                    <GradientStop Offset="0" Color="White" />
+                    <GradientStop Offset="0.5" Color="Transparent" />
+                </LinearGradientBrush>
+            </Setter>
+        </Style>
+
+        <Style Selector="Border.outerCell.right-edge">
+            <Setter Property="BorderBrush" Value="White" />
+        </Style>
+
+        <Style Selector="Border.outerCell.top-edge">
+            <Setter Property="BorderBrush" Value="White" />
+        </Style>
+
+        <Style Selector="Border.outerCell.bottom-edge">
+            <Setter Property="BorderBrush" Value="White" />
+        </Style>
+
+        <Style Selector="Border.outerCell.top-left-edge">
+            <Setter Property="BorderBrush" Value="White" />
+        </Style>
+
+        <Style Selector="Border.outerCell.top-right-edge">
+            <Setter Property="BorderBrush" Value="White" />
+        </Style>
+
+        <Style Selector="Border.outerCell.bottom-left-edge">
+            <Setter Property="BorderBrush" Value="White" />
+        </Style>
+
+        <Style Selector="Border.outerCell.bottom-right-edge">
+            <Setter Property="BorderBrush" Value="White" />
         </Style>
     </UserControl.Styles>
 
@@ -118,8 +154,9 @@
             Grid.Column="1"
             BorderBrush="Black"
             BorderThickness="1"
-            Cursor="Hand">
-            <ItemsControl ItemsSource="{Binding BoardCells}">
+            Cursor="Hand"
+            UseLayoutRounding="True">
+            <ItemsControl x:Name="board" ItemsSource="{Binding BoardCells}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <UniformGrid Columns="{Binding GridColumns}" Rows="{Binding GridRows}" />
@@ -128,7 +165,7 @@
 
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Border
+                        <!--<Border
                             Classes="outerCell"
                             PointerMoved="OnPointerMoved"
                             PointerPressed="OnPointerPressed"
@@ -139,7 +176,18 @@
                                     Classes.filled="{Binding CellState, Converter={x:Static con:AppConverters.EnumToBoolean}, ConverterParameter=Filled}"
                                     Classes.undetermined="{Binding CellState, Converter={x:Static con:AppConverters.EnumToBoolean}, ConverterParameter=Undetermined}" />
                             </Border>
-                        </Border>
+                        </Border>-->
+                        <c:Cell
+                            BorderThickness="10"
+                            BottomBrush="Purple"
+                            Classes.empty="{Binding CellState, Converter={x:Static con:AppConverters.EnumToBoolean}, ConverterParameter=Empty}"
+                            Classes.filled="{Binding CellState, Converter={x:Static con:AppConverters.EnumToBoolean}, ConverterParameter=Filled}"
+                            Classes.undetermined="{Binding CellState, Converter={x:Static con:AppConverters.EnumToBoolean}, ConverterParameter=Undetermined}"
+                            CornerRadius="4"
+                            Fill="Beige"
+                            LeftBrush="Blue"
+                            RightBrush="Red"
+                            TopBrush="Orange" />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

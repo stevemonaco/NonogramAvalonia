@@ -7,8 +7,8 @@ namespace NonogramAvalonia.ViewModels;
 
 public partial class NonogramViewModel : ObservableObject
 {
-    public int Columns { get => Cells.GetLength(0); }
-    public int Rows { get => Cells.GetLength(1); }
+    public int Columns { get => Cells.GetLength(1); }
+    public int Rows { get => Cells.GetLength(0); }
 
     public List<LineConstraints> SolutionRowConstraints { get; private set; } = [];
     public List<LineConstraints> SolutionColumnConstraints { get; private set; } = [];
@@ -146,10 +146,10 @@ public partial class NonogramViewModel : ObservableObject
 
     public IEnumerable<CellViewModel> GetRow(int row)
     {
-        if (row >= Cells.GetLength(1) || row < 0)
+        if (row >= Cells.GetLength(0) || row < 0)
             throw new IndexOutOfRangeException();
         
-        for (int col = 0; col < Cells.GetLength(0); col++)
+        for (int col = 0; col < Cells.GetLength(1); col++)
         {
             yield return Cells[row, col];
         }
@@ -157,10 +157,10 @@ public partial class NonogramViewModel : ObservableObject
 
     public IEnumerable<CellViewModel> GetColumn(int column)
     {
-        if (column >= Cells.GetLength(0) || column < 0)
+        if (column >= Cells.GetLength(1) || column < 0)
             throw new IndexOutOfRangeException();
 
-        for (int row = 0; row < Cells.GetLength(1); row++)
+        for (int row = 0; row < Cells.GetLength(0); row++)
         {
             yield return Cells[row, column];
         }

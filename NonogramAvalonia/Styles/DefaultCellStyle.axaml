@@ -13,7 +13,7 @@
         </StackPanel>
     </Design.PreviewWith>
 
-    <ControlTheme x:Key="{x:Type c:Cell}" TargetType="c:Cell">
+    <!--<ControlTheme x:Key="{x:Type c:Cell}" TargetType="c:Cell">
         <Setter Property="Background" Value="{DynamicResource Background}" />
 
         <Setter Property="Template">
@@ -21,10 +21,13 @@
                 <Border x:Name="outerBorder">
                     <Border x:Name="innerBorder">
                         <Rectangle />
-                        <!--<Rectangle Classes.undetermined="{Binding CellState, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Undetermined}"
+    -->
+    <!--<Rectangle Classes.undetermined="{Binding CellState, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Undetermined}"
 								   Classes.empty="{Binding CellState, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Empty}"
 								   Classes.filled="{Binding CellState, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Filled}" >-->
-                        <!--<i:Interaction.Behaviors>
+    <!--
+    -->
+    <!--<i:Interaction.Behaviors>
 										<ia:DataTriggerBehavior Binding="{Binding CellState}" Value="{x:Static ngd:CellState.Undetermined}">
 											<ia:ChangePropertyAction PropertyName="Fill" Value="#df6626" />
 										</ia:DataTriggerBehavior>
@@ -35,9 +38,10 @@
 											<ia:ChangePropertyAction PropertyName="Fill" Value="#37946e" />
 										</ia:DataTriggerBehavior>
 									</i:Interaction.Behaviors>-->
+    <!--
                     </Border>
                 </Border>
             </ControlTemplate>
         </Setter>
-    </ControlTheme>
+    </ControlTheme>-->
 </ResourceDictionary>

@@ -54,7 +54,6 @@
 
         <Style Selector="Border.outerCell">
             <Setter Property="BorderThickness" Value="2" />
-            <Setter Property="BorderBrush" Value="Black" />
         </Style>
         <Style Selector="Border.outerCell:pointerover">
             <Setter Property="BorderThickness" Value="4" />
@@ -66,6 +65,38 @@
         </Style>
         <Style Selector="Border.innerCell:pointerover">
             <Setter Property="BorderThickness" Value="0" />
+        </Style>
+
+        <Style Selector="Border.outerCell.left-edge">
+            <Setter Property="BorderBrush" Value="White" />
+        </Style>
+
+        <Style Selector="Border.outerCell.right-edge">
+            <Setter Property="BorderBrush" Value="White" />
+        </Style>
+
+        <Style Selector="Border.outerCell.top-edge">
+            <Setter Property="BorderBrush" Value="White" />
+        </Style>
+
+        <Style Selector="Border.outerCell.bottom-edge">
+            <Setter Property="BorderBrush" Value="White" />
+        </Style>
+
+        <Style Selector="Border.outerCell.top-left-edge">
+            <Setter Property="BorderBrush" Value="White" />
+        </Style>
+
+        <Style Selector="Border.outerCell.top-right-edge">
+            <Setter Property="BorderBrush" Value="White" />
+        </Style>
+
+        <Style Selector="Border.outerCell.bottom-left-edge">
+            <Setter Property="BorderBrush" Value="White" />
+        </Style>
+
+        <Style Selector="Border.outerCell.bottom-right-edge">
+            <Setter Property="BorderBrush" Value="White" />
         </Style>
     </UserControl.Styles>
 
@@ -120,7 +151,7 @@
             BorderBrush="Black"
             BorderThickness="1"
             Cursor="Hand">
-            <ItemsControl ItemsSource="{Binding BoardCells}">
+            <ItemsControl x:Name="board" ItemsSource="{Binding BoardCells}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <UniformGrid Columns="{Binding GridColumns}" Rows="{Binding GridRows}" />
