@@ -1,10 +1,9 @@
 using Avalonia.Controls;
 using Avalonia.Input;
-using Nonogram.Domain;
+using Avalonia.Interactivity;
 using NonogramAvalonia.ViewModels;
 
 namespace NonogramAvalonia.Views;
-
 public partial class BoardEditorView : UserControl
 {
     internal BoardViewModel ViewModel => (BoardViewModel)DataContext!;
@@ -14,9 +13,15 @@ public partial class BoardEditorView : UserControl
         InitializeComponent();
     }
 
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        Focus();
+    }
+
     private void OnPointerPressed(object? sender, PointerPressedEventArgs e)
     {
-        if (e.Pointer.Type == PointerType.Mouse && sender is Control { DataContext: NonogramCell cell })
+        if (e.Pointer.Type == PointerType.Mouse && sender is Control { DataContext: CellViewModel cell })
         {
             var props = e.GetCurrentPoint(null).Properties;
             var secondary = props.IsRightButtonPressed;
@@ -44,7 +49,7 @@ public partial class BoardEditorView : UserControl
 
     private void OnPointerMoved(object? sender, PointerEventArgs e)
     {
-        if (e.Pointer.Type == PointerType.Mouse && sender is Control { DataContext: NonogramCell cell })
+        if (e.Pointer.Type == PointerType.Mouse && sender is Control { DataContext: CellViewModel cell })
         {
             var props = e.GetCurrentPoint(null).Properties;
             var anyPressed = props.IsLeftButtonPressed || props.IsMiddleButtonPressed || props.IsRightButtonPressed;

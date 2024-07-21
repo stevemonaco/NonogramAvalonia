@@ -32,6 +32,7 @@ public class Bootstrapper : IAppBootstrapper<ShellViewModel>
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddTransient<BoardService>();
+        services.AddTransient<SolverService>();
         services.AddTransient<IFileSelectService, FileSelectService>();
         services.AddTransient<BoardViewModelFactory>();
     }

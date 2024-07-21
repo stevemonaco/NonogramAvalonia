@@ -12,6 +12,8 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     x:DataType="vm:BoardViewModel"
+    FocusAdorner="{x:Null}"
+    Focusable="True"
     mc:Ignorable="d">
     <UserControl.Styles>
         <Style Selector="c|OutlinedText">

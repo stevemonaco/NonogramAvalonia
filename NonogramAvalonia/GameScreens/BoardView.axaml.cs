@@ -4,12 +4,10 @@ using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Messaging;
-using Nonogram.Domain;
 using NonogramAvalonia.ViewModels;
 using System;
 
 namespace NonogramAvalonia.Views;
-
 public partial class BoardView : UserControl,
     IRecipient<GameStartedMessage>, IRecipient<GameWinMessage>, IRecipient<GameQuitMessage>
 {
@@ -32,7 +30,7 @@ public partial class BoardView : UserControl,
 
     private void OnPointerPressed(object? sender, PointerPressedEventArgs e)
     {
-        if (e.Pointer.Type == PointerType.Mouse && sender is Control { DataContext: NonogramCell cell })
+        if (e.Pointer.Type == PointerType.Mouse && sender is Control { DataContext: CellViewModel cell })
         {
             var props = e.GetCurrentPoint(null).Properties;
             var secondary = props.IsRightButtonPressed;
@@ -60,7 +58,7 @@ public partial class BoardView : UserControl,
 
     private void OnPointerMoved(object? sender, PointerEventArgs e)
     {
-        if (e.Pointer.Type == PointerType.Mouse && sender is Control { DataContext: NonogramCell cell })
+        if (e.Pointer.Type == PointerType.Mouse && sender is Control { DataContext: CellViewModel cell })
         {
             var props = e.GetCurrentPoint(null).Properties;
             var anyPressed = props.IsLeftButtonPressed || props.IsMiddleButtonPressed || props.IsRightButtonPressed;

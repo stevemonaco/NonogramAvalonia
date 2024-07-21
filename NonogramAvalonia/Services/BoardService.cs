@@ -1,13 +1,14 @@
 ﻿using System.Text.Json;
 using NonogramAvalonia.SerializationModels.Json;
 using Remora.Results;
-using Nonogram.Domain;
+using NonogramAvalonia.ViewModels;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace NonogramAvalonia.Services;
 public class BoardService
 {
-    public Result<NonogramBoard> DeserializeBoard(string json)
+    public Result<NonogramViewModel> DeserializeBoard(string json)
     {
         var jsonOptions = new JsonSerializerOptions()
         {
@@ -18,36 +19,36 @@ public class BoardService
 
         if (model is null)
         {
-            return Result<NonogramBoard>.FromError(new ArgumentInvalidError("JSON parsing error", "Could not parse the JSON content for an undetermined reason"));
+            return Result<NonogramViewModel>.FromError(new ArgumentInvalidError("JSON parsing error", "Could not parse the JSON content for an undetermined reason"));
         }
 
         if (model.Rows != model.RowConstraints.Count)
         {
-            return Result<NonogramBoard>.FromError(new ArgumentInvalidError("Mismatched row dimensions", $"The 'rows' ({model.Rows}) did not match the number of constraints ({model.RowConstraints.Count})"));
+            return Result<NonogramViewModel>.FromError(new ArgumentInvalidError("Mismatched row dimensions", $"The 'rows' ({model.Rows}) did not match the number of constraints ({model.RowConstraints.Count})"));
         }
 
         if (model.Columns != model.ColumnConstraints.Count)
         {
-            return Result<NonogramBoard>.FromError(new ArgumentInvalidError("Mismatched column dimensions", $"The 'columns' ({model.Columns}) did not match the number of constraints ({model.ColumnConstraints.Count})"));
+            return Result<NonogramViewModel>.FromError(new ArgumentInvalidError("Mismatched column dimensions", $"The 'columns' ({model.Columns}) did not match the number of constraints ({model.ColumnConstraints.Count})"));
         }
 
-        var board = new NonogramBoard(model.RowConstraints, model.ColumnConstraints)
+        var board = new NonogramViewModel(model.RowConstraints, model.ColumnConstraints)
         {
             Name = model.Name
         };
 
-        return Result<NonogramBoard>.FromSuccess(board);
+        return Result<NonogramViewModel>.FromSuccess(board);
     }
 
-    public string SerializeBoard(NonogramBoard board)
+    public string SerializeBoard(NonogramViewModel board)
     {
         var jsonOptions = new JsonSerializerOptions()
         {
             PropertyNameCaseInsensitive = true
         };
 
-        var rowConstraints = board.PlayerRowConstraints.Select(x => x.Items).ToList();
-        var columnConstraints = board.PlayerColumnConstraints.Select(x => x.Items).ToList();
+        var rowConstraints = board.PlayerRowConstraints.Select(x => new List<int>(x)).ToList();
+        var columnConstraints = board.PlayerColumnConstraints.Select(x => new List<int>(x)).ToList();
 
         var model = new NonogramModel(board.Name ?? "", board.Rows, board.Columns, rowConstraints, columnConstraints);
 

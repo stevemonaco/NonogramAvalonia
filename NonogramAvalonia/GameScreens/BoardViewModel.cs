@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using Nonogram.Domain;
 using NonogramAvalonia.Services;
 
 namespace NonogramAvalonia.ViewModels;
@@ -17,13 +16,13 @@ public enum CellTransition { None, ToUndetermined, ToEmpty, ToFilled }
 
 public partial class BoardViewModel : ObservableRecipient
 {
-    public NonogramBoard Board { get; }
+    public NonogramViewModel Board { get; }
     public BoardMode Mode { get; }
 
     [ObservableProperty] private int _gridRows;
     [ObservableProperty] private int _gridColumns;
 
-    [ObservableProperty] private ObservableCollection<NonogramCell> _boardCells;
+    [ObservableProperty] private ObservableCollection<CellViewModel> _boardCells;
     [ObservableProperty] private string? _puzzleName;
     [ObservableProperty] private bool _isSolved;
     [ObservableProperty] private TimeSpan? _timeElapsed;
@@ -37,14 +36,15 @@ public partial class BoardViewModel : ObservableRecipient
     protected CellTransition _transition;
     private readonly BoardService _boardService;
     private readonly IFileSelectService _fileSelectService;
+    private readonly SolverService _solverService;
 
-    public BoardViewModel(BoardMode mode, NonogramBoard board, BoardService boardService, IFileSelectService fileSelectService)
+    public BoardViewModel(BoardMode mode, NonogramViewModel board, BoardService boardService, IFileSelectService fileSelectService, SolverService solverService)
     {
         Mode = mode;
         Board = board;
         _boardService = boardService;
         _fileSelectService = fileSelectService;
-
+        _solverService = solverService;
         ShowConstraints = true;
 
         _boardCells = new(Board.Board);
@@ -54,7 +54,7 @@ public partial class BoardViewModel : ObservableRecipient
         GridColumns = Board.Columns;
     }
 
-    public virtual bool TryApplyCellTransition(NonogramCell cell)
+    public virtual bool TryApplyCellTransition(CellViewModel cell)
     {
         if (cell.Locked || IsSolved || _transition == CellTransition.None)
             return false;
@@ -83,7 +83,7 @@ public partial class BoardViewModel : ObservableRecipient
         return true;
     }
 
-    public virtual bool TryStartCellTransition(NonogramCell cell, bool secondary)
+    public virtual bool TryStartCellTransition(CellViewModel cell, bool secondary)
     {
         if (cell.Locked || IsSolved)
             return false;
@@ -128,6 +128,12 @@ public partial class BoardViewModel : ObservableRecipient
         await File.WriteAllTextAsync(fileName, json);
     }
 
+    [RelayCommand]
+    public void SolveBoard()
+    {
+        _solverService.SolveBoard(Board, true);
+    }
+
     private void PuzzleSolved()
     {
         IsSolved = true;
@@ -147,9 +153,9 @@ public partial class BoardViewModel : ObservableRecipient
         OnPropertyChanged(nameof(ColumnConstraints));
     }
 
-    private IEnumerable<string> GenerateConstraintStrings(IEnumerable<LineConstraint> lineConstraints, string separator)
+    private IEnumerable<string> GenerateConstraintStrings(IEnumerable<LineConstraints> lineConstraints, string separator)
     {
         foreach (var constraints in lineConstraints)
-            yield return string.Join(separator, constraints.Items.Select(x => x.ToString("d")));
+            yield return string.Join(separator, constraints.Select(x => x.ToString("d")));
     }
 }

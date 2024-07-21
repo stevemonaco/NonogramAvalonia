@@ -1,13 +1,12 @@
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Messaging;
-using Nonogram.Domain;
 using NonogramAvalonia.ViewModels;
 using System;
 
 namespace NonogramAvalonia.Views;
-
 public partial class BoardPlayView : UserControl, 
     IRecipient<GameStartedMessage>, IRecipient<GameWinMessage>, IRecipient<GameQuitMessage>
 {
@@ -23,6 +22,20 @@ public partial class BoardPlayView : UserControl,
         WeakReferenceMessenger.Default.RegisterAll(this);
     }
 
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        Focus();
+    }
+
+    protected override void OnKeyDown(KeyEventArgs e)
+    {
+        if (e.Key == Key.S)
+        {
+            ViewModel.SolveBoard();
+        }
+    }
+
     private void Timer_Tick(object? sender, EventArgs e)
     {
         ViewModel.TimeElapsed = DateTime.Now - _timeStarted;
@@ -30,7 +43,7 @@ public partial class BoardPlayView : UserControl,
 
     private void OnPointerPressed(object? sender, PointerPressedEventArgs e)
     {
-        if (e.Pointer.Type == PointerType.Mouse && sender is Control { DataContext: NonogramCell cell })
+        if (e.Pointer.Type == PointerType.Mouse && sender is Control { DataContext: CellViewModel cell })
         {
             var props = e.GetCurrentPoint(null).Properties;
             var secondary = props.IsRightButtonPressed;
@@ -58,7 +71,7 @@ public partial class BoardPlayView : UserControl,
 
     private void OnPointerMoved(object? sender, PointerEventArgs e)
     {
-        if (e.Pointer.Type == PointerType.Mouse && sender is Control { DataContext: NonogramCell cell })
+        if (e.Pointer.Type == PointerType.Mouse && sender is Control { DataContext: CellViewModel cell })
         {
             var props = e.GetCurrentPoint(null).Properties;
             var anyPressed = props.IsLeftButtonPressed || props.IsMiddleButtonPressed || props.IsRightButtonPressed;

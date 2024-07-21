@@ -1,6 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls.Primitives;
-using Nonogram.Domain;
+using NonogramAvalonia.ViewModels;
 using System;
 
 namespace NonogramAvalonia.Controls;

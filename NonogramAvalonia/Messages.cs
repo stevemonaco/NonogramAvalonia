@@ -1,8 +1,8 @@
-﻿using Nonogram.Domain;
+﻿using NonogramAvalonia.ViewModels;
 
 namespace NonogramAvalonia;
 
-public record NavigateToPlayMessage(NonogramBoard Board);
+public record NavigateToPlayMessage(NonogramViewModel Board);
 public record NavigateToCreateMessage(int Rows, int Columns);
 public record NavigateToMenuMessage();
 

@@ -1,31 +1,39 @@
-﻿namespace Nonogram.Domain;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
-public class NonogramBoard
+namespace NonogramAvalonia.ViewModels;
+
+public partial class NonogramViewModel : ObservableObject
 {
     public int Columns { get => Cells.GetLength(0); }
     public int Rows { get => Cells.GetLength(1); }
 
-    public List<LineConstraint> SolutionRowConstraints { get; private set; } = [];
-    public List<LineConstraint> SolutionColumnConstraints { get; private set; } = [];
+    public List<LineConstraints> SolutionRowConstraints { get; private set; } = [];
+    public List<LineConstraints> SolutionColumnConstraints { get; private set; } = [];
 
-    public List<LineConstraint> PlayerRowConstraints { get; private set; } = [];
-    public List<LineConstraint> PlayerColumnConstraints { get; private set; } = [];
+    public List<LineConstraints> PlayerRowConstraints { get; private set; } = [];
+    public List<LineConstraints> PlayerColumnConstraints { get; private set; } = [];
 
-    public NonogramCell[,] Cells { get; private set; }
+    /// <summary>
+    /// Board cells in [row, column] order
+    /// </summary>
+    public CellViewModel[,] Cells { get; private set; }
 
-    public string? Name { get; set; }
+    [ObservableProperty] private string? _name;
 
-    public NonogramBoard(int rows, int columns)
+    public NonogramViewModel(int rows, int columns)
     {
-        Cells = new NonogramCell[rows, columns];
+        Cells = new CellViewModel[rows, columns];
         ResetCellStates();
     }
 
-    public NonogramBoard(List<List<int>> rowConstraints, List<List<int>> columnConstraints)
+    public NonogramViewModel(List<List<int>> rowConstraints, List<List<int>> columnConstraints)
     {
-        Cells = new NonogramCell[rowConstraints.Count, columnConstraints.Count];
-        SolutionRowConstraints = rowConstraints.Select(x => new LineConstraint(x)).ToList();
-        SolutionColumnConstraints = columnConstraints.Select(x => new LineConstraint(x)).ToList();
+        Cells = new CellViewModel[rowConstraints.Count, columnConstraints.Count];
+        SolutionRowConstraints = rowConstraints.Select(x => new LineConstraints(x)).ToList();
+        SolutionColumnConstraints = columnConstraints.Select(x => new LineConstraints(x)).ToList();
 
         ResetCellStates();
     }
@@ -40,7 +48,7 @@ public class NonogramBoard
 
         return true;
 
-        bool AreConstraintsEqual(List<LineConstraint> a, List<LineConstraint> b)
+        bool AreConstraintsEqual(List<LineConstraints> a, List<LineConstraints> b)
         {
             if (a.Count != b.Count)
                 return false;
@@ -61,13 +69,13 @@ public class NonogramBoard
         PlayerColumnConstraints.Clear();
 
         // Build Row Constraints
-        for (int y = 0; y < Rows; y++)
+        for (int row = 0; row < Rows; row++)
         {
-            LineConstraint constraint = new LineConstraint();
+            LineConstraints constraint = new LineConstraints();
             int run = 0;
-            for (int x = 0; x < Columns; x++)
+            for (int col = 0; col < Columns; col++)
             {
-                if (Cells[x, y].CellState == CellState.Filled)
+                if (Cells[row, col].CellState == CellState.Filled)
                     run++;
                 else if (run > 0)
                 {
@@ -78,20 +86,20 @@ public class NonogramBoard
             if (run > 0)
                 constraint.Add(run);
 
-            if (constraint.Items.Count == 0)
+            if (constraint.Count == 0)
                 constraint.Add(0);
 
             PlayerRowConstraints.Add(constraint);
         }
 
         // Build Column Constraints
-        for (int x = 0; x < Columns; x++)
+        for (int col = 0; col < Columns; col++)
         {
-            LineConstraint constraint = new LineConstraint();
+            LineConstraints constraint = new LineConstraints();
             int run = 0;
-            for (int y = 0; y < Rows; y++)
+            for (int row = 0; row < Rows; row++)
             {
-                if (Cells[x, y].CellState == CellState.Filled)
+                if (Cells[row, col].CellState == CellState.Filled)
                     run++;
                 else if (run > 0)
                 {
@@ -102,7 +110,7 @@ public class NonogramBoard
             if (run > 0)
                 constraint.Add(run);
 
-            if (constraint.Items.Count == 0)
+            if (constraint.Count == 0)
                 constraint.Add(0);
 
             PlayerColumnConstraints.Add(constraint);
@@ -113,9 +121,9 @@ public class NonogramBoard
     {
         for (int row = 0; row < Rows; row++)
         {
-            for (int column = 0; column < Columns; column++)
+            for (int col = 0; col < Columns; col++)
             {
-                Cells[row, column] = new NonogramCell(CellState.Undetermined, row, column);
+                Cells[row, col] = new CellViewModel(CellState.Undetermined, row, col);
             }
         }
     }
@@ -136,35 +144,35 @@ public class NonogramBoard
             throw new IndexOutOfRangeException();
     }
 
-    public IEnumerable<NonogramCell> GetRowCells(int row)
+    public IEnumerable<CellViewModel> GetRow(int row)
     {
         if (row >= Cells.GetLength(1) || row < 0)
             throw new IndexOutOfRangeException();
         
-        for (int x = 0; x < Cells.GetLength(0); x++)
+        for (int col = 0; col < Cells.GetLength(0); col++)
         {
-            yield return Cells[x, row];
+            yield return Cells[row, col];
         }
     }
 
-    public IEnumerable<NonogramCell> GetColumnCells(int column)
+    public IEnumerable<CellViewModel> GetColumn(int column)
     {
         if (column >= Cells.GetLength(0) || column < 0)
             throw new IndexOutOfRangeException();
 
-        for (int y = 0; y < Cells.GetLength(1); y++)
+        for (int row = 0; row < Cells.GetLength(1); row++)
         {
-            yield return Cells[column, y];
+            yield return Cells[row, column];
         }
     }
 
-    public IEnumerable<NonogramCell> Board
+    public IEnumerable<CellViewModel> Board
     {
         get
         {
-            for (int y = 0; y < Rows; y++)
-                for (int x = 0; x < Columns; x++)
-                    yield return Cells[x, y];
+            for (int row = 0; row < Rows; row++)
+                for (int col = 0; col < Columns; col++)
+                    yield return Cells[row, col];
         }
     }
 }

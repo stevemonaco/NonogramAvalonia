@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using Nonogram.Domain;
 using NonogramAvalonia.Factory;
 using NonogramAvalonia.Services;
 
@@ -57,7 +56,7 @@ public partial class ShellViewModel : ViewModelBase,
         }
     }
 
-    public void PlayBoard(NonogramBoard board)
+    public void PlayBoard(NonogramViewModel board)
     {
         ActiveScreen = _boardViewModelFactory.CreatePlay(board);
         Messenger.Send(new GameStartedMessage());
@@ -81,7 +80,7 @@ public partial class ShellViewModel : ViewModelBase,
 
     public void Receive(NavigateToCreateMessage message)
     {
-        var board = new NonogramBoard(message.Rows, message.Columns);
+        var board = new NonogramViewModel(message.Rows, message.Columns);
         ActiveScreen = _boardViewModelFactory.CreateEditor(board);
     }
 }
