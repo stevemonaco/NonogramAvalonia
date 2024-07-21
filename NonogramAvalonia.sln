@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32825.248
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NonogramAvalonia", "NonogramAvalonia\NonogramAvalonia.csproj", "{CA76CECF-E69F-4AAF-89DB-BF73BA22B248}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NonogramAvalonia", "NonogramAvalonia\NonogramAvalonia.csproj", "{CA76CECF-E69F-4AAF-89DB-BF73BA22B248}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nonogram.Domain", "Nonogram.Domain\Nonogram.Domain.csproj", "{22485C23-5C2F-4F90-B6AE-91B113986648}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nonogram.Domain", "Nonogram.Domain\Nonogram.Domain.csproj", "{22485C23-5C2F-4F90-B6AE-91B113986648}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nonogram.UnitTests", "Nonogram.UnitTests\Nonogram.UnitTests.csproj", "{5DF0B779-094E-4085-88B8-7D7181B71C8A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{22485C23-5C2F-4F90-B6AE-91B113986648}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{22485C23-5C2F-4F90-B6AE-91B113986648}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{22485C23-5C2F-4F90-B6AE-91B113986648}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5DF0B779-094E-4085-88B8-7D7181B71C8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5DF0B779-094E-4085-88B8-7D7181B71C8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5DF0B779-094E-4085-88B8-7D7181B71C8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5DF0B779-094E-4085-88B8-7D7181B71C8A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
