@@ -13,6 +13,14 @@ public partial class Cell : Control
     static Cell()
     {
         StateProperty.Changed.Subscribe(OnStateChanged);
+
+        var items = new AvaloniaProperty[]
+        {
+            StateProperty, FillProperty, BorderThicknessProperty, CornerRadiusProperty,
+            LeftBrushProperty, RightBrushProperty, TopBrushProperty, BottomBrushProperty
+        };
+
+        AffectsRender<Cell>(items);
     }
 
     private static void OnStateChanged(AvaloniaPropertyChangedEventArgs e)
@@ -32,23 +40,23 @@ public partial class Cell : Control
         var clipRect = new RoundedRect(Bounds, CornerRadius);
         var clipRectState = context.PushClip(clipRect);
 
-        if (Fill is not null)
-            context.FillRectangle(Fill, Bounds);
+        var bounds = Bounds.Deflate(new Thickness(BorderThickness.Left, BorderThickness.Top, BorderThickness.Right, BorderThickness.Bottom));
 
-        var bounds = Bounds; // Bounds.Deflate(new Thickness(BorderThickness.Left / 2, BorderThickness.Top / 2, BorderThickness.Right / 2, BorderThickness.Bottom / 2));
+        if (Fill is not null)
+            context.FillRectangle(Fill, bounds);
 
 
         var leftPen = new ImmutablePen(GetColor(LeftBrush), BorderThickness.Left);
-        context.DrawLine(leftPen, bounds.TopLeft, bounds.BottomLeft);
+        context.DrawLine(leftPen, Bounds.TopLeft, Bounds.BottomLeft);
 
         var rightPen = new ImmutablePen(GetColor(RightBrush), BorderThickness.Right);
-        context.DrawLine(rightPen, bounds.TopRight, bounds.BottomRight);
+        context.DrawLine(rightPen, Bounds.TopRight, Bounds.BottomRight);
 
         var topPen = new ImmutablePen(GetColor(TopBrush), BorderThickness.Top);
-        context.DrawLine(topPen, bounds.TopLeft, bounds.TopRight);
+        context.DrawLine(topPen, Bounds.TopLeft, Bounds.TopRight);
 
         var bottomPen = new ImmutablePen(GetColor(BottomBrush), BorderThickness.Bottom);
-        context.DrawLine(bottomPen, bounds.BottomLeft, bounds.BottomRight);
+        context.DrawLine(bottomPen, Bounds.BottomLeft, Bounds.BottomRight);
 
         clipRectState.Dispose();
     }

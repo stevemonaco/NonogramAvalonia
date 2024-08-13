@@ -1,10 +1,7 @@
 ﻿using NonogramAvalonia.ViewModels;
 using Nonogram.Domain;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DomainCellState = Nonogram.Domain.CellState;
 using ViewModelCellState = NonogramAvalonia.ViewModels.CellState;
 
@@ -14,7 +11,8 @@ public class SolverService
     public bool SolveBoard(NonogramViewModel nonogram, bool fillState)
     {
         var puzzle = ToPuzzle(nonogram);
-        var isSolved = puzzle.SolvePuzzle();
+        var solver = new NonogramSolver(puzzle);
+        var isSolved = solver.SolvePuzzle();
 
         if (fillState)
         {
@@ -34,12 +32,12 @@ public class SolverService
         return isSolved;
     }
 
-    private Puzzle ToPuzzle(NonogramViewModel nonogram)
+    private NonogramPuzzle ToPuzzle(NonogramViewModel nonogram)
     {
         var rowConstraints = nonogram.SolutionRowConstraints.Select(x => new LineConstraint(x));
         var columnConstraints = nonogram.SolutionColumnConstraints.Select(x => new LineConstraint(x));
 
-        return new Puzzle(rowConstraints, columnConstraints);
+        return new NonogramPuzzle(rowConstraints, columnConstraints);
     }
 
     private ViewModelCellState ToCellState(DomainCellState state) => state switch

@@ -7,7 +7,7 @@ public static class NonogramUtility
     private static readonly Dictionary<char, CellState> _lookup =
         new Dictionary<char, CellState>() { ['-'] = CellState.Undetermined, ['x'] = CellState.Empty, ['o'] = CellState.Filled };
 
-    public static List<string> ToCellStrings(Puzzle puzzle)
+    public static List<string> ToCellStrings(NonogramPuzzle puzzle)
     {
         var cellStrings = new List<string>();
         for (int row = 0; row < puzzle.Rows; row++)

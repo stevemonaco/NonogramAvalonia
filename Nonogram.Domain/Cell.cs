@@ -1,5 +1,4 @@
-﻿
-namespace Nonogram.Domain;
+﻿namespace Nonogram.Domain;
 public class Cell
 {
     private CellState _state;

@@ -1,6 +1,20 @@
 ﻿namespace Nonogram.Domain;
-internal static class Solver
+internal static class SolverUtility
 {
+    public static void UnionRowCell(Cell cell, Cell neighborCell, LabelMap map) =>
+        UnionCell(cell, neighborCell, map, true);
+
+    public static void UnionColumnCell(Cell cell, Cell neighborCell, LabelMap map) =>
+        UnionCell(cell, neighborCell, map, false);
+
+    public static void UnionCell(Cell cell, Cell neighborCell, LabelMap map, bool isRow)
+    {
+        var neighborLabels = map.GetNextProspectiveLabels(isRow ? neighborCell.RowLabelProspects : neighborCell.ColumnLabelProspects);
+        var cellLabels = isRow ? cell.RowLabelProspects : cell.ColumnLabelProspects;
+
+        cellLabels.UnionWith(neighborLabels);
+    }
+
     public static List<int> CreateLabels(LineConstraint constraint)
     {
         if (constraint.Count == 0)
