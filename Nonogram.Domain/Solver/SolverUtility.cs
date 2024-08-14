@@ -1,13 +1,13 @@
-﻿namespace Nonogram.Domain;
+﻿namespace Nonogram.Domain.Solver;
 internal static class SolverUtility
 {
-    public static void UnionRowCell(Cell cell, Cell neighborCell, LabelMap map) =>
+    public static void UnionRowCell(SolverCell cell, SolverCell neighborCell, LabelMap map) =>
         UnionCell(cell, neighborCell, map, true);
 
-    public static void UnionColumnCell(Cell cell, Cell neighborCell, LabelMap map) =>
+    public static void UnionColumnCell(SolverCell cell, SolverCell neighborCell, LabelMap map) =>
         UnionCell(cell, neighborCell, map, false);
 
-    public static void UnionCell(Cell cell, Cell neighborCell, LabelMap map, bool isRow)
+    public static void UnionCell(SolverCell cell, SolverCell neighborCell, LabelMap map, bool isRow)
     {
         var neighborLabels = map.GetNextProspectiveLabels(isRow ? neighborCell.RowLabelProspects : neighborCell.ColumnLabelProspects);
         var cellLabels = isRow ? cell.RowLabelProspects : cell.ColumnLabelProspects;

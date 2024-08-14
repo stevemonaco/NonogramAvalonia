@@ -1,4 +1,5 @@
 using Nonogram.Domain;
+using Nonogram.Domain.Solver;
 
 namespace Nonogram.UnitTests.Solver;
 public partial class PuzzleFullySolvedTests
@@ -9,7 +10,8 @@ public partial class PuzzleFullySolvedTests
     {
         var solver = new NonogramSolver(puzzle);
         var isSolved = solver.SolvePuzzle();
-        var actual = NonogramUtility.ToCellStrings(puzzle);
+        NonogramUtility.UpdateStateFromSolver(puzzle, solver);
+        var actual = NonogramUtility.PuzzleToCellStrings(puzzle);
 
         Assert.True(isSolved);
         Assert.Equal(expected, actual);

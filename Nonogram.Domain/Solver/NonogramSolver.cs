@@ -1,13 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Nonogram.Domain.Solver;
 
-namespace Nonogram.Domain;
+/// <summary>
+/// Solves a Nonogram
+/// </summary>
+/// <remarks>
+/// Implementation adapted from the label-based approach created by https://www.twanvl.nl/blog/haskell/Nonograms in Haskell
+/// However, this solver doesn't implement the guessing mechanism
+/// </remarks>
 public class NonogramSolver
 {
+    /// <summary>
+    /// Cells in [row, column] order
+    /// </summary>
+    public SolverCell[,] Cells { get; }
+
+    public int Rows { get; }
+    public int Columns { get; }
+
     internal List<LabelMap> RowLabelMaps { get; } = [];
     internal List<LabelMap> ColumnLabelMaps { get; } = [];
     internal List<LabelMap> ReverseRowLabelMaps { get; } = [];
@@ -15,13 +24,20 @@ public class NonogramSolver
 
     private NonogramPuzzle _puzzle;
 
-    private int Rows => _puzzle.Rows;
-    private int Columns => _puzzle.Columns;
-    private Cell[,] Cells => _puzzle.Cells;
-
     public NonogramSolver(NonogramPuzzle puzzle)
     {
         _puzzle = puzzle;
+        Rows = puzzle.Rows;
+        Columns = puzzle.Columns;
+
+        Cells = new SolverCell[Rows, Columns];
+
+        for (int row = 0; row < Rows; row++)
+        {
+            for (int col = 0; col < Columns; col++)
+                Cells[row, col] = new SolverCell(row, col, _puzzle.Cells[row, col].State);
+        }
+
         CreateMaps();
     }
 
@@ -88,6 +104,10 @@ public class NonogramSolver
         }
     }
 
+    /// <summary>
+    /// Solves the puzzle to the extent possible
+    /// </summary>
+    /// <returns>True if fully solved, false if partially solved</returns>
     public bool SolvePuzzle()
     {
         int count = -1;
@@ -111,9 +131,14 @@ public class NonogramSolver
         }
     }
 
+    /// <summary>
+    /// Solves the specified row to the extent possible
+    /// </summary>
+    /// <param name="row">Row to solve</param>
+    /// <returns>The total count of prospects ruled out</returns>
     public int SolveRow(int row) => SolveRowForward(row) + SolveRowReverse(row);
 
-    public int SolveRowForward(int row)
+    private int SolveRowForward(int row)
     {
         int count = 0;
 
@@ -125,7 +150,7 @@ public class NonogramSolver
         return count;
     }
 
-    public int SolveRowReverse(int row)
+    private int SolveRowReverse(int row)
     {
         int count = 0;
         for (int col = Columns - 2; col >= 0; col--)
@@ -136,9 +161,14 @@ public class NonogramSolver
         return count;
     }
 
+    /// <summary>
+    /// Solves the specified column to the extent possible
+    /// </summary>
+    /// <param name="col">Column to solve</param>
+    /// <returns>The total count of prospects ruled out</returns>
     public int SolveColumn(int col) => SolveColumnForward(col) + SolveColumnReverse(col);
 
-    public int SolveColumnForward(int col)
+    private int SolveColumnForward(int col)
     {
         int count = 0;
         for (int row = 1; row < Rows; row++)
@@ -149,7 +179,7 @@ public class NonogramSolver
         return count;
     }
 
-    public int SolveColumnReverse(int col)
+    private int SolveColumnReverse(int col)
     {
         int count = 0;
         for (int row = Rows - 2; row >= 0; row--)
@@ -160,13 +190,13 @@ public class NonogramSolver
         return count;
     }
 
-    private int SolveRowCell(Cell cell, Cell neighborCell, LabelMap map)
+    private int SolveRowCell(SolverCell cell, SolverCell neighborCell, LabelMap map)
     {
         var prospects = map.GetNextProspectiveLabels(neighborCell.RowLabelProspects);
         return SolveCell(cell, cell.RowLabelProspects, prospects);
     }
 
-    private int SolveColumnCell(Cell cell, Cell neighborCell, LabelMap map)
+    private int SolveColumnCell(SolverCell cell, SolverCell neighborCell, LabelMap map)
     {
         var prospects = map.GetNextProspectiveLabels(neighborCell.ColumnLabelProspects);
         return SolveCell(cell, cell.ColumnLabelProspects, prospects);
@@ -179,7 +209,7 @@ public class NonogramSolver
     /// <param name="cellProspects"></param>
     /// <param name="adjacentProspects"></param>
     /// <returns>Number of prospects ruled out</returns>
-    private int SolveCell(Cell cell, HashSet<int> cellProspects, HashSet<int> adjacentProspects)
+    private int SolveCell(SolverCell cell, HashSet<int> cellProspects, HashSet<int> adjacentProspects)
     {
         var count = cellProspects.Count;
         if (count == 1) // Cell is already fully constrained
@@ -194,10 +224,22 @@ public class NonogramSolver
         return change;
     }
 
-    public void PrintRowProspects(int row) => PrintLineProspects(_puzzle.GetRow(row), true);
-    public void PrintColumnProspects(int column) => PrintLineProspects(_puzzle.GetColumn(column), false);
+    public IEnumerable<SolverCell> GetRow(int row)
+    {
+        for (int column = 0; column < Columns; column++)
+            yield return Cells[row, column];
+    }
 
-    public void PrintLineProspects(IEnumerable<Cell> cells, bool isRow)
+    public IEnumerable<SolverCell> GetColumn(int column)
+    {
+        for (int row = 0; row < Rows; row++)
+            yield return Cells[row, column];
+    }
+
+    public void PrintRowProspects(int row) => PrintLineProspects(GetRow(row), true);
+    public void PrintColumnProspects(int column) => PrintLineProspects(GetColumn(column), false);
+
+    public void PrintLineProspects(IEnumerable<SolverCell> cells, bool isRow)
     {
         int i = 0;
 

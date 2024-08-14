@@ -2,6 +2,7 @@
 using Nonogram.Domain;
 using System;
 using System.Linq;
+using Nonogram.Domain.Solver;
 using DomainCellState = Nonogram.Domain.CellState;
 using ViewModelCellState = NonogramAvalonia.ViewModels.CellState;
 
@@ -20,7 +21,7 @@ public class SolverService
             {
                 for (int row = 0; row < nonogram.Rows; row++)
                 {
-                    var state = puzzle.Cells[row, col].State;
+                    var state = solver.Cells[row, col].State;
                     if (state != DomainCellState.Undetermined)
                     {
                         nonogram.Cells[row, col].CellState = ToCellState(state);

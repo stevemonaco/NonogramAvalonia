@@ -42,9 +42,6 @@ public partial class Cell
         set { SetValue(StateProperty, value); }
     }
 
-    /// <summary>
-    /// Gets or sets the <see cref="IBrush"/> that fills the Cell's bounds.
-    /// </summary>
     public IBrush? Fill
     {
         get { return GetValue(FillProperty); }

@@ -1,4 +1,4 @@
-﻿namespace Nonogram.Domain;
+﻿namespace Nonogram.Domain.Solver;
 
 /// <summary>
 /// Used to map a Cell's labels to the prospective (possible) labels of the following Cell
