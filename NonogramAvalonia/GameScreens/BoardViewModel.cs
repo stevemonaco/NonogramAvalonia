@@ -132,7 +132,7 @@ public partial class BoardViewModel : ObservableRecipient
         _solverService.SolveBoard(Board, true);
     }
 
-    public void OnIsSolvedChanged(bool value)
+    partial void OnIsSolvedChanged(bool value)
     {
         if (value is true)
         {

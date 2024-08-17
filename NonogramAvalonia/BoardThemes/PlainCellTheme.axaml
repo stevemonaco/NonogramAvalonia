@@ -45,7 +45,7 @@
         <Style Selector="^.undetermined">
             <Setter Property="Fill" Value="#F8ECC2" />
         </Style>
-        <Style Selector="^.empty">
+        <Style Selector="^.empty:not(.win)">
             <Setter Property="Fill" Value="#F8ECC2" />
             <Style Selector="^ PathIcon#emptyIcon">
                 <Setter Property="Foreground" Value="#C40000" />

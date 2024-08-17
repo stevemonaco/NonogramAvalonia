@@ -1,32 +1,26 @@
+﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
-using Avalonia.Threading;
-using CommunityToolkit.Mvvm.Messaging;
 using NonogramAvalonia.ViewModels;
-using System;
+using System.Collections.Generic;
 
 namespace NonogramAvalonia.Views;
-public partial class BoardView : UserControl,
-    IRecipient<GameStartedMessage>, IRecipient<GameWinMessage>, IRecipient<GameQuitMessage>
+public class BoardView : UserControl
 {
-    internal BoardViewModel ViewModel => (BoardViewModel)DataContext!;
-    private readonly DispatcherTimer _timer;
-    private DateTime _timeStarted;
+    public static readonly StyledProperty<BoardTheme> BoardThemeProperty =
+    AvaloniaProperty.Register<BoardPlayView, BoardTheme>(nameof(BoardTheme), defaultValue: BoardTheme.Default);
 
-    public BoardView()
+    public BoardTheme BoardTheme
     {
-        InitializeComponent();
-
-        _timer = new(TimeSpan.FromSeconds(1), DispatcherPriority.Normal, Timer_Tick);
-        WeakReferenceMessenger.Default.RegisterAll(this);
+        get => GetValue(BoardThemeProperty);
+        set => SetValue(BoardThemeProperty, value);
     }
 
-    private void Timer_Tick(object? sender, EventArgs e)
-    {
-        ViewModel.TimeElapsed = DateTime.Now - _timeStarted;
-    }
+    public List<BoardTheme> AvailableThemes { get; } = [BoardTheme.Default, BoardTheme.Plain];
 
-    private void OnPointerPressed(object? sender, PointerPressedEventArgs e)
+    protected BoardViewModel ViewModel => (BoardViewModel)DataContext!;
+
+    protected void OnPointerPressed(object? sender, PointerPressedEventArgs e)
     {
         if (e.Pointer.Type == PointerType.Mouse && sender is Control { DataContext: CellViewModel cell })
         {
@@ -41,7 +35,7 @@ public partial class BoardView : UserControl,
         }
     }
 
-    private void OnPointerReleased(object? sender, PointerReleasedEventArgs e)
+    protected void OnPointerReleased(object? sender, PointerReleasedEventArgs e)
     {
         if (e.Pointer.Type == PointerType.Mouse)
         {
@@ -54,7 +48,7 @@ public partial class BoardView : UserControl,
         }
     }
 
-    private void OnPointerMoved(object? sender, PointerEventArgs e)
+    protected void OnPointerMoved(object? sender, PointerEventArgs e)
     {
         if (e.Pointer.Type == PointerType.Mouse && sender is Control { DataContext: CellViewModel cell })
         {
@@ -70,23 +64,5 @@ public partial class BoardView : UserControl,
             ViewModel.TryApplyCellTransition(cell);
             e.Handled = true;
         }
-    }
-
-    public void Receive(GameStartedMessage message)
-    {
-        _timeStarted = DateTime.Now;
-        _timer.Start();
-    }
-
-    public void Receive(GameWinMessage message)
-    {
-        ViewModel.TimeElapsed = DateTime.Now - _timeStarted;
-        _timer.Stop();
-    }
-
-    public void Receive(GameQuitMessage message)
-    {
-        _timer.Stop();
-        WeakReferenceMessenger.Default.UnregisterAll(this);
     }
 }

@@ -1,0 +1,42 @@
+<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="using:NonogramAvalonia.Controls"
+    xmlns:res="using:NonogramAvalonia.Resources"
+    xmlns:v="using:NonogramAvalonia.Views">
+    <Style Selector="c|OutlinedText">
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="FontSize" Value="36" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="Stroke" Value="Red" />
+        <Setter Property="FontFamily" Value="{x:Static res:AppResources.Polaris}" />
+    </Style>
+
+    <Style Selector="c|BoardGrid">
+        <Setter Property="Padding" Value="8" />
+        <Setter Property="ColumnSpacing" Value="4" />
+        <Setter Property="RowSpacing" Value="4" />
+        <Setter Property="DoubleSpacing" Value="5" />
+    </Style>
+
+    <!--  Default Theme  -->
+    <Style Selector="v|BoardPlayView[BoardTheme=Default]">
+        <Style Selector="^ c|Cell">
+            <Setter Property="Theme" Value="{StaticResource DefaultCellTheme}" />
+        </Style>
+    </Style>
+
+    <!--  Plain Theme  -->
+    <Style Selector="v|BoardPlayView[BoardTheme=Plain]">
+        <Setter Property="Background" Value="#2A2B23" />
+        <Style Selector="^ c|BoardGrid">
+            <Setter Property="Background" Value="Black" />
+            <Setter Property="Padding" Value="6" />
+            <Setter Property="ColumnSpacing" Value="3" />
+            <Setter Property="RowSpacing" Value="3" />
+        </Style>
+        <Style Selector="^ c|Cell">
+            <Setter Property="Theme" Value="{StaticResource PlainCellTheme}" />
+        </Style>
+    </Style>
+</Styles>

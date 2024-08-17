@@ -12,21 +12,9 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace NonogramAvalonia.Views;
-public partial class BoardPlayView : UserControl, 
+public partial class BoardPlayView : BoardView, 
     IRecipient<GameStartedMessage>, IRecipient<GameWinMessage>, IRecipient<GameQuitMessage>
 {
-    public static readonly StyledProperty<BoardTheme> BoardThemeProperty =
-        AvaloniaProperty.Register<BoardPlayView, BoardTheme>(nameof(BoardTheme), defaultValue: BoardTheme.Default);
-
-    public BoardTheme BoardTheme
-    {
-        get => GetValue(BoardThemeProperty);
-        set => SetValue(BoardThemeProperty, value);
-    }
-
-    private List<BoardTheme> _themeCycle = [BoardTheme.Default, BoardTheme.Plain];
-
-    internal BoardViewModel ViewModel => (BoardViewModel)DataContext!;
     private readonly DispatcherTimer _timer;
     private DateTime _timeStarted;
 
@@ -52,60 +40,14 @@ public partial class BoardPlayView : UserControl,
         }
         else if (e.Key == Key.T)
         {
-            var index = (_themeCycle.IndexOf(BoardTheme) + 1) % _themeCycle.Count;
-            BoardTheme = _themeCycle[index];
+            var index = (AvailableThemes.IndexOf(BoardTheme) + 1) % AvailableThemes.Count;
+            BoardTheme = AvailableThemes[index];
         }
     }
 
     private void Timer_Tick(object? sender, EventArgs e)
     {
         ViewModel.TimeElapsed = DateTime.Now - _timeStarted;
-    }
-
-    private void OnPointerPressed(object? sender, PointerPressedEventArgs e)
-    {
-        if (e.Pointer.Type == PointerType.Mouse && sender is Control { DataContext: CellViewModel cell })
-        {
-            var props = e.GetCurrentPoint(null).Properties;
-            var secondary = props.IsRightButtonPressed;
-
-            ViewModel.TryStartCellTransition(cell, secondary);
-            ViewModel.TryApplyCellTransition(cell);
-
-            e.Pointer.Capture(null); // Release capture so that the mouse can color multiple cells while pressed
-            e.Handled = true;
-        }
-    }
-
-    private void OnPointerReleased(object? sender, PointerReleasedEventArgs e)
-    {
-        if (e.Pointer.Type == PointerType.Mouse)
-        {
-            var props = e.GetCurrentPoint(null).Properties;
-            var anyPressed = props.IsLeftButtonPressed || props.IsMiddleButtonPressed || props.IsRightButtonPressed;
-
-            if (!anyPressed)
-                ViewModel.EndCellTransition();
-            e.Handled = true;
-        }
-    }
-
-    private void OnPointerMoved(object? sender, PointerEventArgs e)
-    {
-        if (e.Pointer.Type == PointerType.Mouse && sender is Control { DataContext: CellViewModel cell })
-        {
-            var props = e.GetCurrentPoint(null).Properties;
-            var anyPressed = props.IsLeftButtonPressed || props.IsMiddleButtonPressed || props.IsRightButtonPressed;
-
-            if (!anyPressed)
-            {
-                ViewModel.EndCellTransition();
-                return;
-            }
-
-            ViewModel.TryApplyCellTransition(cell);
-            e.Handled = true;
-        }
     }
 
     public void Receive(GameStartedMessage message)
