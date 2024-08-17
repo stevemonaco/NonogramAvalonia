@@ -7,7 +7,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ngd="using:Nonogram.Domain"
-    xmlns:res="using:NonogramAvalonia"
+    xmlns:res="using:NonogramAvalonia.Resources"
+    xmlns:v="using:NonogramAvalonia.Views"
     xmlns:vm="using:NonogramAvalonia.ViewModels"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -16,6 +17,10 @@
     Focusable="True"
     mc:Ignorable="d">
     <UserControl.Styles>
+        <Style Selector="TextBlock.solved">
+            <Setter Property="Foreground" Value="Green" />
+        </Style>
+
         <Style Selector="c|OutlinedText">
             <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="FontSize" Value="36" />
@@ -24,82 +29,30 @@
             <Setter Property="FontFamily" Value="{x:Static res:AppResources.Polaris}" />
         </Style>
 
-        <Style Selector="c|Cell">
-            <Setter Property="Fill" Value="#888888" />
-            <Setter Property="BorderThickness" Value="2" />
-            <Setter Property="Transitions">
-                <Transitions>
-                    <DoubleTransition
-                        Easing="CubicEaseOut"
-                        Property="Opacity"
-                        Duration="0:0:0.5" />
-                    <BrushTransition
-                        Easing="CubicEaseOut"
-                        Property="Fill"
-                        Duration="0:0:0:0.5" />
-                </Transitions>
-            </Setter>
-
-            <Setter Property="BottomBrush" Value="Transparent" />
-            <Setter Property="LeftBrush" Value="Transparent" />
-            <Setter Property="RightBrush" Value="Transparent" />
-            <Setter Property="TopBrush" Value="Transparent" />
+        <Style Selector="c|BoardGrid">
+            <Setter Property="Padding" Value="8" />
+            <Setter Property="ColumnSpacing" Value="4" />
+            <Setter Property="RowSpacing" Value="4" />
+            <Setter Property="DoubleSpacing" Value="5" />
         </Style>
 
-        <Style Selector="c|Cell.undetermined">
-            <Setter Property="Opacity" Value="0.8" />
-            <Setter Property="Fill" Value="#df6626" />
-        </Style>
-        <Style Selector="c|Cell.empty">
-            <Setter Property="Opacity" Value="0.8" />
-            <Setter Property="Fill" Value="#ac3232" />
-        </Style>
-        <Style Selector="c|Cell.filled">
-            <Setter Property="Opacity" Value="0.8" />
-            <Setter Property="Fill" Value="#37946e" />
-        </Style>
-        <Style Selector="c|Cell:pointerover">
-            <Setter Property="Opacity" Value="1.0" />
+        <Style Selector="v|BoardPlayView[BoardTheme=Default]">
+            <Style Selector="^ c|Cell">
+                <Setter Property="Theme" Value="{StaticResource DefaultCellTheme}" />
+            </Style>
         </Style>
 
-        <Style Selector="c|Cell.left-edge">
-            <Setter Property="LeftBrush" Value="White" />
-        </Style>
-
-        <Style Selector="c|Cell.right-edge">
-            <Setter Property="RightBrush" Value="White" />
-        </Style>
-
-        <Style Selector="c|Cell.top-edge">
-            <Setter Property="TopBrush" Value="White" />
-        </Style>
-
-        <Style Selector="c|Cell.bottom-edge">
-            <Setter Property="BottomBrush" Value="White" />
-        </Style>
-
-        <Style Selector="c|Cell.top-left-edge">
-            <Setter Property="TopBrush" Value="White" />
-            <Setter Property="LeftBrush" Value="White" />
-        </Style>
-
-        <Style Selector="c|Cell.top-right-edge">
-            <Setter Property="TopBrush" Value="White" />
-            <Setter Property="RightBrush" Value="White" />
-        </Style>
-
-        <Style Selector="c|Cell.bottom-left-edge">
-            <Setter Property="BottomBrush" Value="White" />
-            <Setter Property="LeftBrush" Value="White" />
-        </Style>
-
-        <Style Selector="c|Cell.bottom-right-edge">
-            <Setter Property="BottomBrush" Value="White" />
-            <Setter Property="RightBrush" Value="White" />
-        </Style>
-
-        <Style Selector="c|Cell.win">
-            <Setter Property="BorderThickness" Value="0" />
+        <Style Selector="v|BoardPlayView[BoardTheme=Plain]">
+            <Setter Property="Background" Value="#2A2B23" />
+            <Style Selector="^ c|BoardGrid">
+                <Setter Property="Background" Value="Black" />
+                <Setter Property="Padding" Value="6" />
+                <Setter Property="ColumnSpacing" Value="3" />
+                <Setter Property="RowSpacing" Value="3" />
+            </Style>
+            <Style Selector="^ c|Cell">
+                <Setter Property="Theme" Value="{StaticResource PlainCellTheme}" />
+            </Style>
         </Style>
     </UserControl.Styles>
 
@@ -148,14 +101,15 @@
 
         <!--  Main Nonogram Grid  -->
         <Border
+            x:Name="boardBorder"
             Grid.Row="1"
             Grid.Column="1"
             Cursor="Hand">
             <ItemsControl x:Name="board" ItemsSource="{Binding BoardCells}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <UniformGrid
-                            ClipToBounds="True"
+                        <c:BoardGrid
+                            x:Name="boardGrid"
                             Columns="{Binding GridColumns}"
                             Rows="{Binding GridRows}" />
                     </ItemsPanelTemplate>
@@ -175,9 +129,25 @@
             </ItemsControl>
         </Border>
 
-        <DockPanel Grid.Row="2" Grid.ColumnSpan="2">
-            <TextBlock DockPanel.Dock="Right" Text="{Binding TimeElapsed, Converter={x:Static con:AppConverters.TimeSpanToTimerString}}" />
-            <TextBlock Text="{Binding PuzzleName, StringFormat=Now Playing: {0}}" />
+        <DockPanel
+            Grid.Row="2"
+            Grid.ColumnSpan="2"
+            Margin="8,0,8,4">
+            <TextBlock
+                Classes.solved="{Binding IsSolved}"
+                DockPanel.Dock="Right"
+                FontSize="16"
+                Text="{Binding TimeElapsed, Converter={x:Static con:AppConverters.TimeSpanToTimerString}}" />
+            <TextBlock Classes.solved="{Binding IsSolved}" FontSize="16">
+                <TextBlock.Styles>
+                    <Style Selector="TextBlock">
+                        <Setter Property="Text" Value="{Binding PuzzleName, StringFormat=Now Playing: {0}}" />
+                    </Style>
+                    <Style Selector="TextBlock.solved">
+                        <Setter Property="Text" Value="{Binding PuzzleName, StringFormat=Completed: {0}}" />
+                    </Style>
+                </TextBlock.Styles>
+            </TextBlock>
         </DockPanel>
     </Grid>
 </UserControl>

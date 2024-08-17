@@ -1,3 +1,4 @@
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
@@ -7,16 +8,27 @@ using CommunityToolkit.Mvvm.Messaging;
 using NonogramAvalonia.Controls;
 using NonogramAvalonia.ViewModels;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace NonogramAvalonia.Views;
 public partial class BoardPlayView : UserControl, 
     IRecipient<GameStartedMessage>, IRecipient<GameWinMessage>, IRecipient<GameQuitMessage>
 {
+    public static readonly StyledProperty<BoardTheme> BoardThemeProperty =
+        AvaloniaProperty.Register<BoardPlayView, BoardTheme>(nameof(BoardTheme), defaultValue: BoardTheme.Default);
+
+    public BoardTheme BoardTheme
+    {
+        get => GetValue(BoardThemeProperty);
+        set => SetValue(BoardThemeProperty, value);
+    }
+
+    private List<BoardTheme> _themeCycle = [BoardTheme.Default, BoardTheme.Plain];
+
     internal BoardViewModel ViewModel => (BoardViewModel)DataContext!;
     private readonly DispatcherTimer _timer;
     private DateTime _timeStarted;
-    private string[] _edges = ["top-edge", "bottom-edge", "left-edge", "right-edge", "top-left-edge", "top-right-edge", "bottom-left-edge", "bottom-right-edge", "no-edge"];
 
     public BoardPlayView()
     {
@@ -30,38 +42,6 @@ public partial class BoardPlayView : UserControl,
     {
         base.OnLoaded(e);
         Focus();
-
-        int spacing = 5;
-
-        foreach (var cellControl in board.GetLogicalChildren().Select(x => x.LogicalChildren.OfType<Cell>().First()))
-        {
-            var cell = (CellViewModel)cellControl.DataContext!;
-
-            bool hasTopEdge = cell.Row % spacing == 0 && cell.Row != ViewModel.GridRows && cell.Row != 0;
-            bool hasBottomEdge = (cell.Row + 1) % spacing == 0 && (cell.Row + 1) != ViewModel.GridRows && cell.Row != 0;
-            bool hasLeftEdge = cell.Column % spacing == 0 && cell.Column != ViewModel.GridColumns && cell.Column != 0;
-            bool hasRightEdge = (cell.Column + 1) % spacing == 0 && (cell.Column + 1) != ViewModel.GridColumns && cell.Column != 0;
-
-            var className = (hasTopEdge, hasBottomEdge, hasLeftEdge, hasRightEdge) switch
-            {
-                (true, false, false, false) => "top-edge",
-                (false, true, false, false) => "bottom-edge",
-                (false, false, true, false) => "left-edge",
-                (false, false, false, true) => "right-edge",
-
-                (true, false, true, false) => "top-left-edge",
-                (true, false, false, true) => "top-right-edge",
-                (false, true, true, false) => "bottom-left-edge",
-                (false, true, false, true) => "bottom-right-edge",
-                (false, false, false, false) => "no-edge",
-                _ => throw new InvalidOperationException()
-            };
-
-            foreach (var edge in _edges)
-                cellControl.Classes.Remove(edge);
-
-            cellControl.Classes.Add(className);
-        }
     }
 
     protected override void OnKeyDown(KeyEventArgs e)
@@ -69,6 +49,11 @@ public partial class BoardPlayView : UserControl,
         if (e.Key == Key.S)
         {
             ViewModel.SolveBoard();
+        }
+        else if (e.Key == Key.T)
+        {
+            var index = (_themeCycle.IndexOf(BoardTheme) + 1) % _themeCycle.Count;
+            BoardTheme = _themeCycle[index];
         }
     }
 
@@ -131,8 +116,8 @@ public partial class BoardPlayView : UserControl,
 
     public void Receive(GameWinMessage message)
     {
-        ViewModel.TimeElapsed = DateTime.Now - _timeStarted;
         _timer.Stop();
+        ViewModel.TimeElapsed = DateTime.Now - _timeStarted;
 
         foreach (var cellControl in board.GetLogicalChildren().Select(x => x.LogicalChildren.OfType<Cell>().First()))
         {

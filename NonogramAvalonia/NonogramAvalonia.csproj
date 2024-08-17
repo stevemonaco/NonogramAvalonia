@@ -3,6 +3,7 @@
     <OutputType>WinExe</OutputType>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    <AvaloniaXamlIlDebuggerLaunch>false</AvaloniaXamlIlDebuggerLaunch>
   </PropertyGroup>
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />

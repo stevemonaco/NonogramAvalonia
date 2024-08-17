@@ -73,12 +73,10 @@ public partial class BoardViewModel : ObservableRecipient
         Board.BuildConstraints();
 
         if (Mode == BoardMode.Play && Board.CheckWinState())
-            PuzzleSolved();
+            IsSolved = true;
 
         if (Mode == BoardMode.Editor)
-        {
             UpdateConstraints();
-        }
 
         return true;
     }
@@ -134,14 +132,12 @@ public partial class BoardViewModel : ObservableRecipient
         _solverService.SolveBoard(Board, true);
     }
 
-    private void PuzzleSolved()
+    public void OnIsSolvedChanged(bool value)
     {
-        IsSolved = true;
-
-        foreach (var cell in BoardCells.Where(x => x.CellState != CellState.Filled))
-            cell.CellState = CellState.Undetermined;
-
-        Messenger.Send(new GameWinMessage());
+        if (value is true)
+        {
+            Messenger.Send(new GameWinMessage());
+        }
     }
 
     private void UpdateConstraints()

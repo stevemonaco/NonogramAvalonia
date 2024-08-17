@@ -5,7 +5,7 @@
 /// </summary>
 /// <remarks>
 /// Implementation adapted from the label-based approach created by https://www.twanvl.nl/blog/haskell/Nonograms in Haskell
-/// However, this solver doesn't implement the guessing mechanism
+/// However, this implementation doesn't attempt the guessing mechanism
 /// </remarks>
 public class NonogramSolver
 {

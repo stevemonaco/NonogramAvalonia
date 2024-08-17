@@ -1,0 +1,51 @@
+<ResourceDictionary
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="using:NonogramAvalonia.Controls">
+
+    <ControlTheme x:Key="DefaultCellTheme" TargetType="c:Cell">
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border>
+                    <Rectangle Fill="{TemplateBinding Fill}" />
+                </Border>
+            </ControlTemplate>
+        </Setter>
+
+        <Setter Property="Fill" Value="#888888" />
+        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="Transitions">
+            <Transitions>
+                <DoubleTransition
+                    Easing="CubicEaseOut"
+                    Property="Opacity"
+                    Duration="0:0:0.5" />
+                <BrushTransition
+                    Easing="CubicEaseOut"
+                    Property="Fill"
+                    Duration="0:0:0:0.5" />
+            </Transitions>
+        </Setter>
+
+        <Style Selector="^.undetermined">
+            <Setter Property="Opacity" Value="0.8" />
+            <Setter Property="Fill" Value="#df6626" />
+        </Style>
+        <Style Selector="^.empty">
+            <Setter Property="Opacity" Value="0.8" />
+            <Setter Property="Fill" Value="#ac3232" />
+        </Style>
+        <Style Selector="^.filled">
+            <Setter Property="Opacity" Value="0.8" />
+            <Setter Property="Fill" Value="#37946e" />
+        </Style>
+        <Style Selector="^.win">
+            <Setter Property="BorderThickness" Value="0" />
+        </Style>
+
+        <Style Selector="^:pointerover">
+            <Setter Property="Opacity" Value="1.0" />
+        </Style>
+    </ControlTheme>
+
+</ResourceDictionary>

@@ -8,7 +8,7 @@ using System;
 
 namespace NonogramAvalonia.Controls;
 
-public partial class Cell : Control
+public partial class Cell : TemplatedControl
 {
     static Cell()
     {
@@ -16,8 +16,7 @@ public partial class Cell : Control
 
         var items = new AvaloniaProperty[]
         {
-            StateProperty, FillProperty, BorderThicknessProperty, CornerRadiusProperty,
-            LeftBrushProperty, RightBrushProperty, TopBrushProperty, BottomBrushProperty
+            StateProperty, FillProperty
         };
 
         AffectsRender<Cell>(items);
@@ -32,34 +31,4 @@ public partial class Cell : Control
             cell.Classes.Set(":filled", cell.State == CellState.Filled);
         }
     }
-
-    public override void Render(DrawingContext context)
-    {
-        base.Render(context);
-
-        var clipRect = new RoundedRect(Bounds, CornerRadius);
-        var clipRectState = context.PushClip(clipRect);
-
-        var bounds = Bounds.Deflate(new Thickness(BorderThickness.Left, BorderThickness.Top, BorderThickness.Right, BorderThickness.Bottom));
-
-        if (Fill is not null)
-            context.FillRectangle(Fill, bounds);
-
-
-        var leftPen = new ImmutablePen(GetColor(LeftBrush), BorderThickness.Left);
-        context.DrawLine(leftPen, Bounds.TopLeft, Bounds.BottomLeft);
-
-        var rightPen = new ImmutablePen(GetColor(RightBrush), BorderThickness.Right);
-        context.DrawLine(rightPen, Bounds.TopRight, Bounds.BottomRight);
-
-        var topPen = new ImmutablePen(GetColor(TopBrush), BorderThickness.Top);
-        context.DrawLine(topPen, Bounds.TopLeft, Bounds.TopRight);
-
-        var bottomPen = new ImmutablePen(GetColor(BottomBrush), BorderThickness.Bottom);
-        context.DrawLine(bottomPen, Bounds.BottomLeft, Bounds.BottomRight);
-
-        clipRectState.Dispose();
-    }
-
-    private static uint GetColor(IBrush? brush) => ((ISolidColorBrush)brush!).Color.ToUInt32();
 }

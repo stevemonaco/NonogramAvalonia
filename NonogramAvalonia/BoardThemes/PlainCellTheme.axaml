@@ -1,0 +1,67 @@
+<ResourceDictionary
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="using:NonogramAvalonia.Controls"
+    xmlns:res="using:NonogramAvalonia.Resources">
+    <ControlTheme x:Key="PlainCellTheme" TargetType="c:Cell">
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border
+                    Padding="{TemplateBinding Padding}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}">
+                    <Panel>
+                        <Rectangle Margin="{TemplateBinding Margin}" Fill="{TemplateBinding Fill}" />
+                        <PathIcon
+                            x:Name="emptyIcon"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            Data="{x:Static res:AppIcons.PlainEmptyIcon}"
+                            Foreground="Transparent">
+                            <PathIcon.Transitions>
+                                <Transitions>
+                                    <BrushTransition
+                                        Easing="CubicEaseOut"
+                                        Property="Foreground"
+                                        Duration="0:0:0:0.2" />
+                                </Transitions>
+                            </PathIcon.Transitions>
+                        </PathIcon>
+                    </Panel>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+
+        <Setter Property="Fill" Value="#F8ECC2" />
+        <Setter Property="Transitions">
+            <Transitions>
+                <BrushTransition
+                    Easing="CubicEaseOut"
+                    Property="Fill"
+                    Duration="0:0:0:0.5" />
+            </Transitions>
+        </Setter>
+
+        <Style Selector="^.undetermined">
+            <Setter Property="Fill" Value="#F8ECC2" />
+        </Style>
+        <Style Selector="^.empty">
+            <Setter Property="Fill" Value="#F8ECC2" />
+            <Style Selector="^ PathIcon#emptyIcon">
+                <Setter Property="Foreground" Value="#C40000" />
+            </Style>
+        </Style>
+        <Style Selector="^.filled">
+            <Setter Property="BorderBrush" Value="#F8ECC2" />
+            <Setter Property="BorderThickness" Value="3" />
+            <Setter Property="Fill" Value="Transparent" />
+        </Style>
+        <Style Selector="^.win">
+            <Setter Property="BorderThickness" Value="0" />
+        </Style>
+
+        <Style Selector="^:pointerover">
+            <Setter Property="Opacity" Value="1.0" />
+        </Style>
+    </ControlTheme>
+</ResourceDictionary>
