@@ -4,6 +4,15 @@
     xmlns:c="using:NonogramAvalonia.Controls"
     xmlns:res="using:NonogramAvalonia.Resources"
     xmlns:v="using:NonogramAvalonia.Views">
+    <Styles.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="avares://NonogramAvalonia/BoardThemes/DefaultCellTheme.axaml" />
+                <ResourceInclude Source="avares://NonogramAvalonia/BoardThemes/PlainCellTheme.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Styles.Resources>
+
     <Style Selector="c|OutlinedText">
         <Setter Property="FontWeight" Value="Bold" />
         <Setter Property="FontSize" Value="36" />
@@ -20,14 +29,14 @@
     </Style>
 
     <!--  Default Theme  -->
-    <Style Selector="v|BoardPlayView[BoardTheme=Default]">
+    <Style Selector=":is(v|BoardView)[BoardTheme=Default]">
         <Style Selector="^ c|Cell">
             <Setter Property="Theme" Value="{StaticResource DefaultCellTheme}" />
         </Style>
     </Style>
 
     <!--  Plain Theme  -->
-    <Style Selector="v|BoardPlayView[BoardTheme=Plain]">
+    <Style Selector=":is(v|BoardView)[BoardTheme=Plain]">
         <Setter Property="Background" Value="#2A2B23" />
         <Style Selector="^ c|BoardGrid">
             <Setter Property="Background" Value="Black" />

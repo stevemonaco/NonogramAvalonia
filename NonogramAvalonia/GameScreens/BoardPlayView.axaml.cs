@@ -1,14 +1,10 @@
-using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Messaging;
 using NonogramAvalonia.Controls;
-using NonogramAvalonia.ViewModels;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace NonogramAvalonia.Views;

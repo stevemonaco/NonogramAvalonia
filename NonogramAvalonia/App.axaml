@@ -14,13 +14,4 @@
 
         <StyleInclude Source="avares://NonogramAvalonia/BoardThemes/BoardStyles.axaml" />
     </Application.Styles>
-
-    <Application.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceInclude Source="avares://NonogramAvalonia/BoardThemes/DefaultCellTheme.axaml" />
-                <ResourceInclude Source="avares://NonogramAvalonia/BoardThemes/PlainCellTheme.axaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Application.Resources>
 </Application>
