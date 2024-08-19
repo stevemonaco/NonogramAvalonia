@@ -44,7 +44,11 @@ public class Bootstrapper : IAppBootstrapper<ShellViewModel>
 
     public void ConfigureViews(IServiceCollection services)
     {
-        var viewTypes = GetType().Assembly.GetTypes().Where(x => x.Name.EndsWith("View"));
+        var viewTypes = GetType()
+            .Assembly
+            .GetTypes()
+            .Where(x => x.Name.EndsWith("View"))
+            .Where(x => !x.IsAbstract && !x.IsInterface);
 
         foreach (var viewType in viewTypes)
             services.AddTransient(viewType);
