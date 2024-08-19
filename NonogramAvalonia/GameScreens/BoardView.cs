@@ -5,7 +5,11 @@ using NonogramAvalonia.ViewModels;
 using System.Collections.Generic;
 
 namespace NonogramAvalonia.Views;
-public class BoardView : UserControl
+
+/// <summary>
+/// Base functionality for the Editor and Play boards
+/// </summary>
+public abstract class BoardView : UserControl
 {
     public static readonly StyledProperty<BoardTheme> BoardThemeProperty =
     AvaloniaProperty.Register<BoardPlayView, BoardTheme>(nameof(BoardTheme), defaultValue: BoardTheme.Default);

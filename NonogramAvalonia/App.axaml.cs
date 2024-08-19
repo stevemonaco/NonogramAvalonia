@@ -10,6 +10,8 @@ using System.Linq;
 namespace NonogramAvalonia;
 public partial class App : Application
 {
+    private ServiceProvider? _serviceProvider;
+
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
@@ -28,19 +30,27 @@ public partial class App : Application
         var bootstrapper = new Bootstrapper();
         bootstrapper.ConfigureIoc(services);
         bootstrapper.ConfigureServices(services);
-        bootstrapper.ConfigureViews(services);
         bootstrapper.ConfigureViewModels(services);
+        bootstrapper.ConfigureViews(services);
 
-        var provider = services.BuildServiceProvider();
-        await bootstrapper.LoadConfigurations(provider);
+        _serviceProvider = services.BuildServiceProvider();
+        await bootstrapper.LoadConfigurations(_serviceProvider);
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            var shellView = provider.GetService<ShellView>();
-            shellView!.DataContext = provider.GetService<ShellViewModel>();
+            desktop.ShutdownRequested += Desktop_ShutdownRequested;
+
+            var shellView = _serviceProvider.GetService<ShellView>();
+            shellView!.DataContext = _serviceProvider.GetService<ShellViewModel>();
             desktop.MainWindow = shellView;
         }
 
         base.OnFrameworkInitializationCompleted();
+    }
+
+    private void Desktop_ShutdownRequested(object? sender, ShutdownRequestedEventArgs e)
+    {
+        // Ensures logs are flushed
+        _serviceProvider?.Dispose();
     }
 }

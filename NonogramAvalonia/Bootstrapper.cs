@@ -5,9 +5,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using Serilog.Extensions.Logging;
 using NonogramAvalonia.Services;
 using NonogramAvalonia.ViewModels;
 using NonogramAvalonia.Factory;
+using System.IO;
 
 namespace NonogramAvalonia;
 public interface IAppBootstrapper<TViewModel> where TViewModel : class
@@ -26,7 +28,10 @@ public class Bootstrapper : IAppBootstrapper<ShellViewModel>
 
     public void ConfigureIoc(IServiceCollection services)
     {
-        _loggerFactory = CreateLoggerFactory(_logFileName);
+        var logPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, _logFileName);
+        _loggerFactory = CreateLoggerFactory(logPath);
+
+        services.AddLogging(builder => builder.AddSerilog(dispose: true));
     }
 
     public void ConfigureServices(IServiceCollection services)
