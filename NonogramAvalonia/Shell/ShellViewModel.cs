@@ -69,7 +69,7 @@ public partial class ShellViewModel : ViewModelBase,
 
     public void Receive(NavigateToPlayMessage message)
     {
-		message.Board.ResetCellStates();
+		//message.Board.ResetCellStates();
 		PlayBoard(message.Board);
     }
 

@@ -17,14 +17,14 @@ public class SolverService
 
         if (fillState)
         {
-            for (int col = 0; col < nonogram.Columns; col++)
+            for (int col = 0; col < nonogram.ColumnCount; col++)
             {
-                for (int row = 0; row < nonogram.Rows; row++)
+                for (int row = 0; row < nonogram.RowCount; row++)
                 {
                     var state = solver.Cells[row, col].State;
                     if (state != DomainCellState.Undetermined)
                     {
-                        nonogram.Cells[row, col].CellState = ToCellState(state);
+                        nonogram.SetState(row, col, ToCellState(state));
                     }
                 }
             }

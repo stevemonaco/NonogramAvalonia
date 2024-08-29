@@ -41,7 +41,7 @@ public partial class MenuViewModel : ObservableRecipient
     [RelayCommand]
     public void Play(BoardViewModel board)
     {
-        WeakReferenceMessenger.Default.Send(new NavigateToPlayMessage(board.Board));
+        WeakReferenceMessenger.Default.Send(new NavigateToPlayMessage(board.Nonogram));
     }
 
     [RelayCommand]

@@ -1,6 +1,5 @@
 ﻿using NonogramAvalonia.ViewModels;
 using NonogramAvalonia.Services;
-using NonogramAvalonia.ViewModels;
 
 namespace NonogramAvalonia.Factory;
 public class BoardViewModelFactory

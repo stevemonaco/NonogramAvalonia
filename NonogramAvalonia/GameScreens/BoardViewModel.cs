@@ -16,42 +16,26 @@ public enum CellTransition { None, ToUndetermined, ToEmpty, ToFilled }
 
 public partial class BoardViewModel : ObservableRecipient
 {
-    public NonogramViewModel Board { get; }
+    public NonogramViewModel Nonogram { get; }
     public BoardMode Mode { get; }
 
-    [ObservableProperty] private int _gridRows;
-    [ObservableProperty] private int _gridColumns;
-
-    [ObservableProperty] private ObservableCollection<CellViewModel> _boardCells;
-    [ObservableProperty] private string? _puzzleName;
     [ObservableProperty] private bool _isSolved;
     [ObservableProperty] private TimeSpan? _timeElapsed;
     [ObservableProperty] private bool _showConstraints;
-
-    public IEnumerable<string> SolutionRowConstraints => GenerateConstraintStrings(Board.SolutionRowConstraints, " ");
-    public IEnumerable<string> SolutionColumnConstraints => GenerateConstraintStrings(Board.SolutionColumnConstraints, "\n");
-    public IEnumerable<string> RowConstraints => GenerateConstraintStrings(Board.PlayerRowConstraints, " ");
-    public IEnumerable<string> ColumnConstraints => GenerateConstraintStrings(Board.PlayerColumnConstraints, "\n");
 
     protected CellTransition _transition;
     private readonly BoardService _boardService;
     private readonly IFileSelectService _fileSelectService;
     private readonly SolverService _solverService;
 
-    public BoardViewModel(BoardMode mode, NonogramViewModel board, BoardService boardService, IFileSelectService fileSelectService, SolverService solverService)
+    public BoardViewModel(BoardMode mode, NonogramViewModel nonogramViewModel, BoardService boardService, IFileSelectService fileSelectService, SolverService solverService)
     {
         Mode = mode;
-        Board = board;
+        Nonogram = nonogramViewModel;
         _boardService = boardService;
         _fileSelectService = fileSelectService;
         _solverService = solverService;
         ShowConstraints = true;
-
-        _boardCells = new(Board.Board);
-        
-        _puzzleName = board.Name;
-        GridRows = Board.Rows;
-        GridColumns = Board.Columns;
     }
 
     public virtual bool TryApplyCellTransition(CellViewModel cell)
@@ -70,13 +54,13 @@ public partial class BoardViewModel : ObservableRecipient
             _ => throw new InvalidOperationException($"{nameof(TryApplyCellTransition)} attempted to apply invalid transition {_transition}")
         };
 
-        Board.BuildConstraints();
+        Nonogram.RebuildPlayerConstraints();
 
-        if (Mode == BoardMode.Play && Board.CheckWinState())
+        if (Mode == BoardMode.Play && Nonogram.CheckWinState())
             IsSolved = true;
 
         if (Mode == BoardMode.Editor)
-            UpdateConstraints();
+            Nonogram.RebuildPlayerConstraints();
 
         return true;
     }
@@ -86,7 +70,7 @@ public partial class BoardViewModel : ObservableRecipient
         if (cell.Locked || IsSolved)
             return false;
 
-        Board.BuildConstraints();
+        Nonogram.RebuildPlayerConstraints();
 
         _transition = (cell.CellState, secondary) switch
         {
@@ -101,7 +85,7 @@ public partial class BoardViewModel : ObservableRecipient
 
         if (Mode == BoardMode.Editor)
         {
-            UpdateConstraints();
+            Nonogram.RebuildPlayerConstraints();
         }
 
         return true;
@@ -120,16 +104,16 @@ public partial class BoardViewModel : ObservableRecipient
         if (fileName is null)
             return;
 
-        Board.Name = Path.GetFileNameWithoutExtension(fileName);
-        Board.BuildConstraints();
-        var json = _boardService.SerializeBoard(Board);
+        Nonogram.Name = Path.GetFileNameWithoutExtension(fileName);
+        Nonogram.RebuildPlayerConstraints();
+        var json = _boardService.SerializeBoard(Nonogram);
         await File.WriteAllTextAsync(fileName, json);
     }
 
     [RelayCommand]
     public void SolveBoard()
     {
-        _solverService.SolveBoard(Board, true);
+        _solverService.SolveBoard(Nonogram, true);
     }
 
     partial void OnIsSolvedChanged(bool value)
@@ -138,20 +122,5 @@ public partial class BoardViewModel : ObservableRecipient
         {
             Messenger.Send(new GameWinMessage());
         }
-    }
-
-    private void UpdateConstraints()
-    {
-        Board.BuildConstraints();
-        OnPropertyChanged(nameof(SolutionRowConstraints));
-        OnPropertyChanged(nameof(SolutionColumnConstraints));
-        OnPropertyChanged(nameof(RowConstraints));
-        OnPropertyChanged(nameof(ColumnConstraints));
-    }
-
-    private IEnumerable<string> GenerateConstraintStrings(IEnumerable<LineConstraints> lineConstraints, string separator)
-    {
-        foreach (var constraints in lineConstraints)
-            yield return string.Join(separator, constraints.Select(x => x.ToString("d")));
     }
 }

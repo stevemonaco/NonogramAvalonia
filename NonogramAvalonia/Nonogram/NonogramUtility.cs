@@ -15,7 +15,7 @@ public static class NonogramUtility
     public static List<string> ToCellStrings(NonogramViewModel puzzle)
     {
         var cellStrings = new List<string>();
-        for (int row = 0; row < puzzle.Rows; row++)
+        for (int row = 0; row < puzzle.RowCount; row++)
         {
             var cellString = puzzle.GetRow(row).Select(x => StateToChar(x.CellState));
             cellStrings.Add(string.Join("", cellString));

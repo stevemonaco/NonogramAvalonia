@@ -50,7 +50,7 @@ public class BoardService
         var rowConstraints = board.PlayerRowConstraints.Select(x => new List<int>(x)).ToList();
         var columnConstraints = board.PlayerColumnConstraints.Select(x => new List<int>(x)).ToList();
 
-        var model = new NonogramModel(board.Name ?? "", board.Rows, board.Columns, rowConstraints, columnConstraints);
+        var model = new NonogramModel(board.Name ?? "", board.RowCount, board.ColumnCount, rowConstraints, columnConstraints);
 
         var json = JsonSerializer.Serialize(model, jsonOptions);
 

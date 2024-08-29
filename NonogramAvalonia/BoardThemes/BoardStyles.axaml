@@ -13,23 +13,30 @@
         </ResourceDictionary>
     </Styles.Resources>
 
-    <Style Selector="c|OutlinedText">
-        <Setter Property="FontWeight" Value="Bold" />
-        <Setter Property="FontSize" Value="36" />
-        <Setter Property="StrokeThickness" Value="1" />
-        <Setter Property="Stroke" Value="Red" />
-        <Setter Property="FontFamily" Value="{x:Static res:AppResources.Polaris}" />
+    <!--  Base Board Styles  -->
+    <Style Selector="c|SpacedUniformGrid">
+        <Setter Property="Padding" Value="6" />
+        <Setter Property="ColumnSpacing" Value="3" />
+        <Setter Property="RowSpacing" Value="3" />
+        <Setter Property="DoubleSpacing" Value="5" />
     </Style>
 
-    <Style Selector="c|BoardGrid">
-        <Setter Property="Padding" Value="8" />
-        <Setter Property="ColumnSpacing" Value="4" />
-        <Setter Property="RowSpacing" Value="4" />
-        <Setter Property="DoubleSpacing" Value="5" />
+    <Style Selector="c|SpacedUniformGrid.row.constraints">
+        <Setter Property="Padding" Value="6,6,0,6" />
+    </Style>
+
+    <Style Selector="c|SpacedUniformGrid.column.constraints">
+        <Setter Property="Padding" Value="6,6,6,0" />
     </Style>
 
     <!--  Default Theme  -->
     <Style Selector=":is(v|BoardView)[BoardTheme=Default]">
+        <Style Selector="^ TextBlock.constraints">
+            <Setter Property="FontSize" Value="36" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontFamily" Value="{x:Static res:AppResources.Polaris}" />
+        </Style>
+
         <Style Selector="^ c|Cell">
             <Setter Property="Theme" Value="{StaticResource DefaultCellTheme}" />
         </Style>
@@ -37,12 +44,25 @@
 
     <!--  Plain Theme  -->
     <Style Selector=":is(v|BoardView)[BoardTheme=Plain]">
-        <Setter Property="Background" Value="#2A2B23" />
-        <Style Selector="^ c|BoardGrid">
+        <Style Selector="^ TextBlock.constraints">
+            <Setter Property="FontSize" Value="36" />
+            <Setter Property="Foreground" Value="Black" />
+            <Setter Property="FontFamily" Value="{x:Static res:AppResources.Polaris}" />
+        </Style>
+
+        <Setter Property="Background" Value="Black" />
+        <Style Selector="^ c|SpacedUniformGrid.cells">
             <Setter Property="Background" Value="Black" />
-            <Setter Property="Padding" Value="6" />
-            <Setter Property="ColumnSpacing" Value="3" />
-            <Setter Property="RowSpacing" Value="3" />
+        </Style>
+
+        <Style Selector="^ TextBlock.row.constraints">
+            <Setter Property="Margin" Value="8,0,8,0" />
+        </Style>
+        <Style Selector="^ Panel.row.constraints">
+            <Setter Property="Background" Value="#F8ECC2" />
+        </Style>
+        <Style Selector="^ Panel.column.constraints">
+            <Setter Property="Background" Value="#F8ECC2" />
         </Style>
         <Style Selector="^ c|Cell">
             <Setter Property="Theme" Value="{StaticResource PlainCellTheme}" />

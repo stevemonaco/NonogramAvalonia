@@ -6,106 +6,17 @@ using Avalonia.Media;
 namespace NonogramAvalonia.Controls;
 
 /// <summary>
-/// Based on UniformGrid with better support for spacing and ensuring each element has a whole integer size instead of fractional
+/// UniformGrid with better support for spacing and ensuring each element has a whole integer size instead of fractional
 /// </summary>
-public class BoardGrid : Panel
+/// <remarks>Implementation based upon UniformGrid source</remarks>
+public partial class SpacedUniformGrid : Panel
 {
-    /// <summary>
-    /// Defines the <see cref="Rows"/> property.
-    /// </summary>
-    public static readonly StyledProperty<int> RowsProperty =
-        AvaloniaProperty.Register<BoardGrid, int>(nameof(Rows));
-
-    /// <summary>
-    /// Defines the <see cref="Columns"/> property.
-    /// </summary>
-    public static readonly StyledProperty<int> ColumnsProperty =
-        AvaloniaProperty.Register<BoardGrid, int>(nameof(Columns));
-
-    /// <summary>
-    /// Defines the <see cref="RowSpacing"/> property.
-    /// </summary>
-    public static readonly StyledProperty<int> RowSpacingProperty =
-        AvaloniaProperty.Register<BoardGrid, int>(nameof(RowSpacing));
-
-    /// <summary>
-    /// Defines the <see cref="RowSpacing"/> property.
-    /// </summary>
-    public static readonly StyledProperty<int> ColumnSpacingProperty =
-        AvaloniaProperty.Register<BoardGrid, int>(nameof(ColumnSpacing));
-
-    /// <summary>
-    /// Defines the <see cref="Padding"/> property.
-    /// </summary>
-    public static readonly StyledProperty<Thickness> PaddingProperty =
-        AvaloniaProperty.Register<Decorator, Thickness>(nameof(Padding));
-
-    /// <summary>
-    /// Defines the <see cref="DoubleSpacing"/> property.
-    /// </summary>
-    public static readonly StyledProperty<int> DoubleSpacingProperty =
-        AvaloniaProperty.Register<BoardGrid, int>(nameof(DoubleSpacing));
-
     private int _rows;
     private int _columns;
 
-    static BoardGrid()
+    static SpacedUniformGrid()
     {
-        AffectsMeasure<BoardGrid>(RowsProperty, ColumnsProperty);
-    }
-
-    /// <summary>
-    /// Specifies the row count. If set to 0, row count will be calculated automatically.
-    /// </summary>
-    public int Rows
-    {
-        get => GetValue(RowsProperty);
-        set => SetValue(RowsProperty, value);
-    }
-
-    /// <summary>
-    /// Specifies the column count. If set to 0, column count will be calculated automatically.
-    /// </summary>
-    public int Columns
-    {
-        get => GetValue(ColumnsProperty);
-        set => SetValue(ColumnsProperty, value);
-    }
-
-    /// <summary>
-    /// Specifies the row spacing.
-    /// </summary>
-    public int RowSpacing
-    {
-        get => GetValue(RowSpacingProperty);
-        set => SetValue(RowSpacingProperty, value);
-    }
-
-    /// <summary>
-    /// Specifies the row spacing.
-    /// </summary>
-    public int ColumnSpacing
-    {
-        get => GetValue(ColumnSpacingProperty);
-        set => SetValue(ColumnSpacingProperty, value);
-    }
-
-    /// <summary>
-    /// Specifies the spacing around the outside of the elements.
-    /// </summary>
-    public Thickness Padding
-    {
-        get => GetValue(PaddingProperty);
-        set => SetValue(PaddingProperty, value);
-    }
-
-    /// <summary>
-    /// Use double spacing of rows/columns every n rows/columns
-    /// </summary>
-    public int DoubleSpacing
-    {
-        get => GetValue(DoubleSpacingProperty);
-        set => SetValue(DoubleSpacingProperty, value);
+        AffectsMeasure<SpacedUniformGrid>(RowsProperty, ColumnsProperty, RowSpacingProperty, ColumnSpacingProperty, PaddingProperty, DoubleSpacingProperty);
     }
 
     protected override Size MeasureOverride(Size availableSize)
@@ -115,7 +26,7 @@ public class BoardGrid : Panel
         var maxWidth = 0d;
         var maxHeight = 0d;
 
-        var (rowSpace, columnSpace) = GetRowColumnSpace();
+        var (rowSpace, columnSpace) = CalculateTotalSpacing();
 
         var availableWidth = Math.Floor((availableSize.Width - columnSpace - Padding.Left - Padding.Right) / _columns);
         var availableHeight = Math.Floor((availableSize.Height - rowSpace - Padding.Top - Padding.Bottom) / _rows);
@@ -144,7 +55,7 @@ public class BoardGrid : Panel
         var x = 0;
         var y = 0;
 
-        var (rowSpace, columnSpace) = GetRowColumnSpace();
+        var (rowSpace, columnSpace) = CalculateTotalSpacing();
 
         var childWidth = Math.Floor((finalSize.Width - columnSpace - Padding.Left - Padding.Right) / _columns);
         var childHeight = Math.Floor((finalSize.Height - rowSpace - Padding.Top - Padding.Bottom) / _rows);
@@ -184,7 +95,10 @@ public class BoardGrid : Panel
         return finalSize;
     }
 
-    private (int RowSpace, int ColumnSpace) GetRowColumnSpace()
+    /// <summary>
+    /// Calculates required extra space to accomodate the spacing across the entire grid. Does not account for padding.
+    /// </summary>
+    private (int RowSpace, int ColumnSpace) CalculateTotalSpacing()
     {
         var rowSpace = RowSpacing * (_rows - 1);
         var columnSpace = ColumnSpacing * (_columns - 1);

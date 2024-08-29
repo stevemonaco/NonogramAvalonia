@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:res="using:NonogramAvalonia.Resources"
     xmlns:vm="using:NonogramAvalonia.ViewModels"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -32,11 +33,11 @@
                         CommandParameter="{Binding}"
                         CornerRadius="4">
                         <StackPanel>
-                            <TextBlock Text="{Binding PuzzleName}" />
+                            <TextBlock Text="{Binding Nonogram.Name}" />
                             <TextBlock>
-                                <Run Text="{Binding GridRows}" />
+                                <Run Text="{Binding Nonogram.RowCount}" />
                                 <Run Text="x" />
-                                <Run Text="{Binding GridColumns}" />
+                                <Run Text="{Binding Nonogram.ColumnCount}" />
                             </TextBlock>
                         </StackPanel>
                     </Button>
@@ -44,8 +45,19 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
 
-        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Bottom" Orientation="Horizontal">
-            <Button Command="{Binding CreateBoardCommand}" Content="Create" />
+        <StackPanel
+            HorizontalAlignment="Center"
+            VerticalAlignment="Bottom"
+            Orientation="Horizontal">
+            <Button
+                Margin="0,8,0,8"
+                Classes="accent"
+                Command="{Binding CreateBoardCommand}">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <PathIcon Data="{x:Static res:AppIcons.CreateBoardIcon}" />
+                    <TextBlock Text="Create New Board" />
+                </StackPanel>
+            </Button>
         </StackPanel>
     </Grid>
 </UserControl>

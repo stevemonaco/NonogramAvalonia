@@ -1,7 +1,14 @@
 ﻿namespace Nonogram.Domain;
 public class NonogramPuzzle
 {
+    /// <summary>
+    /// Row constraints required to be satisfied for the solution
+    /// </summary>
     public List<LineConstraint> RowConstraints { get; }
+
+    /// <summary>
+    /// Column constraints required to be satisfied for the solution
+    /// </summary>
     public List<LineConstraint> ColumnConstraints { get; }
 
     public int Rows => RowConstraints.Count;

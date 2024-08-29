@@ -26,21 +26,24 @@
         <!--<Rectangle Grid.Row="0" Grid.Column="0" />-->
 
         <!--  Solution Row Constraints  -->
-        <ItemsControl
-            Grid.Row="1"
-            Margin="0,0,4,0"
-            ItemsSource="{Binding SolutionRowConstraints}">
+        <ItemsControl Grid.Row="1" ItemsSource="{Binding Nonogram.SolutionRowConstraints, Converter={x:Static con:AppConverters.RowConstraintToStrings}}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <UniformGrid Columns="1" Rows="{Binding GridRows}" />
+                    <c:SpacedUniformGrid
+                        Classes="row constraints"
+                        Columns="1"
+                        Rows="{Binding Nonogram.RowCount}" />
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <c:OutlinedText
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Center"
-                        Text="{Binding}" />
+                    <Panel Classes="row constraints">
+                        <TextBlock
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Classes="row constraints"
+                            Text="{Binding}" />
+                    </Panel>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
@@ -49,18 +52,25 @@
         <ItemsControl
             Grid.Row="0"
             Grid.Column="1"
-            ItemsSource="{Binding SolutionColumnConstraints}">
+            ItemsSource="{Binding Nonogram.SolutionColumnConstraints, Converter={x:Static con:AppConverters.ColumnConstraintToStrings}}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <UniformGrid Columns="{Binding GridColumns}" Rows="1" />
+                    <c:SpacedUniformGrid
+                        Classes="column constraints"
+                        Columns="{Binding Nonogram.ColumnCount}"
+                        Rows="1" />
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <c:OutlinedText
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Bottom"
-                        Text="{Binding}" />
+                    <Panel Classes="column constraints">
+                        <TextBlock
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Bottom"
+                            Classes="column constraints"
+                            Text="{Binding}"
+                            TextAlignment="Center" />
+                    </Panel>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
@@ -71,13 +81,14 @@
             Grid.Row="1"
             Grid.Column="1"
             Cursor="Hand">
-            <ItemsControl x:Name="board" ItemsSource="{Binding BoardCells}">
+            <ItemsControl x:Name="board" ItemsSource="{Binding Nonogram.Cells}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <c:BoardGrid
+                        <c:SpacedUniformGrid
                             x:Name="boardGrid"
-                            Columns="{Binding GridColumns}"
-                            Rows="{Binding GridRows}" />
+                            Classes="cells"
+                            Columns="{Binding Nonogram.ColumnCount}"
+                            Rows="{Binding Nonogram.RowCount}" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
 
@@ -107,10 +118,10 @@
             <TextBlock Classes.solved="{Binding IsSolved}" FontSize="16">
                 <TextBlock.Styles>
                     <Style Selector="TextBlock">
-                        <Setter Property="Text" Value="{Binding PuzzleName, StringFormat=Now Playing: {0}}" />
+                        <Setter Property="Text" Value="{Binding Nonogram.Name, StringFormat=Now Playing: {0}}" />
                     </Style>
                     <Style Selector="TextBlock.solved">
-                        <Setter Property="Text" Value="{Binding PuzzleName, StringFormat=Completed: {0}}" />
+                        <Setter Property="Text" Value="{Binding Nonogram.Name, StringFormat=Completed: {0}}" />
                     </Style>
                 </TextBlock.Styles>
             </TextBlock>

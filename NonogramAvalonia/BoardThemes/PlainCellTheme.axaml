@@ -17,30 +17,13 @@
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch"
                             Data="{x:Static res:AppIcons.PlainEmptyIcon}"
-                            Foreground="Transparent">
-                            <PathIcon.Transitions>
-                                <Transitions>
-                                    <BrushTransition
-                                        Easing="CubicEaseOut"
-                                        Property="Foreground"
-                                        Duration="0:0:0:0.2" />
-                                </Transitions>
-                            </PathIcon.Transitions>
-                        </PathIcon>
+                            Foreground="Transparent" />
                     </Panel>
                 </Border>
             </ControlTemplate>
         </Setter>
 
         <Setter Property="Fill" Value="#F8ECC2" />
-        <Setter Property="Transitions">
-            <Transitions>
-                <BrushTransition
-                    Easing="CubicEaseOut"
-                    Property="Fill"
-                    Duration="0:0:0:0.5" />
-            </Transitions>
-        </Setter>
 
         <Style Selector="^.undetermined">
             <Setter Property="Fill" Value="#F8ECC2" />

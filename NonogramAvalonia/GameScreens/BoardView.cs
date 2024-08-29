@@ -12,7 +12,7 @@ namespace NonogramAvalonia.Views;
 public abstract class BoardView : UserControl
 {
     public static readonly StyledProperty<BoardTheme> BoardThemeProperty =
-    AvaloniaProperty.Register<BoardPlayView, BoardTheme>(nameof(BoardTheme), defaultValue: BoardTheme.Default);
+        AvaloniaProperty.Register<BoardPlayView, BoardTheme>(nameof(BoardTheme), defaultValue: BoardTheme.Default);
 
     public BoardTheme BoardTheme
     {
