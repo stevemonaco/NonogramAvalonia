@@ -1,15 +1,15 @@
 ﻿{
-  "name": "PicrossDS 0-C",
-  "rows": 5,
-  "columns": 5,
-  "rowConstraints": [
+  "Name": "PicrossDS 0-C",
+  "RowCount": 5,
+  "ColumnCount": 5,
+  "RowConstraints": [
     [ 2, 2 ],
     [ 5 ],
     [ 5 ],
     [ 3 ],
     [ 1 ]
   ],
-  "columnConstraints": [
+  "ColumnConstraints": [
     [ 3 ],
     [ 4 ],
     [ 4 ],

@@ -33,11 +33,11 @@
                         CommandParameter="{Binding}"
                         CornerRadius="4">
                         <StackPanel>
-                            <TextBlock Text="{Binding Nonogram.Name}" />
+                            <TextBlock Text="{Binding Name}" />
                             <TextBlock>
-                                <Run Text="{Binding Nonogram.RowCount}" />
+                                <Run Text="{Binding RowCount}" />
                                 <Run Text="x" />
-                                <Run Text="{Binding Nonogram.ColumnCount}" />
+                                <Run Text="{Binding ColumnCount}" />
                             </TextBlock>
                         </StackPanel>
                     </Button>

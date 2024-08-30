@@ -4,11 +4,11 @@ using NonogramAvalonia.Services;
 namespace NonogramAvalonia.Factory;
 public class BoardViewModelFactory
 {
-    private readonly BoardService _boardService;
+    private readonly SerializationService _boardService;
     private readonly IFileSelectService _fileSelectService;
     private readonly SolverService _solverService;
 
-    public BoardViewModelFactory(BoardService boardService, IFileSelectService fileSelectService, SolverService solverService)
+    public BoardViewModelFactory(SerializationService boardService, IFileSelectService fileSelectService, SolverService solverService)
     {
         _boardService = boardService;
         _fileSelectService = fileSelectService;

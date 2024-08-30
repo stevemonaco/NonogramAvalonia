@@ -1,8 +1,8 @@
 ﻿{
-  "name": "PicrossDS 1-B",
-  "rows": 10,
-  "columns": 10,
-  "rowConstraints": [
+  "Name": "PicrossDS 1-B",
+  "RowCount": 10,
+  "ColumnCount": 10,
+  "RowConstraints": [
     [ 3, 3 ],
     [ 9 ],
     [ 1, 3, 1 ],
@@ -14,7 +14,7 @@
     [ 1, 1, 1, 1 ],
     [ 5 ]
   ],
-  "columnConstraints": [
+  "ColumnConstraints": [
     [ 2 ],
     [ 2, 5 ],
     [ 2, 1, 1, 1, 1 ],

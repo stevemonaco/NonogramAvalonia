@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using NonogramAvalonia.Factory;
+using NonogramAvalonia.Mappers;
 using NonogramAvalonia.Services;
 
 namespace NonogramAvalonia.ViewModels;
@@ -13,11 +14,11 @@ public partial class ShellViewModel : ViewModelBase,
 	[ObservableProperty] private ObservableObject? _activeScreen;
 
 	private readonly MenuViewModel _menuViewModel;
-    private readonly BoardService _boardService;
+    private readonly SerializationService _boardService;
     private readonly IFileSelectService _fileSelectService;
     private readonly BoardViewModelFactory _boardViewModelFactory;
 
-    public ShellViewModel(MenuViewModel menuViewModel, BoardService boardService, IFileSelectService fileSelectService, BoardViewModelFactory boardViewModelFactory)
+    public ShellViewModel(MenuViewModel menuViewModel, SerializationService boardService, IFileSelectService fileSelectService, BoardViewModelFactory boardViewModelFactory)
 	{
 		_menuViewModel = menuViewModel;
         _boardService = boardService;
@@ -48,11 +49,11 @@ public partial class ShellViewModel : ViewModelBase,
 	public async Task LoadBoardAsync(string path)
 	{
         string json = await File.ReadAllTextAsync(path);
-        var boardResult = _boardService.DeserializeBoard(json);
+        var result = _boardService.DeserializeNonogram(json);
 
-        if (boardResult.IsSuccess)
+        if (result.IsSuccess)
         {
-			PlayBoard(boardResult.Entity);
+			PlayBoard(result.Entity.ToViewModel());
         }
     }
 

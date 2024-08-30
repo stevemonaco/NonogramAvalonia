@@ -8,6 +8,8 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using NonogramAvalonia.Services;
+using NonogramAvalonia.Mappers;
+
 
 namespace NonogramAvalonia.ViewModels;
 
@@ -24,11 +26,11 @@ public partial class BoardViewModel : ObservableRecipient
     [ObservableProperty] private bool _showConstraints;
 
     protected CellTransition _transition;
-    private readonly BoardService _boardService;
+    private readonly SerializationService _boardService;
     private readonly IFileSelectService _fileSelectService;
     private readonly SolverService _solverService;
 
-    public BoardViewModel(BoardMode mode, NonogramViewModel nonogramViewModel, BoardService boardService, IFileSelectService fileSelectService, SolverService solverService)
+    public BoardViewModel(BoardMode mode, NonogramViewModel nonogramViewModel, SerializationService boardService, IFileSelectService fileSelectService, SolverService solverService)
     {
         Mode = mode;
         Nonogram = nonogramViewModel;
@@ -104,9 +106,12 @@ public partial class BoardViewModel : ObservableRecipient
         if (fileName is null)
             return;
 
-        Nonogram.Name = Path.GetFileNameWithoutExtension(fileName);
         Nonogram.RebuildPlayerConstraints();
-        var json = _boardService.SerializeBoard(Nonogram);
+        if (string.IsNullOrEmpty(Nonogram.Name))
+            Nonogram.Name = Path.GetFileNameWithoutExtension(fileName);
+
+        var model = Nonogram.ToModel();
+        var json = _boardService.SerializeNonogram(model);
         await File.WriteAllTextAsync(fileName, json);
     }
 

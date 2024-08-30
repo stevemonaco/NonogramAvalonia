@@ -1,1 +1,1 @@
-{"Name":"PicrossDS 0-A","Rows":5,"Columns":5,"RowConstraints":[[2,2],[2,2],[0],[1,1],[1,1,1]],"ColumnConstraints":[[2,2],[2],[1],[2],[2,2]]}
+{"Name":"PicrossDS 0-A","RowCount":5,"ColumnCount":5,"RowConstraints":[[2,2],[2,2],[0],[1,1],[1,1,1]],"ColumnConstraints":[[2,2],[2],[1],[2],[2,2]]}
