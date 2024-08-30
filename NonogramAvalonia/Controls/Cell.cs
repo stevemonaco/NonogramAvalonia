@@ -1,8 +1,5 @@
 ﻿using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
-using Avalonia.Media;
-using Avalonia.Media.Immutable;
 using NonogramAvalonia.ViewModels;
 using System;
 

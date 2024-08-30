@@ -122,7 +122,7 @@ public partial class NonogramViewModel : ObservableObject
 
     public CellState GetState(int row, int column)
     {
-        if (row < ColumnCount && column < RowCount && row >= 0 && column >= 0)
+        if (row < RowCount && column < ColumnCount && row >= 0 && column >= 0)
             return Cells[row * ColumnCount + column].CellState;
         else
             throw new IndexOutOfRangeException();
@@ -130,7 +130,7 @@ public partial class NonogramViewModel : ObservableObject
 
     public void SetState(int row, int column, CellState cs)
     {
-        if (row < ColumnCount && column < RowCount && row >= 0 && column >= 0)
+        if (row < RowCount && column < ColumnCount && row >= 0 && column >= 0)
             Cells[row * ColumnCount + column].CellState = cs;
         else
             throw new IndexOutOfRangeException();
@@ -173,14 +173,4 @@ public partial class NonogramViewModel : ObservableObject
             yield return GetCell(row, column);
         }
     }
-
-    //public IEnumerable<CellViewModel> Board
-    //{
-    //    get
-    //    {
-    //        for (int row = 0; row < RowCount; row++)
-    //            for (int col = 0; col < ColumnCount; col++)
-    //                yield return GetCell(row, col);
-    //    }
-    //}
 }

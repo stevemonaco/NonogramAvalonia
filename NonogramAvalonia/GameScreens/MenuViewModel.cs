@@ -35,8 +35,6 @@ public partial class MenuViewModel : ObservableRecipient
             if (result.IsSuccess)
             {
                 AvailableBoards.Add(result.Entity);
-                //var vm = _boardViewModelFactory.CreateEditor(result.Entity.ToViewModel());
-                //AvailableBoards.Add(vm);
             }
         }
     }

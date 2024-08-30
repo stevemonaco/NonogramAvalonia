@@ -2,6 +2,7 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+    <MvvmToolkitEnableINotifyPropertyChangingSupport>false</MvvmToolkitEnableINotifyPropertyChangingSupport>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <AvaloniaXamlIlDebuggerLaunch>false</AvaloniaXamlIlDebuggerLaunch>
   </PropertyGroup>
@@ -32,13 +33,5 @@
     <None Update="_boards\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Update="GameScreens\BoardEditorView.axaml.cs">
-      <DependentUpon>BoardEditorView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="GameScreens\BoardPlayView.axaml.cs">
-      <DependentUpon>BoardPlayView.axaml</DependentUpon>
-    </Compile>
   </ItemGroup>
 </Project>

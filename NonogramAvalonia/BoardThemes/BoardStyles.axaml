@@ -14,7 +14,7 @@
     </Styles.Resources>
 
     <!--  Base Board Styles  -->
-    <Style Selector="c|SpacedUniformGrid">
+    <Style Selector=":is(v|BoardView) c|SpacedUniformGrid">
         <Setter Property="Padding" Value="6" />
         <Setter Property="ColumnSpacing" Value="3" />
         <Setter Property="RowSpacing" Value="3" />

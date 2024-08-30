@@ -2,6 +2,7 @@
     x:Class="NonogramAvalonia.Views.MenuView"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="using:NonogramAvalonia.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:res="using:NonogramAvalonia.Resources"
@@ -11,41 +12,92 @@
     x:DataType="vm:MenuViewModel"
     mc:Ignorable="d">
     <UserControl.Styles>
-        <Style Selector="Button:pressed">
-            <Setter Property="RenderTransform" Value="{x:Null}" />
+        <Style Selector="Button.level">
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="BorderBrush" Value="White" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="4" />
+
+            <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Background" Value="#37946E" />
+            </Style>
+
+            <Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Background" Value="#45ba89" />
+                <Setter Property="BorderBrush" Value="White" />
+            </Style>
+
+            <Style Selector="^:pressed">
+                <Setter Property="RenderTransform" Value="{x:Null}" />
+                <Setter Property="BorderBrush" Value="White" />
+
+                <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+                    <Setter Property="Background" Value="#297052" />
+                </Style>
+            </Style>
         </Style>
     </UserControl.Styles>
 
-    <Grid RowDefinitions="*,auto">
-        <ItemsControl x:Name="boards" ItemsSource="{Binding AvailableBoards}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <UniformGrid VerticalAlignment="Top" />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Button
-                        HorizontalAlignment="Stretch"
-                        BorderBrush="Orange"
-                        BorderThickness="1"
-                        Command="{Binding #boards.((vm:MenuViewModel)DataContext).PlayCommand}"
-                        CommandParameter="{Binding}"
-                        CornerRadius="4">
-                        <StackPanel>
-                            <TextBlock Text="{Binding Name}" />
-                            <TextBlock>
-                                <Run Text="{Binding RowCount}" />
-                                <Run Text="x" />
-                                <Run Text="{Binding ColumnCount}" />
-                            </TextBlock>
-                        </StackPanel>
-                    </Button>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+    <UserControl.Background>
+        <ImageBrush Source="/Assets/Elegant_Background-8.jpg" Stretch="UniformToFill" />
+    </UserControl.Background>
+
+    <Grid RowDefinitions="auto,*,auto">
+        <TextBlock
+            HorizontalAlignment="Center"
+            FontSize="36"
+            FontWeight="Bold"
+            Text="Level Selection" />
+
+        <ScrollViewer Grid.Row="1">
+            <ItemsControl x:Name="boards" ItemsSource="{Binding AvailableBoards}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <c:SpacedUniformGrid
+                            Padding="16"
+                            VerticalAlignment="Top"
+                            ColumnSpacing="16"
+                            Columns="5"
+                            RowSpacing="16" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button
+                            Classes="level"
+                            Command="{Binding #boards.((vm:MenuViewModel)DataContext).PlayCommand}"
+                            CommandParameter="{Binding}">
+                            <StackPanel Spacing="8">
+                                <Border
+                                    Padding="4"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Top"
+                                    BorderBrush="Black"
+                                    BorderThickness="2"
+                                    CornerRadius="4">
+                                    <TextBlock
+                                        FontSize="16"
+                                        FontWeight="Bold"
+                                        Foreground="Black">
+                                        <Run Text="{Binding RowCount}" />
+                                        <Run Text="x" />
+                                        <Run Text="{Binding ColumnCount}" />
+                                    </TextBlock>
+                                </Border>
+
+                                <TextBlock
+                                    HorizontalAlignment="Center"
+                                    FontSize="24"
+                                    Text="{Binding Name}" />
+                            </StackPanel>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
 
         <StackPanel
+            Grid.Row="2"
             HorizontalAlignment="Center"
             VerticalAlignment="Bottom"
             Orientation="Horizontal">
