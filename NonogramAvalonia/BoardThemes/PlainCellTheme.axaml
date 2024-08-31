@@ -2,7 +2,14 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:c="using:NonogramAvalonia.Controls"
-    xmlns:res="using:NonogramAvalonia.Resources">
+    xmlns:res="using:NonogramAvalonia.Resources"
+    xmlns:v="using:NonogramAvalonia.Views">
+
+    <!--<SolidColorBrush x:Key="BoardBackground" Color="#F8ECC2" />-->
+    <!--
+    <SolidColorBrush x:Key="BoardBackgroundBrush" Color="#EBCD56" />
+    <SolidColorBrush x:Key="BoardFilledBrush" Color="#C40000" />-->
+
     <ControlTheme x:Key="PlainCellTheme" TargetType="c:Cell">
         <Setter Property="Template">
             <ControlTemplate>
@@ -23,19 +30,19 @@
             </ControlTemplate>
         </Setter>
 
-        <Setter Property="Fill" Value="#F8ECC2" />
+        <Setter Property="Fill" Value="{StaticResource PlainBoardBackgroundBrush}" />
 
         <Style Selector="^.undetermined">
-            <Setter Property="Fill" Value="#F8ECC2" />
+            <Setter Property="Fill" Value="{StaticResource PlainBoardBackgroundBrush}" />
         </Style>
         <Style Selector="^.empty:not(.win)">
-            <Setter Property="Fill" Value="#F8ECC2" />
+            <Setter Property="Fill" Value="{StaticResource PlainBoardBackgroundBrush}" />
             <Style Selector="^ PathIcon#emptyIcon">
-                <Setter Property="Foreground" Value="#C40000" />
+                <Setter Property="Foreground" Value="{StaticResource PlainBoardFilledBrush}" />
             </Style>
         </Style>
         <Style Selector="^.filled">
-            <Setter Property="BorderBrush" Value="#F8ECC2" />
+            <Setter Property="BorderBrush" Value="{StaticResource PlainBoardBackgroundBrush}" />
             <Setter Property="BorderThickness" Value="3" />
             <Setter Property="Fill" Value="Transparent" />
         </Style>

@@ -8,8 +8,8 @@ public static class NonogramViewModelMapper
 {
     public static NonogramModel ToModel(this NonogramViewModel viewModel)
     {
-        var rowConstraints = viewModel.PlayerRowConstraints.Select(x => new List<int>(x)).ToList();
-        var columnConstraints = viewModel.PlayerColumnConstraints.Select(x => new List<int>(x)).ToList();
+        var rowConstraints = viewModel.SolutionRowConstraints.Select(x => new List<int>(x)).ToList();
+        var columnConstraints = viewModel.SolutionColumnConstraints.Select(x => new List<int>(x)).ToList();
 
         return new NonogramModel(viewModel.Name ?? "", viewModel.RowCount, viewModel.ColumnCount, rowConstraints, columnConstraints);
     }

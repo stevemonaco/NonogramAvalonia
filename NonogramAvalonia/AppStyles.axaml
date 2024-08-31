@@ -1,0 +1,27 @@
+<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:b="using:NonogramAvalonia.Behaviors">
+    <!--  Globally useful styles  -->
+    <Style Selector="TextBox">
+        <Setter Property="(Interaction.Behaviors)">
+            <BehaviorCollectionTemplate>
+                <BehaviorCollection>
+                    <b:TextBoxFocusSelectionBehavior />
+                </BehaviorCollection>
+            </BehaviorCollectionTemplate>
+        </Setter>
+    </Style>
+
+    <Style Selector="PathIcon.vflip">
+        <Setter Property="RenderTransform" Value="scaley(-1)" />
+    </Style>
+
+    <Style Selector="PathIcon.hflip">
+        <Setter Property="RenderTransform" Value="scalex(-1)" />
+    </Style>
+
+    <Style Selector="PathIcon.turn">
+        <Setter Property="RenderTransform" Value="scale(-1)" />
+    </Style>
+</Styles>

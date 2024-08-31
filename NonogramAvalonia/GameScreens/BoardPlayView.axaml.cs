@@ -28,19 +28,6 @@ public partial class BoardPlayView : BoardView,
         Focus();
     }
 
-    protected override void OnKeyDown(KeyEventArgs e)
-    {
-        if (e.Key == Key.S)
-        {
-            ViewModel.SolveBoard();
-        }
-        else if (e.Key == Key.T)
-        {
-            var index = (AvailableThemes.IndexOf(BoardTheme) + 1) % AvailableThemes.Count;
-            BoardTheme = AvailableThemes[index];
-        }
-    }
-
     private void Timer_Tick(object? sender, EventArgs e)
     {
         ViewModel.TimeElapsed = DateTime.Now - _timeStarted;

@@ -24,17 +24,23 @@ public partial class NonogramViewModel : ObservableObject
     {
         RowCount = rows;
         ColumnCount = columns;
-        Cells = new(CreateCellStates());
+        Cells = new(CreateCells(RowCount, ColumnCount));
+
+        RebuildSolutionConstraints();
+        RebuildPlayerConstraints();
     }
 
     public NonogramViewModel(List<List<int>> rowConstraints, List<List<int>> columnConstraints)
     {
         RowCount = rowConstraints.Count;
         ColumnCount = columnConstraints.Count;
-        Cells = new(CreateCellStates());
+        Cells = new(CreateCells(RowCount, ColumnCount));
 
         SolutionRowConstraints = new(rowConstraints.Select(x => new LineConstraints(x)));
         SolutionColumnConstraints = new(columnConstraints.Select(x => new LineConstraints(x)));
+
+        PlayerRowConstraints = new(rowConstraints.Select(x => new LineConstraints([0])));
+        PlayerColumnConstraints = new(columnConstraints.Select(x => new LineConstraints([0])));
     }
 
     public bool CheckWinState()
@@ -67,53 +73,80 @@ public partial class NonogramViewModel : ObservableObject
     /// </summary>
     public void RebuildPlayerConstraints()
     {
-        PlayerRowConstraints.Clear();
-        PlayerColumnConstraints.Clear();
+        var rowConstraints = Enumerable.Range(0, RowCount)
+            .Select(x => BuildLineConstraints(GetRow(x)));
 
-        for (int row = 0; row < RowCount; row++)
-        {
-            var constraint = BuildLineConstraint(GetRow(row));
-            PlayerRowConstraints.Add(constraint);
-        }
+        var columnConstraints = Enumerable.Range(0, ColumnCount)
+            .Select(x => BuildLineConstraints(GetColumn(x)));
 
-        for (int col = 0; col < ColumnCount; col++)
-        {
-            var constraint = BuildLineConstraint(GetColumn(col));
-            PlayerColumnConstraints.Add(constraint);
-        }
-
-        LineConstraints BuildLineConstraint(IEnumerable<CellViewModel> cells)
-        {
-            var constraints = new LineConstraints();
-            int run = 0;
-            foreach (var cell in cells)
-            {
-                if (cell.CellState == CellState.Filled)
-                {
-                    run++;
-                }
-                else if (run > 0)
-                {
-                    constraints.Add(run);
-                    run = 0;
-                }
-            }
-
-            if (run > 0)
-                constraints.Add(run);
-
-            if (constraints.Count == 0)
-                constraints.Add(0);
-
-            return constraints;
-        }
+        PlayerRowConstraints = new(rowConstraints);
+        PlayerColumnConstraints = new(columnConstraints);
     }
 
-    private IEnumerable<CellViewModel> CreateCellStates()
+    /// <summary>
+    /// Rebuilds the Solution Row and Column constraints based on the current Cells state
+    /// </summary>
+    public void RebuildSolutionConstraints()
     {
-        for (int row = 0; row < RowCount; row++)
+        var rowConstraints = Enumerable.Range(0, RowCount)
+            .Select(x => BuildLineConstraints(GetRow(x)));
+
+        var columnConstraints = Enumerable.Range(0, ColumnCount)
+            .Select(x => BuildLineConstraints(GetColumn(x)));
+
+        SolutionRowConstraints = new(rowConstraints);
+        SolutionColumnConstraints = new(columnConstraints);
+    }
+
+    /// <summary>
+    /// Updates Player Constraints for a given (row, column)
+    /// </summary>
+    public void UpdatePlayerConstraints(int row, int column)
+    {
+        PlayerRowConstraints[row] = BuildLineConstraints(GetRow(row));
+        PlayerColumnConstraints[column] = BuildLineConstraints(GetColumn(column));
+    }
+
+    /// <summary>
+    /// Updates Solution Constraints for a given (row, column)
+    /// </summary>
+    public void UpdateSolutionConstraints(int row, int column)
+    {
+        SolutionRowConstraints[row] = BuildLineConstraints(GetRow(row));
+        SolutionColumnConstraints[column] = BuildLineConstraints(GetColumn(column));
+    }
+
+    private LineConstraints BuildLineConstraints(IEnumerable<CellViewModel> cells)
+    {
+        var constraints = new LineConstraints();
+        int run = 0;
+        foreach (var cell in cells)
         {
-            for (int col = 0; col < ColumnCount; col++)
+            if (cell.CellState == CellState.Filled)
+            {
+                run++;
+            }
+            else if (run > 0)
+            {
+                constraints.Add(run);
+                run = 0;
+            }
+        }
+
+        if (run > 0)
+            constraints.Add(run);
+
+        if (constraints.Count == 0)
+            constraints.Add(0);
+
+        return constraints;
+    }
+
+    private IEnumerable<CellViewModel> CreateCells(int rows, int columns)
+    {
+        for (int row = 0; row < rows; row++)
+        {
+            for (int col = 0; col < columns; col++)
             {
                 yield return new CellViewModel(CellState.Undetermined, row, col);
             }
@@ -125,7 +158,7 @@ public partial class NonogramViewModel : ObservableObject
         if (row < RowCount && column < ColumnCount && row >= 0 && column >= 0)
             return Cells[row * ColumnCount + column].CellState;
         else
-            throw new IndexOutOfRangeException();
+            throw new IndexOutOfRangeException($"Nonogram cell ({row}, {column}) is out of range");
     }
 
     public void SetState(int row, int column, CellState cs)
@@ -133,44 +166,28 @@ public partial class NonogramViewModel : ObservableObject
         if (row < RowCount && column < ColumnCount && row >= 0 && column >= 0)
             Cells[row * ColumnCount + column].CellState = cs;
         else
-            throw new IndexOutOfRangeException();
-    }
-
-    public CellViewModel GetCell(int row, int column)
-    {
-        if (row >= RowCount || row < 0 || column >= ColumnCount || column < 0)
             throw new IndexOutOfRangeException($"Nonogram cell ({row}, {column}) is out of range");
-
-        return Cells[row * ColumnCount + column];
     }
 
-    public void SetCell(CellViewModel cell, int row, int column)
-    {
-        if (row >= RowCount || row < 0 || column >= ColumnCount || column < 0)
-            throw new IndexOutOfRangeException($"Nonogram cell ({row}, {column}) is out of range");
-
-        Cells[row * ColumnCount + column] = cell;
-    }
-
-    public IEnumerable<CellViewModel> GetRow(int row)
+    private IEnumerable<CellViewModel> GetRow(int row)
     {
         if (row >= RowCount || row < 0)
             throw new IndexOutOfRangeException();
         
-        for (int col = 0; col < ColumnCount; col++)
+        for (int column = 0; column < ColumnCount; column++)
         {
-            yield return GetCell(row, col);
+            yield return Cells[row * ColumnCount + column];
         }
     }
 
-    public IEnumerable<CellViewModel> GetColumn(int column)
+    private IEnumerable<CellViewModel> GetColumn(int column)
     {
         if (column >= ColumnCount || column < 0)
             throw new IndexOutOfRangeException();
 
         for (int row = 0; row < RowCount; row++)
         {
-            yield return GetCell(row, column);
+            yield return Cells[row * ColumnCount + column];
         }
     }
 }

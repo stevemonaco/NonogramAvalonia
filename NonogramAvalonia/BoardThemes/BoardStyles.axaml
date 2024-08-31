@@ -7,6 +7,11 @@
     <Styles.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary>
+                    <SolidColorBrush x:Key="PlainBoardBackgroundBrush" Color="#F8ECC2" />
+                    <SolidColorBrush x:Key="PlainBoardFilledBrush" Color="#C40000" />
+                </ResourceDictionary>
+
                 <ResourceInclude Source="avares://NonogramAvalonia/BoardThemes/DefaultCellTheme.axaml" />
                 <ResourceInclude Source="avares://NonogramAvalonia/BoardThemes/PlainCellTheme.axaml" />
             </ResourceDictionary.MergedDictionaries>
@@ -59,10 +64,10 @@
             <Setter Property="Margin" Value="8,0,8,0" />
         </Style>
         <Style Selector="^ Panel.row.constraints">
-            <Setter Property="Background" Value="#F8ECC2" />
+            <Setter Property="Background" Value="{StaticResource PlainBoardBackgroundBrush}" />
         </Style>
         <Style Selector="^ Panel.column.constraints">
-            <Setter Property="Background" Value="#F8ECC2" />
+            <Setter Property="Background" Value="{StaticResource PlainBoardBackgroundBrush}" />
         </Style>
         <Style Selector="^ c|Cell">
             <Setter Property="Theme" Value="{StaticResource PlainCellTheme}" />

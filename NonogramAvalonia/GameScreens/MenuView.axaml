@@ -44,8 +44,9 @@
 
     <Grid RowDefinitions="auto,*,auto">
         <TextBlock
+          Margin="0,8,0,8"
             HorizontalAlignment="Center"
-            FontSize="36"
+            FontSize="48"
             FontWeight="Bold"
             Text="Level Selection" />
 

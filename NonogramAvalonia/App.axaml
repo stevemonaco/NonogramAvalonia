@@ -12,6 +12,7 @@
     <Application.Styles>
         <FluentTheme />
 
+        <StyleInclude Source="avares://NonogramAvalonia/AppStyles.axaml" />
         <StyleInclude Source="avares://NonogramAvalonia/BoardThemes/BoardStyles.axaml" />
     </Application.Styles>
 </Application>

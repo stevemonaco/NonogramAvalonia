@@ -12,29 +12,86 @@
     xmlns:vm="using:NonogramAvalonia.ViewModels"
     d:DesignHeight="450"
     d:DesignWidth="800"
-    x:DataType="vm:BoardViewModel">
+    x:DataType="vm:BoardViewModel"
+    FocusAdorner="{x:Null}"
+    Focusable="True">
+    <UserControl.Styles>
+        <Style Selector="NumericUpDown TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+
+        <Style Selector="NumericUpDown">
+            <Setter Property="(TextBlock.TextAlignment)" Value="Right" />
+        </Style>
+
+        <Style Selector="NumericUpDown /template/ TextBox#PART_TextBox /template/ TextPresenter#PART_TextPresenter">
+            <Setter Property="MinWidth" Value="50" />
+            <Setter Property="HorizontalAlignment" Value="Right" />
+        </Style>
+
+        <Style Selector="PathIcon.undetermined">
+            <Setter Property="Data" Value="{x:Null}" />
+        </Style>
+        <Style Selector="PathIcon.failed">
+            <Setter Property="Data" Value="{x:Static res:AppIcons.SolverFailedIcon}" />
+            <Setter Property="Foreground" Value="Red" />
+        </Style>
+        <Style Selector="PathIcon.success">
+            <Setter Property="Data" Value="{x:Static res:AppIcons.SolverSuccessIcon}" />
+            <Setter Property="Foreground" Value="Green" />
+        </Style>
+    </UserControl.Styles>
 
     <Grid ColumnDefinitions="Auto, *" RowDefinitions="Auto, Auto, *, Auto">
         <StackPanel
             Grid.ColumnSpan="2"
+            Margin="12,16,0,0"
             Orientation="Horizontal"
             Spacing="8">
-            <Button Command="{Binding SaveBoardCommand}">
+
+            <TextBox
+                MinWidth="200"
+                Text="{Binding Nonogram.Name}"
+                Watermark="Name">
+                <TextBox.InnerLeftContent>
+                    <PathIcon Margin="4,0,0,0" Data="{x:Static res:AppIcons.BoardNameIcon}" />
+                </TextBox.InnerLeftContent>
+            </TextBox>
+            <NumericUpDown Value="{Binding Nonogram.RowCount, UpdateSourceTrigger=LostFocus}">
+                <NumericUpDown.InnerLeftContent>
+                    <TextBlock Margin="4,0,0,0" Text="Rows" />
+                </NumericUpDown.InnerLeftContent>
+            </NumericUpDown>
+            <NumericUpDown Value="{Binding Nonogram.ColumnCount, UpdateSourceTrigger=LostFocus}">
+                <NumericUpDown.InnerLeftContent>
+                    <TextBlock Margin="4,0,0,0" Text="Columns" />
+                </NumericUpDown.InnerLeftContent>
+            </NumericUpDown>
+
+            <Button Classes="accent" Command="{Binding SaveBoardCommand}">
                 <StackPanel Orientation="Horizontal" Spacing="8">
                     <PathIcon Data="{x:Static res:AppIcons.SaveBoardIcon}" />
                     <TextBlock Text="Save" />
                 </StackPanel>
             </Button>
-            <TextBox
-                Text="{Binding Nonogram.Name}"
-                UseFloatingWatermark="True"
-                Watermark="Name" />
-            <NumericUpDown InnerLeftContent="Width" VerticalContentAlignment="Center" />
-            <NumericUpDown InnerLeftContent="Width" />
+
+            <Button Command="{Binding TestSolveBoardCommand}" ToolTip.Tip="Runs the Solver to ensure the board can be solved">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <PathIcon Data="{x:Static res:AppIcons.RunSolverIcon}" />
+                    <TextBlock Text="Test Solver" />
+                    <PathIcon
+                        Classes.failed="{Binding SolverState, Converter={x:Static con:AppConverters.EnumToBoolean}, ConverterParameter={x:Static vm:SolverState.Failed}}"
+                        Classes.success="{Binding SolverState, Converter={x:Static con:AppConverters.EnumToBoolean}, ConverterParameter={x:Static vm:SolverState.Success}}"
+                        Classes.undetermined="{Binding SolverState, Converter={x:Static con:AppConverters.EnumToBoolean}, ConverterParameter={x:Static vm:SolverState.Undetermined}}" />
+                </StackPanel>
+            </Button>
         </StackPanel>
 
         <!--  Solution Row Constraints  -->
-        <ItemsControl Grid.Row="2" ItemsSource="{Binding Nonogram.SolutionRowConstraints, Converter={x:Static con:AppConverters.RowConstraintToStrings}}">
+        <ItemsControl
+            Grid.Row="2"
+            IsVisible="{Binding ShowConstraints}"
+            ItemsSource="{Binding Nonogram.SolutionRowConstraints, Converter={x:Static con:AppConverters.RowConstraintToStrings}}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <c:SpacedUniformGrid
@@ -60,6 +117,7 @@
         <ItemsControl
             Grid.Row="1"
             Grid.Column="1"
+            IsVisible="{Binding ShowConstraints}"
             ItemsSource="{Binding Nonogram.SolutionColumnConstraints, Converter={x:Static con:AppConverters.ColumnConstraintToStrings}}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
