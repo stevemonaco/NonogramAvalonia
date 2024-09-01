@@ -13,6 +13,17 @@
         </Setter>
     </Style>
 
+    <Style Selector="Button.icon">
+        <Style Selector="^ > StackPanel">
+            <Setter Property="Orientation" Value="Horizontal" />
+            <Setter Property="Spacing" Value="8" />
+        </Style>
+        <Style Selector="^ PathIcon">
+            <Setter Property="Width" Value="16" />
+            <Setter Property="Height" Value="16" />
+        </Style>
+    </Style>
+
     <Style Selector="PathIcon.vflip">
         <Setter Property="RenderTransform" Value="scaley(-1)" />
     </Style>

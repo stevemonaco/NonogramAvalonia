@@ -3,8 +3,6 @@ using Nonogram.Domain;
 using System;
 using System.Linq;
 using Nonogram.Domain.Solver;
-using DomainCellState = Nonogram.Domain.CellState;
-using ViewModelCellState = NonogramAvalonia.ViewModels.CellState;
 
 namespace NonogramAvalonia.Services;
 public class SolverService
@@ -22,9 +20,9 @@ public class SolverService
                 for (int row = 0; row < nonogram.RowCount; row++)
                 {
                     var state = solver.Cells[row, col].State;
-                    if (state != DomainCellState.Undetermined)
+                    if (state != CellState.Undetermined)
                     {
-                        nonogram.SetState(row, col, ToCellState(state));
+                        nonogram.SetState(row, col, state);
                     }
                 }
             }
@@ -40,12 +38,4 @@ public class SolverService
 
         return new NonogramPuzzle(rowConstraints, columnConstraints);
     }
-
-    private ViewModelCellState ToCellState(DomainCellState state) => state switch
-    {
-        DomainCellState.Undetermined => ViewModelCellState.Undetermined,
-        DomainCellState.Empty => ViewModelCellState.Empty,
-        DomainCellState.Filled => ViewModelCellState.Filled,
-        _ => throw new NotSupportedException()
-    };
 }

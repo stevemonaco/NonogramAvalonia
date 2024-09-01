@@ -1,7 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls.Shapes;
 using Avalonia.Media;
-using NonogramAvalonia.ViewModels;
+using Nonogram.Domain;
 
 namespace NonogramAvalonia.Controls;
 public partial class Cell

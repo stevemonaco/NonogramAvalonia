@@ -8,6 +8,10 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary>
+                    <SolidColorBrush x:Key="DefaultBoardUndeterminedBrush" Color="#DF6626" />
+                    <SolidColorBrush x:Key="DefaultBoardFilledBrush" Color="#37946E" />
+                    <SolidColorBrush x:Key="DefaultBoardEmptyBrush" Color="#AC3232" />
+
                     <SolidColorBrush x:Key="PlainBoardBackgroundBrush" Color="#F8ECC2" />
                     <SolidColorBrush x:Key="PlainBoardFilledBrush" Color="#C40000" />
                 </ResourceDictionary>

@@ -22,11 +22,8 @@
 
         <Style Selector="NumericUpDown">
             <Setter Property="(TextBlock.TextAlignment)" Value="Right" />
-        </Style>
-
-        <Style Selector="NumericUpDown /template/ TextBox#PART_TextBox /template/ TextPresenter#PART_TextPresenter">
-            <Setter Property="MinWidth" Value="50" />
-            <Setter Property="HorizontalAlignment" Value="Right" />
+            <Setter Property="MinWidth" Value="170" />
+            <Setter Property="FormatString" Value="N0" />
         </Style>
 
         <Style Selector="PathIcon.undetermined">
@@ -57,26 +54,36 @@
                     <PathIcon Margin="4,0,0,0" Data="{x:Static res:AppIcons.BoardNameIcon}" />
                 </TextBox.InnerLeftContent>
             </TextBox>
-            <NumericUpDown Value="{Binding Nonogram.RowCount, UpdateSourceTrigger=LostFocus}">
+            <NumericUpDown x:Name="rowCountControl" Value="{Binding Nonogram.RowCount, Mode=OneWay}">
                 <NumericUpDown.InnerLeftContent>
                     <TextBlock Margin="4,0,0,0" Text="Rows" />
                 </NumericUpDown.InnerLeftContent>
             </NumericUpDown>
-            <NumericUpDown Value="{Binding Nonogram.ColumnCount, UpdateSourceTrigger=LostFocus}">
+            <NumericUpDown x:Name="columnCountControl" Value="{Binding Nonogram.ColumnCount, Mode=OneWay}">
                 <NumericUpDown.InnerLeftContent>
                     <TextBlock Margin="4,0,0,0" Text="Columns" />
                 </NumericUpDown.InnerLeftContent>
             </NumericUpDown>
 
-            <Button Classes="accent" Command="{Binding SaveBoardCommand}">
-                <StackPanel Orientation="Horizontal" Spacing="8">
+            <Button Classes="icon" Click="Resize_Click">
+                <StackPanel>
+                    <PathIcon Data="{x:Static res:AppIcons.ResizeBoardIcon}" />
+                    <TextBlock Text="Resize" />
+                </StackPanel>
+            </Button>
+
+            <Button Classes="accent icon" Command="{Binding SaveBoardCommand}">
+                <StackPanel>
                     <PathIcon Data="{x:Static res:AppIcons.SaveBoardIcon}" />
                     <TextBlock Text="Save" />
                 </StackPanel>
             </Button>
 
-            <Button Command="{Binding TestSolveBoardCommand}" ToolTip.Tip="Runs the Solver to ensure the board can be solved">
-                <StackPanel Orientation="Horizontal" Spacing="8">
+            <Button
+                Classes="icon"
+                Command="{Binding TestSolveBoardCommand}"
+                ToolTip.Tip="Runs the Solver to ensure the board can be solved">
+                <StackPanel>
                     <PathIcon Data="{x:Static res:AppIcons.RunSolverIcon}" />
                     <TextBlock Text="Test Solver" />
                     <PathIcon

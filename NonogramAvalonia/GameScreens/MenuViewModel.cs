@@ -49,6 +49,12 @@ public partial class MenuViewModel : ObservableRecipient
     [RelayCommand]
     public void CreateBoard()
     {
-        WeakReferenceMessenger.Default.Send(new NavigateToCreateMessage(25, 25));
+        WeakReferenceMessenger.Default.Send(new NavigateToCreateMessage(10, 10));
+    }
+
+    [RelayCommand]
+    public void CreateRandomBoard()
+    {
+
     }
 }

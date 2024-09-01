@@ -12,7 +12,7 @@
             </ControlTemplate>
         </Setter>
 
-        <Setter Property="Fill" Value="#888888" />
+        <Setter Property="Fill" Value="{StaticResource DefaultBoardUndeterminedBrush}" />
         <Setter Property="BorderThickness" Value="2" />
         <Setter Property="Transitions">
             <Transitions>
@@ -29,15 +29,17 @@
 
         <Style Selector="^.undetermined">
             <Setter Property="Opacity" Value="0.8" />
-            <Setter Property="Fill" Value="#df6626" />
+            <Setter Property="Fill" Value="{StaticResource DefaultBoardUndeterminedBrush}" />
         </Style>
         <Style Selector="^.empty">
             <Setter Property="Opacity" Value="0.8" />
-            <Setter Property="Fill" Value="#ac3232" />
+            <Style Selector="^:not(.win)">
+                <Setter Property="Fill" Value="{StaticResource DefaultBoardEmptyBrush}" />
+            </Style>
         </Style>
         <Style Selector="^.filled">
             <Setter Property="Opacity" Value="0.8" />
-            <Setter Property="Fill" Value="#37946e" />
+            <Setter Property="Fill" Value="{StaticResource DefaultBoardFilledBrush}" />
         </Style>
         <Style Selector="^.win">
             <Setter Property="BorderThickness" Value="0" />

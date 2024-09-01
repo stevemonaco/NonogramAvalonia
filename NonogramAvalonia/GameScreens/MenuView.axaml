@@ -15,7 +15,7 @@
         <Style Selector="Button.level">
             <Setter Property="HorizontalAlignment" Value="Stretch" />
             <Setter Property="BorderBrush" Value="White" />
-            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="BorderThickness" Value="2" />
             <Setter Property="CornerRadius" Value="4" />
 
             <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">

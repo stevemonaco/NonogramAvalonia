@@ -4,12 +4,6 @@
     xmlns:c="using:NonogramAvalonia.Controls"
     xmlns:res="using:NonogramAvalonia.Resources"
     xmlns:v="using:NonogramAvalonia.Views">
-
-    <!--<SolidColorBrush x:Key="BoardBackground" Color="#F8ECC2" />-->
-    <!--
-    <SolidColorBrush x:Key="BoardBackgroundBrush" Color="#EBCD56" />
-    <SolidColorBrush x:Key="BoardFilledBrush" Color="#C40000" />-->
-
     <ControlTheme x:Key="PlainCellTheme" TargetType="c:Cell">
         <Setter Property="Template">
             <ControlTemplate>

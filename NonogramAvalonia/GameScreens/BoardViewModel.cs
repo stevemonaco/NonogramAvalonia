@@ -8,6 +8,7 @@ using NonogramAvalonia.Services;
 using NonogramAvalonia.Mappers;
 using System.Collections.Generic;
 using NonogramAvalonia.GameScreens;
+using Nonogram.Domain;
 
 namespace NonogramAvalonia.ViewModels;
 

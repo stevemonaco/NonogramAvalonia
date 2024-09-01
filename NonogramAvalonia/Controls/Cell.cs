@@ -1,7 +1,7 @@
-﻿using Avalonia;
+﻿using System;
+using Avalonia;
 using Avalonia.Controls.Primitives;
-using NonogramAvalonia.ViewModels;
-using System;
+using Nonogram.Domain;
 
 namespace NonogramAvalonia.Controls;
 

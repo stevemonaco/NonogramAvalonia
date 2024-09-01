@@ -1,8 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Nonogram.Domain;
 
 namespace NonogramAvalonia.ViewModels;
-
-public enum CellState { Undetermined, Empty, Filled };
 
 public partial class CellViewModel : ObservableObject
 {
