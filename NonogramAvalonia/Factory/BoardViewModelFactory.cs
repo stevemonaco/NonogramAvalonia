@@ -4,24 +4,24 @@ using NonogramAvalonia.Services;
 namespace NonogramAvalonia.Factory;
 public class BoardViewModelFactory
 {
-    private readonly SerializationService _boardService;
+    private readonly NonogramService _nonogramService;
     private readonly IFileSelectService _fileSelectService;
     private readonly SolverService _solverService;
 
-    public BoardViewModelFactory(SerializationService boardService, IFileSelectService fileSelectService, SolverService solverService)
+    public BoardViewModelFactory(NonogramService nonogramService, IFileSelectService fileSelectService, SolverService solverService)
     {
-        _boardService = boardService;
+        _nonogramService = nonogramService;
         _fileSelectService = fileSelectService;
         _solverService = solverService;
     }
 
     public BoardViewModel CreatePlay(NonogramViewModel board)
     {
-        return new BoardViewModel(BoardMode.Play, board, _boardService, _fileSelectService, _solverService);
+        return new BoardViewModel(BoardMode.Play, board, _nonogramService, _fileSelectService, _solverService);
     }
 
     public BoardViewModel CreateEditor(NonogramViewModel board)
     {
-        return new BoardViewModel(BoardMode.Editor, board, _boardService, _fileSelectService, _solverService);
+        return new BoardViewModel(BoardMode.Editor, board, _nonogramService, _fileSelectService, _solverService);
     }
 }

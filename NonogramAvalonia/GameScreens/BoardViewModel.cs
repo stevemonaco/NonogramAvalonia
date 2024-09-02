@@ -16,7 +16,7 @@ public enum BoardMode { Play, Editor }
 public enum SolverState { Undetermined, Failed, Success }
 public enum TransitionAction { Primary, Secondary }
 
-public record CellStateChange(int Row, int Column, CellState OldState, CellState NewState);
+public readonly record struct CellStateChange(int Row, int Column, CellState OldState, CellState NewState);
 
 public sealed partial class BoardViewModel : ObservableRecipient
 {
@@ -29,18 +29,18 @@ public sealed partial class BoardViewModel : ObservableRecipient
     [ObservableProperty] private SolverState _solverState;
 
     private CellState? _transition;
-    private readonly SerializationService _boardService;
+    private readonly NonogramService _nonogramService;
     private readonly IFileSelectService _fileSelectService;
     private readonly SolverService _solverService;
 
     private ChangeHistory<List<CellStateChange>> _changeHistory = new();
     private List<CellStateChange> _currentChanges = [];
 
-    public BoardViewModel(BoardMode mode, NonogramViewModel nonogramViewModel, SerializationService boardService, IFileSelectService fileSelectService, SolverService solverService)
+    public BoardViewModel(BoardMode mode, NonogramViewModel nonogramViewModel, NonogramService nonogramService, IFileSelectService fileSelectService, SolverService solverService)
     {
         Mode = mode;
         Nonogram = nonogramViewModel;
-        _boardService = boardService;
+        _nonogramService = nonogramService;
         _fileSelectService = fileSelectService;
         _solverService = solverService;
 
@@ -118,7 +118,7 @@ public sealed partial class BoardViewModel : ObservableRecipient
             Nonogram.Name = Path.GetFileNameWithoutExtension(fileName);
 
         var model = Nonogram.ToModel();
-        var json = _boardService.SerializeNonogram(model);
+        var json = _nonogramService.SerializeNonogram(model);
         await File.WriteAllTextAsync(fileName, json);
     }
 
@@ -131,7 +131,7 @@ public sealed partial class BoardViewModel : ObservableRecipient
         if (IsSolved)
             return;
 
-        IsSolved = _solverService.SolveBoard(Nonogram, true);
+        IsSolved = _solverService.TrySolve(Nonogram, true);
     }
 
     /// <summary>
@@ -140,7 +140,7 @@ public sealed partial class BoardViewModel : ObservableRecipient
     [RelayCommand]
     public void TestSolveBoard()
     {
-        if (_solverService.SolveBoard(Nonogram, false))
+        if (_solverService.TrySolve(Nonogram, false))
             SolverState = SolverState.Success;
         else
             SolverState = SolverState.Failed;

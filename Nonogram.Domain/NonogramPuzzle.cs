@@ -4,12 +4,12 @@ public class NonogramPuzzle
     /// <summary>
     /// Row constraints required to be satisfied for the solution
     /// </summary>
-    public List<LineConstraint> RowConstraints { get; }
+    public List<LineConstraints> RowConstraints { get; }
 
     /// <summary>
     /// Column constraints required to be satisfied for the solution
     /// </summary>
-    public List<LineConstraint> ColumnConstraints { get; }
+    public List<LineConstraints> ColumnConstraints { get; }
 
     public int Rows => RowConstraints.Count;
     public int Columns => ColumnConstraints.Count;
@@ -19,7 +19,7 @@ public class NonogramPuzzle
     /// </summary>
     public Cell[,] Cells { get; set; } = null!;
 
-    public NonogramPuzzle(IEnumerable<LineConstraint> rowConstraints, IEnumerable<LineConstraint> columnConstraints)
+    public NonogramPuzzle(IEnumerable<LineConstraints> rowConstraints, IEnumerable<LineConstraints> columnConstraints)
     {
         RowConstraints = rowConstraints.ToList();
         ColumnConstraints = columnConstraints.ToList();

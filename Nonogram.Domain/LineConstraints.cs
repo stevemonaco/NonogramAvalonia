@@ -1,21 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Nonogram.Domain;
-
-namespace NonogramAvalonia.ViewModels;
+﻿namespace Nonogram.Domain;
 
 public class LineConstraints : List<int>, IEquatable<LineConstraints>
 {
     public LineConstraints() { }
 
-    public LineConstraints(IEnumerable<int> constraintValues)
-    {
-        AddRange(constraintValues);
-    }
-
-    public static LineConstraints FromCells(IEnumerable<CellViewModel> cellStates) =>
-        FromCellStates(cellStates.Select(x => x.CellState));
+    public LineConstraints(IEnumerable<int> values) : base(values) { }
 
     public static LineConstraints FromCellStates(IEnumerable<CellState> cellStates)
     {

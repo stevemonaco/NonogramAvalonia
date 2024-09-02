@@ -60,4 +60,16 @@ public static class NonogramUtility
             }
         }
     }
+
+    public static IEnumerable<T> GetRow<T>(T[,] array, int row)
+    {
+        for (int column = 0; column < array.GetLength(1); column++)
+            yield return array[row, column];
+    }
+
+    public static IEnumerable<T> GetColumn<T>(T[,] array, int column)
+    {
+        for (int row = 0; row < array.GetLength(0); row++)
+            yield return array[row, column];
+    }
 }

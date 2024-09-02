@@ -15,7 +15,7 @@ internal static class SolverUtility
         cellLabels.UnionWith(neighborLabels);
     }
 
-    public static List<int> CreateLabels(LineConstraint constraint)
+    public static List<int> CreateLabels(LineConstraints constraint)
     {
         if (constraint.Count == 0)
             throw new ArgumentOutOfRangeException();

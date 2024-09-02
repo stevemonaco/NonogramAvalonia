@@ -14,14 +14,14 @@ public partial class ShellViewModel : ViewModelBase,
 	[ObservableProperty] private ObservableObject? _activeScreen;
 
 	private readonly MenuViewModel _menuViewModel;
-    private readonly SerializationService _boardService;
+    private readonly NonogramService _nonogramService;
     private readonly IFileSelectService _fileSelectService;
     private readonly BoardViewModelFactory _boardViewModelFactory;
 
-    public ShellViewModel(MenuViewModel menuViewModel, SerializationService boardService, IFileSelectService fileSelectService, BoardViewModelFactory boardViewModelFactory)
+    public ShellViewModel(MenuViewModel menuViewModel, NonogramService nonogramService, IFileSelectService fileSelectService, BoardViewModelFactory boardViewModelFactory)
 	{
 		_menuViewModel = menuViewModel;
-        _boardService = boardService;
+        _nonogramService = nonogramService;
         _fileSelectService = fileSelectService;
         _boardViewModelFactory = boardViewModelFactory;
 
@@ -49,7 +49,7 @@ public partial class ShellViewModel : ViewModelBase,
 	public async Task LoadBoardAsync(string path)
 	{
         string json = await File.ReadAllTextAsync(path);
-        var result = _boardService.DeserializeNonogram(json);
+        var result = _nonogramService.DeserializeNonogram(json);
 
         if (result.IsSuccess)
         {

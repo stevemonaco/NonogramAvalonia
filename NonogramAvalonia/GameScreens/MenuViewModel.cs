@@ -15,13 +15,13 @@ public partial class MenuViewModel : ObservableRecipient
 {
     [ObservableProperty] ObservableCollection<NonogramModel> _availableBoards = [];
 
-    private readonly SerializationService _boardService;
+    private readonly NonogramService _nonogramService;
     private readonly BoardViewModelFactory _boardViewModelFactory;
     private string _boardLocation = @"_boards";
 
-    public MenuViewModel(SerializationService boardService, BoardViewModelFactory boardViewModelFactory)
+    public MenuViewModel(NonogramService nonogramService, BoardViewModelFactory boardViewModelFactory)
     {
-        _boardService = boardService;
+        _nonogramService = nonogramService;
         _boardViewModelFactory = boardViewModelFactory;
     }
 
@@ -30,7 +30,7 @@ public partial class MenuViewModel : ObservableRecipient
         foreach (var file in Directory.GetFiles(_boardLocation).Where(x => x.EndsWith(".json")))
         {
             var content = await File.ReadAllTextAsync(file);
-            var result = _boardService.DeserializeNonogram(content);
+            var result = _nonogramService.DeserializeNonogram(content);
 
             if (result.IsSuccess)
             {
@@ -53,8 +53,10 @@ public partial class MenuViewModel : ObservableRecipient
     }
 
     [RelayCommand]
-    public void CreateRandomBoard()
+    public void RandomPlay()
     {
-
+        var model = _nonogramService.CreateRandomNonogram(10, 10);
+        var vm = model.ToViewModel();
+        WeakReferenceMessenger.Default.Send(new NavigateToPlayMessage(vm));
     }
 }

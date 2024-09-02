@@ -4,7 +4,7 @@ using NonogramAvalonia.SerializationModels;
 using Remora.Results;
 
 namespace NonogramAvalonia.Services;
-public class SerializationService
+public class NonogramService
 {
     public Result<NonogramModel> DeserializeNonogram(string json)
     {
@@ -43,8 +43,11 @@ public class SerializationService
         return JsonSerializer.Serialize(model, jsonOptions);
     }
 
-    //public NonogramModel CreateRandomBoard(int rows, int columns)
-    //{
-    //    var nonogram = new NonogramPuzzle(rows, columns);
-    //}
+    public NonogramModel CreateRandomNonogram(int rows, int columns)
+    {
+        var generator = new NonogramGenerator(rows, columns);
+        var puzzle = generator.CreateRandom();
+
+        return new NonogramModel("", rows, columns, puzzle.RowConstraints, puzzle.ColumnConstraints);
+    }
 }

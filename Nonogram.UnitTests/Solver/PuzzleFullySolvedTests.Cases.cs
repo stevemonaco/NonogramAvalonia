@@ -18,8 +18,8 @@ file class TestData
     /// Contains an empty row, lines fully constrained in 1d, and lines requiring 2d constraints to solve
     /// </summary>
     public static NonogramPuzzle SmallStarPuzzle => new NonogramPuzzle(_smallStarRowConstraints, _smallStarColumnConstraints);
-    public static LineConstraint[] _smallStarRowConstraints = [[2, 2], [2, 2], [0], [1, 1], [1, 1, 1]];
-    public static LineConstraint[] _smallStarColumnConstraints = [[2, 2], [2], [1], [2], [2, 2]];
+    public static LineConstraints[] _smallStarRowConstraints = [[2, 2], [2, 2], [0], [1, 1], [1, 1, 1]];
+    public static LineConstraints[] _smallStarColumnConstraints = [[2, 2], [2], [1], [2], [2, 2]];
     public static List<string> SmallStarSolution =>
     [
         "ooxoo",
@@ -34,8 +34,8 @@ file class TestData
     /// Contains some entirely filled rows, lines fully constrained in 1d, and lines requiring 2d constraints to solve
     /// </summary>
     public static NonogramPuzzle SmallHeartPuzzle => new NonogramPuzzle(_smallHeartRowConstraints, _smallHeartColumnConstraints);
-    public static LineConstraint[] _smallHeartRowConstraints = [[2, 2], [5], [5], [3], [1]];
-    public static LineConstraint[] _smallHeartColumnConstraints = [[3], [4], [4], [4], [3]];
+    public static LineConstraints[] _smallHeartRowConstraints = [[2, 2], [5], [5], [3], [1]];
+    public static LineConstraints[] _smallHeartColumnConstraints = [[3], [4], [4], [4], [3]];
     public static List<string> SmallHeartSolution =>
     [
         "ooxoo",
@@ -46,8 +46,8 @@ file class TestData
     ];
 
     public static NonogramPuzzle SingleLinePuzzle => new NonogramPuzzle(_singleLineRowConstraints, _singleLineColumnConstraints);
-    public static LineConstraint[] _singleLineRowConstraints = [[4, 3]];
-    public static LineConstraint[] _singleLineColumnConstraints = [[0], [1], [1], [1], [1], [0], [0], [1], [1], [1]];
+    public static LineConstraints[] _singleLineRowConstraints = [[4, 3]];
+    public static LineConstraints[] _singleLineColumnConstraints = [[0], [1], [1], [1], [1], [0], [0], [1], [1], [1]];
     public static List<string> SingleLineSolution =>
     [
         "xooooxxooo"

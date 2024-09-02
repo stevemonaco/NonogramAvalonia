@@ -1,5 +1,5 @@
 ﻿using Avalonia.Data.Converters;
-using NonogramAvalonia.ViewModels;
+using Nonogram.Domain;
 using System.Collections.Generic;
 using System.Linq;
 

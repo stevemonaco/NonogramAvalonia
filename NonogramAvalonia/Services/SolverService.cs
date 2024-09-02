@@ -1,13 +1,18 @@
 ﻿using NonogramAvalonia.ViewModels;
 using Nonogram.Domain;
-using System;
 using System.Linq;
 using Nonogram.Domain.Solver;
 
 namespace NonogramAvalonia.Services;
 public class SolverService
 {
-    public bool SolveBoard(NonogramViewModel nonogram, bool fillState)
+    /// <summary>
+    /// Tries to solve a Nonogram using only its constraints and not the current Cell state
+    /// </summary>
+    /// <param name="nonogram">Nonogram to be solved</param>
+    /// <param name="fillState">Fills <paramref name="nonogram"/> with the solved Cell state, even if only partially solved</param>
+    /// <returns>True if the nonogram was fully solved</returns>
+    public bool TrySolve(NonogramViewModel nonogram, bool fillState)
     {
         var puzzle = ToPuzzle(nonogram);
         var solver = new NonogramSolver(puzzle);
@@ -33,8 +38,8 @@ public class SolverService
 
     private NonogramPuzzle ToPuzzle(NonogramViewModel nonogram)
     {
-        var rowConstraints = nonogram.SolutionRowConstraints.Select(x => new LineConstraint(x));
-        var columnConstraints = nonogram.SolutionColumnConstraints.Select(x => new LineConstraint(x));
+        var rowConstraints = nonogram.SolutionRowConstraints.Select(x => new LineConstraints(x));
+        var columnConstraints = nonogram.SolutionColumnConstraints.Select(x => new LineConstraints(x));
 
         return new NonogramPuzzle(rowConstraints, columnConstraints);
     }

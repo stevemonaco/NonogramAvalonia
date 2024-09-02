@@ -36,7 +36,7 @@ public partial class NonogramViewModel : ObservableObject
         RebuildPlayerConstraints();
     }
 
-    public NonogramViewModel(List<List<int>> rowConstraints, List<List<int>> columnConstraints)
+    public NonogramViewModel(IList<LineConstraints> rowConstraints, IList<LineConstraints> columnConstraints)
     {
         RowCount = rowConstraints.Count;
         ColumnCount = columnConstraints.Count;
@@ -95,54 +95,44 @@ public partial class NonogramViewModel : ObservableObject
 
     public bool CheckWinState()
     {
-        if (!AreConstraintsEqual(PlayerRowConstraints, SolutionRowConstraints))
+        if (!PlayerRowConstraints.SequenceEqual(SolutionRowConstraints))
             return false;
 
-        if (!AreConstraintsEqual(PlayerColumnConstraints, SolutionColumnConstraints))
+        if (!PlayerColumnConstraints.SequenceEqual(SolutionColumnConstraints))
             return false;
 
         return true;
-
-        bool AreConstraintsEqual(IList<LineConstraints> a, IList<LineConstraints> b)
-        {
-            if (a.Count != b.Count)
-                return false;
-
-            for (int i = 0; i < a.Count; i++)
-            {
-                if (!a[i].Equals(b[i]))
-                    return false;
-            }
-
-            return true;
-        }
     }
 
     /// <summary>
-    /// Rebuilds the Player Row and Column constraints based on the current Cells state
+    /// Rebuilds and Assigns the Player Row and Column constraints based on the current Cells state
     /// </summary>
     public void RebuildPlayerConstraints()
     {
         var rowConstraints = Enumerable.Range(0, RowCount)
-            .Select(x => LineConstraints.FromCells(GetRow(x)));
+            .Select(GetRow)
+            .Select(CreateLineConstraints);
 
         var columnConstraints = Enumerable.Range(0, ColumnCount)
-            .Select(x => LineConstraints.FromCells(GetColumn(x)));
+            .Select(GetColumn)
+            .Select(CreateLineConstraints);
 
         PlayerRowConstraints = new(rowConstraints);
         PlayerColumnConstraints = new(columnConstraints);
     }
 
     /// <summary>
-    /// Rebuilds the Solution Row and Column constraints based on the current Cells state
+    /// Rebuilds and Assigns the Solution Row and Column constraints based on the current Cells state
     /// </summary>
     public void RebuildSolutionConstraints()
     {
         var rowConstraints = Enumerable.Range(0, RowCount)
-            .Select(x => LineConstraints.FromCells(GetRow(x)));
+            .Select(GetRow)
+            .Select(CreateLineConstraints);
 
         var columnConstraints = Enumerable.Range(0, ColumnCount)
-            .Select(x => LineConstraints.FromCells(GetColumn(x)));
+            .Select(GetColumn)
+            .Select(CreateLineConstraints);
 
         SolutionRowConstraints = new(rowConstraints);
         SolutionColumnConstraints = new(columnConstraints);
@@ -153,8 +143,8 @@ public partial class NonogramViewModel : ObservableObject
     /// </summary>
     public void UpdatePlayerConstraints(int row, int column)
     {
-        PlayerRowConstraints[row] = LineConstraints.FromCells(GetRow(row));
-        PlayerColumnConstraints[column] = LineConstraints.FromCells(GetColumn(column));
+        PlayerRowConstraints[row] = CreateLineConstraints(GetRow(row));
+        PlayerColumnConstraints[column] = CreateLineConstraints(GetColumn(column));
     }
 
     /// <summary>
@@ -162,9 +152,12 @@ public partial class NonogramViewModel : ObservableObject
     /// </summary>
     public void UpdateSolutionConstraints(int row, int column)
     {
-        SolutionRowConstraints[row] = LineConstraints.FromCellStates(GetRow(row).Select(x => x.CellState));
-        SolutionColumnConstraints[column] = LineConstraints.FromCellStates(GetColumn(column).Select(x => x.CellState));
+        SolutionRowConstraints[row] = CreateLineConstraints(GetRow(row));
+        SolutionColumnConstraints[column] = CreateLineConstraints(GetColumn(column));
     }
+
+    private LineConstraints CreateLineConstraints(IEnumerable<CellViewModel> cells) =>
+        LineConstraints.FromCellStates(cells.Select(x => x.CellState));
 
     private IEnumerable<CellViewModel> CreateDefaultCells(int rows, int columns)
     {
