@@ -11,19 +11,25 @@
     d:DesignWidth="800"
     x:DataType="vm:MenuViewModel"
     mc:Ignorable="d">
+    <UserControl.Resources>
+        <SolidColorBrush x:Key="SolidButtonBackground" Color="#37946E" />
+        <SolidColorBrush x:Key="SolidButtonHoveredBackground" Color="#45ba89" />
+        <SolidColorBrush x:Key="SolidButtonPressedBackground" Color="#297052" />
+    </UserControl.Resources>
+
     <UserControl.Styles>
-        <Style Selector="Button.level">
+        <Style Selector="Button.solid">
             <Setter Property="HorizontalAlignment" Value="Stretch" />
             <Setter Property="BorderBrush" Value="White" />
             <Setter Property="BorderThickness" Value="2" />
             <Setter Property="CornerRadius" Value="4" />
 
             <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
-                <Setter Property="Background" Value="#37946E" />
+                <Setter Property="Background" Value="{StaticResource SolidButtonBackground}" />
             </Style>
 
             <Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-                <Setter Property="Background" Value="#45ba89" />
+                <Setter Property="Background" Value="{StaticResource SolidButtonHoveredBackground}" />
                 <Setter Property="BorderBrush" Value="White" />
             </Style>
 
@@ -32,7 +38,7 @@
                 <Setter Property="BorderBrush" Value="White" />
 
                 <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
-                    <Setter Property="Background" Value="#297052" />
+                    <Setter Property="Background" Value="{StaticResource SolidButtonPressedBackground}" />
                 </Style>
             </Style>
         </Style>
@@ -65,7 +71,7 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Button
-                            Classes="level"
+                            Classes="solid"
                             Command="{Binding #boards.((vm:MenuViewModel)DataContext).PlayCommand}"
                             CommandParameter="{Binding}">
                             <StackPanel Spacing="8">
@@ -104,7 +110,22 @@
             VerticalAlignment="Bottom"
             Orientation="Horizontal"
             Spacing="8">
-            <Button Classes="icon" Command="{Binding RandomPlayCommand}">
+            <Button Classes="solid icon">
+                <Button.Resources>
+                    <SolidColorBrush x:Key="SolidButtonBackground" Color="Orange" />
+                    <SolidColorBrush x:Key="SolidButtonHoveredBackground" Color="#45ba89" />
+                    <SolidColorBrush x:Key="SolidButtonPressedBackground" Color="#297052" />
+                </Button.Resources>
+                <Button.ContextFlyout>
+                    <MenuFlyout>
+                        <MenuItem Click="Random5by5_Click" Header="5 x 5" />
+                        <MenuItem Click="Random10by10_Click" Header="10 x 10" />
+                        <MenuItem Click="Random15by15_Click" Header="15 x 15" />
+                        <MenuItem Click="Random20by20_Click" Header="20 x 20" />
+                        <MenuItem Click="Random25by25_Click" Header="25 x 25" />
+                    </MenuFlyout>
+                </Button.ContextFlyout>
+
                 <StackPanel>
                     <PathIcon Data="{x:Static res:AppIcons.RandomPlayIcon}" />
                     <TextBlock Text="Random Play" />

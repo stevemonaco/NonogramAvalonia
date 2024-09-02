@@ -59,4 +59,11 @@ public partial class MenuViewModel : ObservableRecipient
         var vm = model.ToViewModel();
         WeakReferenceMessenger.Default.Send(new NavigateToPlayMessage(vm));
     }
+
+    public void RandomPlay(int rows, int columns)
+    {
+        var model = _nonogramService.CreateRandomNonogram(rows, columns);
+        var vm = model.ToViewModel();
+        WeakReferenceMessenger.Default.Send(new NavigateToPlayMessage(vm));
+    }
 }

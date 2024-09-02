@@ -1,9 +1,5 @@
 ﻿using Nonogram.Domain.Solver;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace Nonogram.Domain;
 public class NonogramGenerator
@@ -15,19 +11,20 @@ public class NonogramGenerator
 
     CellState[,] _states;
 
-    public NonogramGenerator(int rows, int columns, int? seed = null)
+    public NonogramGenerator(int rows, int columns)
     {
-        _random = seed is null ? new Random() : new Random(seed.Value);
         RowCount = rows;
         ColumnCount = columns;
 
         _states = new CellState[RowCount, ColumnCount];
     }
 
-    public NonogramPuzzle CreateRandom()
+    public NonogramPuzzle CreateRandom(int? seed = null)
     {
-        double startingThreshold = _random.NextDouble() * 0.5d;
-        double iterativeThreshold = 0.95;
+        Random _random = seed is null ? new Random() : new Random(seed.Value);
+        double startingThreshold = 0.7d;
+        double iterativeThreshold = 0.9d;
+        int generations = 1;
 
         FillCells(startingThreshold);
         var puzzle = CreatePuzzle();
@@ -36,7 +33,10 @@ public class NonogramGenerator
         {
             FillCells(iterativeThreshold);
             puzzle = CreatePuzzle();
+            generations++;
         }
+
+        Debug.WriteLine($"Seed: {seed}, Generations: {generations}");
 
         return puzzle;
 
