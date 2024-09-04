@@ -120,7 +120,8 @@
                                 <TextBlock
                                     HorizontalAlignment="Center"
                                     FontSize="24"
-                                    Text="{Binding Name}" />
+                                    Text="{Binding Name}"
+                                    TextTrimming="CharacterEllipsis" />
                             </StackPanel>
                         </Button>
                     </DataTemplate>
