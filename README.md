@@ -4,15 +4,15 @@ Nonogram puzzle game made using C# and Avalonia. Created primarily for demonstra
 
 ### Play Premade Puzzles
 
-![Premade Capture](Assets/nonogram-levelsolve.gif)
+![Premade Capture](NonogramAvalonia/Assets/nonogram-levelsolve.gif)
 
 ### Create Puzzles
 
-![Puzzle Creator Capture](Assets/nonogram-editor.gif)
+![Puzzle Creator Capture](NonogramAvalonia/Assets/nonogram-editor.gif)
 
 ### Random Puzzle Generation and Solver
 
-![Random Puzzle Generation Capture](Assets/nonogram-randomsolve.gif)
+![Random Puzzle Generation Capture](NonogramAvalonia/Assets/nonogram-randomsolve.gif)
 
 * Puzzle Solver
 
