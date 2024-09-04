@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 using NonogramAvalonia.ViewModels;
 
 namespace NonogramAvalonia.Views;
@@ -11,18 +12,18 @@ public partial class MenuView : UserControl
         InitializeComponent();
     }
 
-    private void Random5by5_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e) =>
+    private void Random5by5_Click(object? sender, RoutedEventArgs e) =>
         ViewModel.RandomPlay(5, 5);
 
-    private void Random10by10_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e) =>
+    private void Random10by10_Click(object? sender, RoutedEventArgs e) =>
         ViewModel.RandomPlay(10, 10);
 
-    private void Random15by15_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e) =>
+    private void Random15by15_Click(object? sender, RoutedEventArgs e) =>
         ViewModel.RandomPlay(15, 15);
 
-    private void Random20by20_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e) =>
+    private void Random20by20_Click(object? sender, RoutedEventArgs e) =>
         ViewModel.RandomPlay(20, 20);
 
-    private void Random25by25_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e) =>
+    private void Random25by25_Click(object? sender, RoutedEventArgs e) =>
         ViewModel.RandomPlay(25, 25);
 }

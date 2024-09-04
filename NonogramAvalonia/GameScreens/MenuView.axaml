@@ -12,9 +12,12 @@
     x:DataType="vm:MenuViewModel"
     mc:Ignorable="d">
     <UserControl.Resources>
-        <SolidColorBrush x:Key="SolidButtonBackground" Color="#37946E" />
-        <SolidColorBrush x:Key="SolidButtonHoveredBackground" Color="#45ba89" />
-        <SolidColorBrush x:Key="SolidButtonPressedBackground" Color="#297052" />
+        <SolidColorBrush x:Key="SolidGreenButtonBackground" Color="#37946E" />
+        <SolidColorBrush x:Key="SolidGreenButtonHoveredBackground" Color="#45BA89" />
+        <SolidColorBrush x:Key="SolidGreenButtonPressedBackground" Color="#297052" />
+        <SolidColorBrush x:Key="SolidBlueButtonBackground" Color="#306082" />
+        <SolidColorBrush x:Key="SolidBlueButtonHoveredBackground" Color="#4284B3" />
+        <SolidColorBrush x:Key="SolidBlueButtonPressedBackground" Color="#1D3A4E" />
     </UserControl.Resources>
 
     <UserControl.Styles>
@@ -24,21 +27,43 @@
             <Setter Property="BorderThickness" Value="2" />
             <Setter Property="CornerRadius" Value="4" />
 
-            <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
-                <Setter Property="Background" Value="{StaticResource SolidButtonBackground}" />
-            </Style>
-
-            <Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-                <Setter Property="Background" Value="{StaticResource SolidButtonHoveredBackground}" />
-                <Setter Property="BorderBrush" Value="White" />
-            </Style>
-
-            <Style Selector="^:pressed">
-                <Setter Property="RenderTransform" Value="{x:Null}" />
-                <Setter Property="BorderBrush" Value="White" />
-
+            <Style Selector="^.green">
                 <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
-                    <Setter Property="Background" Value="{StaticResource SolidButtonPressedBackground}" />
+                    <Setter Property="Background" Value="{StaticResource SolidGreenButtonBackground}" />
+                </Style>
+
+                <Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+                    <Setter Property="Background" Value="{StaticResource SolidGreenButtonHoveredBackground}" />
+                    <Setter Property="BorderBrush" Value="White" />
+                </Style>
+
+                <Style Selector="^:pressed">
+                    <Setter Property="RenderTransform" Value="{x:Null}" />
+                    <Setter Property="BorderBrush" Value="White" />
+
+                    <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+                        <Setter Property="Background" Value="{StaticResource SolidGreenButtonPressedBackground}" />
+                    </Style>
+                </Style>
+            </Style>
+
+            <Style Selector="^.blue">
+                <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+                    <Setter Property="Background" Value="{StaticResource SolidBlueButtonBackground}" />
+                </Style>
+
+                <Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+                    <Setter Property="Background" Value="{StaticResource SolidBlueButtonHoveredBackground}" />
+                    <Setter Property="BorderBrush" Value="White" />
+                </Style>
+
+                <Style Selector="^:pressed">
+                    <Setter Property="RenderTransform" Value="{x:Null}" />
+                    <Setter Property="BorderBrush" Value="White" />
+
+                    <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+                        <Setter Property="Background" Value="{StaticResource SolidBlueButtonPressedBackground}" />
+                    </Style>
                 </Style>
             </Style>
         </Style>
@@ -71,7 +96,7 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Button
-                            Classes="solid"
+                            Classes="solid green"
                             Command="{Binding #boards.((vm:MenuViewModel)DataContext).PlayCommand}"
                             CommandParameter="{Binding}">
                             <StackPanel Spacing="8">
@@ -110,21 +135,41 @@
             VerticalAlignment="Bottom"
             Orientation="Horizontal"
             Spacing="8">
-            <Button Classes="solid icon">
-                <Button.Resources>
-                    <SolidColorBrush x:Key="SolidButtonBackground" Color="Orange" />
-                    <SolidColorBrush x:Key="SolidButtonHoveredBackground" Color="#45ba89" />
-                    <SolidColorBrush x:Key="SolidButtonPressedBackground" Color="#297052" />
-                </Button.Resources>
-                <Button.ContextFlyout>
-                    <MenuFlyout>
-                        <MenuItem Click="Random5by5_Click" Header="5 x 5" />
-                        <MenuItem Click="Random10by10_Click" Header="10 x 10" />
-                        <MenuItem Click="Random15by15_Click" Header="15 x 15" />
-                        <MenuItem Click="Random20by20_Click" Header="20 x 20" />
-                        <MenuItem Click="Random25by25_Click" Header="25 x 25" />
-                    </MenuFlyout>
-                </Button.ContextFlyout>
+            <Button Classes="solid green icon">
+                <Button.Styles>
+                    <Style Selector="FlyoutPresenter">
+                        <Setter Property="Padding" Value="0" />
+                        <Setter Property="BorderThickness" Value="0" />
+                    </Style>
+                </Button.Styles>
+
+                <Button.Flyout>
+                    <Flyout Placement="TopEdgeAlignedLeft">
+                        <StackPanel>
+                            <Button
+                                MinWidth="{Binding $parent[Button].Bounds.Width}"
+                                Classes="solid blue"
+                                Click="Random5by5_Click"
+                                Content="5 x 5" />
+                            <Button
+                                Classes="solid blue"
+                                Click="Random10by10_Click"
+                                Content="10 x 10" />
+                            <Button
+                                Classes="solid blue"
+                                Click="Random15by15_Click"
+                                Content="15 x 15" />
+                            <Button
+                                Classes="solid blue"
+                                Click="Random20by20_Click"
+                                Content="20 x 20" />
+                            <Button
+                                Classes="solid blue"
+                                Click="Random25by25_Click"
+                                Content="25 x 25" />
+                        </StackPanel>
+                    </Flyout>
+                </Button.Flyout>
 
                 <StackPanel>
                     <PathIcon Data="{x:Static res:AppIcons.RandomPlayIcon}" />
