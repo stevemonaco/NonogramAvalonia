@@ -11,7 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace NonogramAvalonia.ViewModels;
-public partial class MenuViewModel : ObservableRecipient
+public sealed partial class MenuViewModel : ObservableRecipient
 {
     [ObservableProperty] ObservableCollection<NonogramModel> _availableBoards = [];
 
@@ -49,7 +49,7 @@ public partial class MenuViewModel : ObservableRecipient
     [RelayCommand]
     public void CreateBoard()
     {
-        WeakReferenceMessenger.Default.Send(new NavigateToCreateMessage(10, 10));
+        WeakReferenceMessenger.Default.Send(new NavigateToEditorMessage(10, 10));
     }
 
     public void RandomPlay(int rows, int columns)

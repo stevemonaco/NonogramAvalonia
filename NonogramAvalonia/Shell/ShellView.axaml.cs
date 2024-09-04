@@ -7,7 +7,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using NonogramAvalonia.ViewModels;
 
 namespace NonogramAvalonia.Views;
-public partial class ShellView : Window
+public sealed partial class ShellView : Window
 {
     internal ShellViewModel ViewModel => (ShellViewModel)DataContext!;
 

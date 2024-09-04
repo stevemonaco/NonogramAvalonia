@@ -4,7 +4,7 @@ using Avalonia.Interactivity;
 using Avalonia.Xaml.Interactivity;
 
 namespace NonogramAvalonia.Behaviors;
-public class TextBoxFocusSelectionBehavior : Behavior<TextBox>
+public sealed class TextBoxFocusSelectionBehavior : Behavior<TextBox>
 {
     /// <inheritdoc />
     protected override void OnAttachedToVisualTree()

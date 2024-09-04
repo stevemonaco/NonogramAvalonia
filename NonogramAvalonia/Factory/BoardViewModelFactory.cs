@@ -2,7 +2,7 @@
 using NonogramAvalonia.Services;
 
 namespace NonogramAvalonia.Factory;
-public class BoardViewModelFactory
+public sealed class BoardViewModelFactory
 {
     private readonly NonogramService _nonogramService;
     private readonly IFileSelectService _fileSelectService;

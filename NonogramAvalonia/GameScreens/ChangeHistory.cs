@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace NonogramAvalonia.GameScreens;
 
 /// <summary>
-/// Manages a change history for reversible diffs
+/// Manages a change history collection for reversible diffs
+/// Caller is responsible for restoring state
 /// </summary>
 /// <typeparam name="T"></typeparam>
 public class ChangeHistory<T>
@@ -17,9 +17,6 @@ public class ChangeHistory<T>
 
     public virtual T PopUndoState()
     {
-        if (!CanUndo)
-            throw new InvalidOperationException();
-
         var undoState = _undoHistory.Pop();
         _redoHistory.Push(undoState);
 
@@ -28,9 +25,6 @@ public class ChangeHistory<T>
 
     public virtual T PopRedoState()
     {
-        if (!CanRedo)
-            throw new InvalidOperationException();
-
         var redoState = _redoHistory.Pop();
         _undoHistory.Push(redoState);
 

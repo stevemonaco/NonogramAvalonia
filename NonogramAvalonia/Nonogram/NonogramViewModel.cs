@@ -12,7 +12,7 @@ namespace NonogramAvalonia.ViewModels;
 /// Solution constraints are the provided hints required to be satisfied to solve
 /// Player constraints are recalculated based upon the current CellState of the board
 /// </summary>
-public partial class NonogramViewModel : ObservableObject
+public sealed partial class NonogramViewModel : ObservableObject
 {
     [ObservableProperty] private ObservableCollection<CellViewModel> _cells = [];
     [ObservableProperty] private int _columnCount;

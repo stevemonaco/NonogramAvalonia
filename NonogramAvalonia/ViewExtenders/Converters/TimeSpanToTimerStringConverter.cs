@@ -4,7 +4,7 @@ using Avalonia;
 using Avalonia.Data.Converters;
 
 namespace NonogramAvalonia.Converters;
-public class TimeSpanToTimerStringConverter : IValueConverter
+public sealed class TimeSpanToTimerStringConverter : IValueConverter
 {
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {

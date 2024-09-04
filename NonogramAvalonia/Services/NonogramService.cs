@@ -4,7 +4,7 @@ using NonogramAvalonia.SerializationModels;
 using Remora.Results;
 
 namespace NonogramAvalonia.Services;
-public class NonogramService
+public sealed class NonogramService
 {
     public Result<NonogramModel> DeserializeNonogram(string json)
     {

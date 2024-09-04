@@ -4,7 +4,7 @@ using System.Linq;
 using Nonogram.Domain.Solver;
 
 namespace NonogramAvalonia.Services;
-public class SolverService
+public sealed class SolverService
 {
     /// <summary>
     /// Tries to solve a Nonogram using only its constraints and not the current Cell state

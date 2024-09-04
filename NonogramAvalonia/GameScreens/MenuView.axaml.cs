@@ -3,7 +3,7 @@ using Avalonia.Interactivity;
 using NonogramAvalonia.ViewModels;
 
 namespace NonogramAvalonia.Views;
-public partial class MenuView : UserControl
+public sealed partial class MenuView : UserControl
 {
     public MenuViewModel ViewModel => (MenuViewModel)DataContext!;
 

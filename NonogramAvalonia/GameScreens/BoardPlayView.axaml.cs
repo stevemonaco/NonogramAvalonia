@@ -7,7 +7,7 @@ using System;
 using System.Linq;
 
 namespace NonogramAvalonia.Views;
-public partial class BoardPlayView : BoardView, 
+public sealed partial class BoardPlayView : BoardView, 
     IRecipient<GameStartedMessage>, IRecipient<GameWinMessage>, IRecipient<GameQuitMessage>
 {
     private readonly DispatcherTimer _timer;

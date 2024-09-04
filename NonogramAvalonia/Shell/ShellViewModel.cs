@@ -8,8 +8,8 @@ using NonogramAvalonia.Mappers;
 using NonogramAvalonia.Services;
 
 namespace NonogramAvalonia.ViewModels;
-public partial class ShellViewModel : ViewModelBase,
-	IRecipient<NavigateToPlayMessage>, IRecipient<NavigateToMenuMessage>, IRecipient<NavigateToCreateMessage>
+public sealed partial class ShellViewModel : ObservableRecipient,
+	IRecipient<NavigateToPlayMessage>, IRecipient<NavigateToMenuMessage>, IRecipient<NavigateToEditorMessage>
 {
 	[ObservableProperty] private ObservableObject? _activeScreen;
 
@@ -33,7 +33,6 @@ public partial class ShellViewModel : ViewModelBase,
 		await _menuViewModel.InitializeAsync();
 		ActiveScreen = _menuViewModel;
 	}
-
 
     [RelayCommand]
 	public async Task RequestBoard()
@@ -70,7 +69,6 @@ public partial class ShellViewModel : ViewModelBase,
 
     public void Receive(NavigateToPlayMessage message)
     {
-		//message.Board.ResetCellStates();
 		PlayBoard(message.Board);
     }
 
@@ -79,7 +77,7 @@ public partial class ShellViewModel : ViewModelBase,
         ActiveScreen = _menuViewModel;
     }
 
-    public void Receive(NavigateToCreateMessage message)
+    public void Receive(NavigateToEditorMessage message)
     {
         var board = new NonogramViewModel(message.Rows, message.Columns);
         ActiveScreen = _boardViewModelFactory.CreateEditor(board);

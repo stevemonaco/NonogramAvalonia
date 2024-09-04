@@ -13,7 +13,7 @@ public interface IFileSelectService
     Task<string?> RequestSaveBoardFileNameAsync();
 }
 
-public class FileSelectService : IFileSelectService
+public sealed class FileSelectService : IFileSelectService
 {
     public async Task<string?> RequestOpenBoardFileNameAsync()
     {

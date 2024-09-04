@@ -1,6 +1,8 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
+using CommunityToolkit.Mvvm.DependencyInjection;
+using NonogramAvalonia.Settings;
 using NonogramAvalonia.ViewModels;
 using System.Collections.Generic;
 
@@ -23,6 +25,13 @@ public abstract class BoardView : UserControl
     public List<BoardTheme> AvailableThemes { get; } = [BoardTheme.Default, BoardTheme.Plain];
 
     protected BoardViewModel ViewModel => (BoardViewModel)DataContext!;
+    private AppSettings _settings;
+
+    protected BoardView()
+    {
+        _settings = Ioc.Default.GetRequiredService<AppSettings>();
+        BoardTheme = _settings.CurrentBoardTheme;
+    }
 
     protected override void OnKeyDown(KeyEventArgs e)
     {
@@ -45,6 +54,7 @@ public abstract class BoardView : UserControl
         {
             var index = (AvailableThemes.IndexOf(BoardTheme) + 1) % AvailableThemes.Count;
             BoardTheme = AvailableThemes[index];
+            _settings.CurrentBoardTheme = BoardTheme;
         }
         else
         {

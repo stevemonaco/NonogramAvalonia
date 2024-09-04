@@ -5,7 +5,7 @@ using Avalonia.Data;
 using Avalonia.Data.Converters;
 
 namespace NonogramAvalonia.Converters;
-public class EnumToBooleanConverter : IValueConverter
+public sealed class EnumToBooleanConverter : IValueConverter
 {
     /// <summary>
     /// Matches the enum member state against the parameter

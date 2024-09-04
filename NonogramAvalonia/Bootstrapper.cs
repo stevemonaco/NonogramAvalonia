@@ -9,6 +9,7 @@ using NonogramAvalonia.Services;
 using NonogramAvalonia.ViewModels;
 using NonogramAvalonia.Factory;
 using System.IO;
+using NonogramAvalonia.Settings;
 
 namespace NonogramAvalonia;
 public interface IAppBootstrapper<TViewModel> where TViewModel : class
@@ -20,7 +21,7 @@ public interface IAppBootstrapper<TViewModel> where TViewModel : class
     ValueTask<bool> LoadConfigurations(IServiceProvider provider);
 }
 
-public class Bootstrapper : IAppBootstrapper<ShellViewModel>
+public sealed class Bootstrapper : IAppBootstrapper<ShellViewModel>
 {
     private ILoggerFactory? _loggerFactory;
     private const string _logFileName = @"log.txt";
@@ -35,6 +36,7 @@ public class Bootstrapper : IAppBootstrapper<ShellViewModel>
 
     public void ConfigureServices(IServiceCollection services)
     {
+        services.AddSingleton<AppSettings>();
         services.AddTransient<NonogramService>();
         services.AddTransient<SolverService>();
         services.AddTransient<IFileSelectService, FileSelectService>();

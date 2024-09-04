@@ -1,7 +1,7 @@
 using Avalonia.Interactivity;
 
 namespace NonogramAvalonia.Views;
-public partial class BoardEditorView : BoardView
+public sealed partial class BoardEditorView : BoardView
 {
     public BoardEditorView ()
     {

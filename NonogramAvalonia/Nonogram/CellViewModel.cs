@@ -3,7 +3,7 @@ using Nonogram.Domain;
 
 namespace NonogramAvalonia.ViewModels;
 
-public partial class CellViewModel : ObservableObject
+public sealed partial class CellViewModel : ObservableObject
 {
     [ObservableProperty] private CellState _cellState;
     [ObservableProperty] private int _row;
