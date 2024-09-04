@@ -6,8 +6,16 @@
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <AvaloniaXamlIlDebuggerLaunch>false</AvaloniaXamlIlDebuggerLaunch>
   </PropertyGroup>
+  
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
+    <AvaloniaResource Remove="Assets\nonogram-editor.gif" />
+    <AvaloniaResource Remove="Assets\nonogram-levelsolve.gif" />
+    <AvaloniaResource Remove="Assets\nonogram-randomsolve.gif" />
+
+    <None Update="_boards\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
@@ -26,12 +34,8 @@
     <PackageReference Include="Serilog.Extensions.Logging" />
     <PackageReference Include="Serilog.Sinks.File" />
   </ItemGroup>
+  
   <ItemGroup>
     <ProjectReference Include="..\Nonogram.Domain\Nonogram.Domain.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="_boards\**">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 </Project>
