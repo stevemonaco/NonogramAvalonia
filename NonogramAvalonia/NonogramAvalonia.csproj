@@ -12,6 +12,7 @@
     <AvaloniaResource Remove="Assets\nonogram-editor.gif" />
     <AvaloniaResource Remove="Assets\nonogram-levelsolve.gif" />
     <AvaloniaResource Remove="Assets\nonogram-randomsolve.gif" />
+    <AvaloniaResource Remove="Assets\nonogram-themeswitch.gif" />
 
     <None Update="_boards\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
